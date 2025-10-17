@@ -1,0 +1,132 @@
+VITOR VECHIEZ OLIVEIRA
+29/09/2025 - COLA VLAN 
+
+
+
+VLAN [VIRTUAL LAN]
+
+LAN - Local Area Network
+      Rede de Area Local
+
+VLAN - Rede de Area Local Virtual
+       IEEE 802.1Q - (Ponto = DOT)
+dot 1 q
+
+
+NUMERAÇÃO DE VLANS
+
+  1-1005
+
+        VLAN 1- VLAN PADRÃO
+        VLANS 1002-1005 RESERVADAS
+
+        DISPONIVEL 2-1001
+        
+        1006-4096 - EXTENDIDAS [USOS ESPECIFICOS(REDES BEM GRANDES E OUTROS CENARIOS)]
+
+(PODERIA)              |     (BOAS PRATICAS)            |         (PODERIA)             |
+VLAN 2 - ALUNOS        |     VLAN 10 - ALUNOS           |         VLAN 5  - ALUNOS      |
+VLAN 3 - CONVIDADOS    |     VLAN 20 - CONVIDADOS       |         VLAN 10 - CONVIDADOS  |          
+VLAN 4 - COORDENAÇÃO   |     VLAN 30 - COORDENAÇÃO      |         VLAN 15 - COORDENAÇÃO |              
+(PODERIA)              |     (BOAS PRATICAS)            |         (PODERIA)             |
+USADO MENOS            |      MAIS UTILIZADOS                                           |
+
+---
+
+
+COMANDOS VLAN------
+
+!CRIAR UMA VLAN 
+>enable
+#configure terminal
+(config)#vlan <n°-da vlan>
+(config-vlan)#name <nome-da-vlan>
+
+!VERIFICAR AS VLANS CRIADAS NO EQUIPAMENTO
+
+>enable
+#show vlan brief
+
+!COLOCAS UMA INTERFACE EM UMA VLAN(access)
+>enable
+#configure terminal
+(config)#interface <nome-da-interface>              !Ex  f0/1
+(config-if)#switchport mode access
+(config-if)#switchport access vlan <n°-da-vlan>
+
+
+!Script
+
+enable
+config t 
+interface fastethernet0/3
+switchport mode access
+switchport access vlan 30
+interface fastethernet0/6
+switchport mode access
+switchport access vlan 30
+interface fastethernet0/10
+switchport mode access
+switchport access vlan 30
+end
+wr
+
+!Configurar interfaces da Coordenação
+
+enable
+config t
+interface range f0/3, f0/6, f0/10
+switchport mode access
+switchport access vlan 30
+end
+wr
+
+
+!Configurar uma interface para o modo trunk
+enable
+config t 
+int <nome-da-interface>
+switchport mode trunk
+
+!Configurar VLAN nativa na interface trunk
+enable
+configure terminal
+interface <nome-da-interface>
+switchport trunk Native vlan <n°-da-vlan-nativa>
+
+(BOAS PRATICAS ) ----> ! USAR VLAN 99 ou 100 PARA TRUNK NATIVE !
+
+!Filtrando as VLANS no trunk
+enable
+configure terminal
+interface <nome-da-interface>
+switchport trunk allowed vlan <lista-de-vlans-separado-por-VIRGULAS> 
+                              !Ex: switchport trunk allowed vlan 10,20,30,99
+
+
+!VERIFICAR A CONFIG CORRETA DA VLAN NATIVA
+enable
+show interface trunk
+
+!VERIFICAR SE A VLAN NATIVA AGORA É 99
+enable
+show interface <n°-da-interface> switchport
+                  !Ex: show interface g0/1 switchport
+
+!EXIBIR INFORMACOES SOBRE AS VLANS CONFIGURADAS
+enable
+show vlan ou show vlan brief
+
+!PARA VER AS PORTAS CONFIGURADAS
+enable
+show running-config
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,51 @@
+-------- !!!! = INDICAÇÃO QUE PODE APAGAR E MUDAR COMO DESEJADO
+
+
+
+!SCRIPT PARA CONFIUGURACAO DE SWITCH(SENHA CONSOLE,ENABLE,HOSTNAME E SERVICO DE CRIPTOGRAFIA)
+
+en
+config t
+hostname <!!!!nome!!!!>
+banner motd "!!texto!!"
+ enable secret <!!!!senha!!!!>
+ line console 0
+ password <!!!!senha!!!!>
+ login
+ exit
+ service password-encryption
+
+ ----------------------------------------------------------------------------------------------------||
+
+SCRIPT VLAN(TRUNK E ACCESS)
+DEIS DA CRIAÇÃO ATÈ A IMPLANTAÇÃO DA INTERFACE NA VLAN
+
+
+enable
+config t
+vlan 10
+name <!!!!!!!!!!!NOME!!!!!!!!>
+vlan 20
+name <!!!!!!!!!!!NOME!!!!!!!!>
+exit
+vlan 30
+name<!!!!!!!!!!!!NOME!!!!!!!!>
+exit
+int f0/1
+switchport mode access
+switchport access vlan 10
+int f0/2
+switchport mode access
+switchport access vlan 20
+int f0/3
+switchport mode access
+switchport access vlan 30
+----CASO QUEIRA CRIAR TRUNK APAGUE ISSO------------
+int g0/1
+switchport mode trunk
+switchport trunk native vlan 99
+---CASO QUEIRA FILTRAR APAGUE ISSO-----------------
+switchport trunk allowed vlan 10,20,30,99
+
+
+

@@ -1,0 +1,92 @@
+!VER O STATUS DO VTP
+
+en
+show vtp status
+
+
+!MUDAR A VERSAO DO VTP
+
+en
+config t
+hostname SW-SERVER
+vtp version 2
+
+
+!MODO DE OPERACAO DENTRO DO DOMINIO
+
+en
+config t
+vtp mode server
+
+!COLOCANDO EM DOMINIO
+enable
+configure terminal
+vtp domain senai.local
+
+!Colocando Senha no dominio
+enable
+configure terminal
+vtp password senai123
+
+!Verificar status do VTP
+enable
+show vtp status
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+versao 1 do VTP - VLANS 1-1001 (NAO PASSA NO MODO TRANSPARENTE)~
+versao 2 do VTP - VLANS 1-1001 (PASSA NO MODO TRANSPARENTE)
+versao 3 do VTP - VLANS 1-4095 (  VLANS PRIVADAS,
+                                  PASSWORD PROTECTION,
+                                  MULTIPLO SPAMETREE      )
+
+
+!SCRIPT VTP----------------------
+
+MODO SERVER - CPD	
+
+(CONFIG)# vtp version 2
+(CONFIG)# vtp mode server
+(CONFIG)# vtp domain senai
+(CONFIG)# vtp password senai123
+
+(CONFIG)# do show vtp status (VERIFICAÇÃO)
+-------------------------------------------
+MODO CLIENT - SWITCH 1 ANDAR
+
+(CONFIG)# vtp version 2
+(CONFIG)# vtp mode client
+(CONFIG)# vtp domain senai
+(CONFIG)# vtp password senai123
+
+-------------------------------------------
+MODO CLIENT - SWITCH 2 ANDAR
+
+(CONFIG)# vtp version 2
+(CONFIG)# vtp mode client
+(CONFIG)# vtp domain senai
+(CONFIG)# vtp password senai123
+
+--------------------------------------------
+MODO TRANSPARENT- SWITCH TERREO
+
+(CONFIG)# vtp version 2
+(CONFIG)# vtp mode transparent
+(CONFIG)# vtp domain senai
+(CONFIG)# vtp password senai123
+
+

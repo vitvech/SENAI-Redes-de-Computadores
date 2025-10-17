@@ -1,0 +1,12 @@
+
+ banner motd   "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		+                             EMPRESA                                      +
+		+             ACESSO PERMITIDO SOMENTE A PESSOAS AUTORIZADAS               +
+		+           PESSOAS NAO AUTORIZADAS DESCONECTAR IMEDIATAMENTE              +
+		+         TODAS AS CONEXOES ESTAO SENDO MONITORADAS E AUDITADAS            +
+		+                  ATTENTION: AUTHORIZED PERSONAL ONLY.                    +
+		+                         DISCONNECT IMMEDIATELY.                          +
+		+                                                                          +
+		+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+
+

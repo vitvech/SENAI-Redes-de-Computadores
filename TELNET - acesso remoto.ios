@@ -1,0 +1,36 @@
+TELNET - acesso remoto
+
+
+!Configurar IP no switch
+enable
+configure terminal
+interface vlan 90
+ip address <endereço> <máscara>
+
+
+
+Telnet - Conexão NÃO é criptografada
+SSH [Secure Shell] - Conexão criptografada
+
+
+line console = interface do Cabo console
+VTY - Virtual Teletype 
+
+        0 a 15 acessos simultaneos = 16 total
+    
+    
+        0 - Rodrigo
+        1 - Patrick
+        2 - Bruno
+        3 - Chiorato
+
+!Configurar as VTY [TELNET]
+enable
+configure terminal
+line vty 0 15
+password <senha>
+login
+
+
+
+
