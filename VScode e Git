@@ -1,0 +1,38 @@
+Guia Completo: Git e GitHub (Texto Simples para Colar no VS Code)
+Este guia cobre a configuração inicial, criação de projetos e 
+o fluxo de trabalho diário usando o Git Bash (linha de comando) e a interface visual do VS Code.
+
+1. Configuração Inicial (Uma única vez por computador):
+
+    Esta etapa é essencial para que o Git saiba quem você é.
+    Onde fazer:
+    Abra o Git Bash (pesquisando no menu Iniciar).
+    OU use o Terminal Integrado no VS Code (Ctrl + ').
+    Comandos (substitua pelas suas informações):
+        git config --global user.name "Seu Nome"
+        git config --global user.email "seu.email@exemplo.com"
+        
+2. Criando Seu Projeto/Repositório:
+    Você tem duas formas de iniciar um novo projeto:
+
+    A. Criar no GitHub e Clonar Localmente (Recomendado)
+        No site do GitHub: Crie um novo repositório (ícone + > New repository). Marque a opção "Add a README file".
+        Copie a URL: Na página do repositório, clique no botão verde < Code e copie a URL HTTPS.
+        No seu PC (Git Bash): Navegue até a pasta onde deseja salvar e use: git clone [URL_DO_SEU_REPOSITORIO]
+    B. Criar Localmente e Conectar Depois
+        No seu PC: Crie sua pasta de projeto no Windows Explorer.
+        Abra o Git Bash dentro dessa pasta (clique direito > Git Bash Here).
+        Inicialize o Git: Digite git init na pasta do projeto.
+
+3. Fluxo de Trabalho Diário (Adicionar, Confirmar, Sincronizar)
+    Este é o ciclo que você repete sempre que faz alterações no seu código.
+    Adicionar Arquivos (Staging):
+
+        Git Bash: Use git add . (para todos os arquivos modificados).
+        VS Code Visual: No painel Source Control, clique no + ao lado de "Changes".
+Confirmar (Commit)
+        Git Bash: Use git commit -m "Minha mensagem" (salva localmente).
+        VS Code Visual: Digite sua mensagem na caixa "Message" e clique no botão azul Commit.
+Sincronizar com GitHub (Push/Pull)
+        Git Bash: Use git push (enviar para o GitHub).
+        VS Code Visual: Clique no botão Sync Changes na barra de status inferior.
