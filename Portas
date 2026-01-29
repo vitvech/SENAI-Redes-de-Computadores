@@ -1,0 +1,19 @@
+Pesquisar quais os serviços relacionados as seguintes portas e se eles utilizam TCP ou UDP:
+
+•3389
+	->  RDP (Remote Desktop Protocol)  -  Utiliza tanto TCP quanto UDP 		               	   Explicação=  TCP Estabelece a conexão e garante a estabilidade, Utilizando o UDP simultaneamente, melhorando o desempenho gráfico e a fluidez.
+•3306
+    -> MySQL - Utiliza TCP para a comunicação entre cliente e o banco de dados
+•5432
+	-> PostgreSQL - Utiliza TCP por exigir uma conexão confiável, garantindo a integridade dos dados
+•1433
+	-> Microsoft SQL Server e seus aplicativos - Utiliza TCP pelos mesmos motivos que o PostgreSQL
+•123
+	-> NTP (Network Time Protocol) - Utiliza Principalmente UDP, Sendo usado para sincronização do tempo, essencial para autenticação e criptografia
+•81
+	-> Alternativa secundária ao HTTP (porta 80) - Utiliza  TCP
+•161
+	-> SNMP ( Protocolo Simples de Gerenciamento de Rede) - Utiliza UDP,  Comunica Informações de registro e gerenciamento com aplicações de monitoramento remoto
+•389
+	-> LDAP (Lightweight Directory Access Protocol) - Utiliza tanto o TCP quanto o UDP, 
+	Explicação: TCP usado para operações padrão e mais confiáveis, enquanto o UDP pode ser usado para pesquisas CLDAP (Connectionless LDAP) específicas, como em domínios Active Directory  
