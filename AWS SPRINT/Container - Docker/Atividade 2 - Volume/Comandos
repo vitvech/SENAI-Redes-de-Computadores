@@ -1,0 +1,27 @@
+Abrir terminal      
+
+
+
+PROFESSOR QUE PASSOU ->
+
+
+# 1. Criar o volume nomeado (só precisa fazer uma vez)
+docker volume create meus-dados
+
+# 2. Construir a imagem
+docker build -t app-dados .
+
+# 3. Rodar o container (ele executa o script e termina)
+docker run --rm --name container-dados -v meus-dados:/app/dados app-dados
+
+# 4. Rodar novamente — veja o histórico acumulando!
+docker run --rm -v meus-dados:/app/dados app-dados
+
+# 5. Inspecionar o volume (mostra onde os dados ficam no host)
+docker volume inspect meus-dados
+
+# 6. Acessar os dados diretamente pelo host
+docker run --rm -v meus-dados:/dados ubuntu ls -la /dados
+
+# 7. Remover o volume quando não precisar mais
+docker volume rm meus-dados

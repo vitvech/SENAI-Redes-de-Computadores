@@ -1,4 +1,4 @@
-Instalar extensão docker
+#Instalar extensão docker
 
             FROM nginx
             LABEL maintainer="Seu e-mail"
@@ -7,7 +7,7 @@ Instalar extensão docker
                        # Nome, Descrição
             LABEL version="1.0"
                        # Quando tiver atualização, só mudar aqui
-            workdir /usr/share/nginx/html
+            WORKDIR /usr/share/nginx/html
                        # Diretório de trabalho
             RUN rm -rf ./*
                        # Apagar tudo que tem na pasta para garantir que não tenha "sujeira"
@@ -17,3 +17,7 @@ Instalar extensão docker
                        # Vai se conectar com o mundo exterior pela porta 80
             CMD [ "nginx" , "-g" , "daemon off;" ]
                        # comando que inicia o Nginx e mantém o container Docker rodando.
+
+
+        
+        

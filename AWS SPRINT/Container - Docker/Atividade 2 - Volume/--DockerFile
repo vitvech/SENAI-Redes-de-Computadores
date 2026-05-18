@@ -1,0 +1,36 @@
+FROM python:3.12-slim
+#Pego no docker hub, vai achar a imagem de container lá
+
+
+LABEL description="Container armazenamento persistente via volume"
+LABEL version="1.0"
+
+#Variaveis de ambiente
+
+ENV PYTHONDONTWRITEBYTECODE=1 \ 
+#Sempre que eu tenho roomtime, tenho que criar uma variavel de ambiente, 
+#Temos que indicar qual será a nossa variavel de ambiente
+    PYTHONUNBUFFERED=1 \ 
+    #Essa variavel de ambiente é para não ter o buffer, ou seja, para que as mensagens sejam exibidas imediatamente no console, sem esperar o buffer ser preenchido.
+    DADOS_DIR=/app/dados
+    #DADOS_DIR é o nome da variavel de ambiente, e o caminho onde os dados serão armazenados dentro do container
+
+
+
+WORKDIR /app
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends sqlite3\
+    #Atualização do S.O. Não installar recomendações, ou seja, instalar somente o necessário para rodar o sqlite3
+    && rm -rf /var/lib/apt/lists/*
+    #Limpar o cache do apt para reduzir o tamanho da imagem
+
+
+COPY app.py .
+#App em python para criar um banco de dados e inserir dados, e depois ler os dados e exibir no console
+VOLUME [ "/app/dados" ]
+#DOCKER DE ARMAZENAMENTO -> Vai criar um ponto de montagem para o volume, ou seja, o diretório onde os dados serão armazenados dentro do container, e que será mapeado para um diretório no host quando o container for executado.
+
+
+CMD [ "python", "app.py" ]
+#Comando para rodar o app.py quando o container for iniciado, ou seja, quando o container for executado, ele vai rodar o app.py que vai criar o banco de dados e inserir os dados, e depois ler os dados e exibir no console.

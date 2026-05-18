@@ -1,0 +1,43 @@
+Abrir o terminal
+
+
+                    cd Atividade1-nginx
+                    docker build -t meu-site .
+                    # Vai criar imagem no Docker, -t renomeia Ex: -t <nome>
+                    docker run -d --name meu-site -p 8080:80 meu-site
+                    # Criar container ,-d correr em modo daytashion
+                    Docker stop meu-site
+                    #parar o site
+                    Docker rm meu-site
+                    #Apagar container
+                                OBS: Não da para apagar o site, sem parar ele. Então parar ele primeiro !!
+
+                    
+
+
+
+
+Comandos passados pelo professor ->
+
+
+cd atividade1-nginx
+
+# 1. Construir a imagem (-t nomeia a imagem, . indica o Dockerfile no diretório atual)
+docker build -t meu-site .
+
+# 2. Rodar o container
+#    -d        → background (detached)
+#    --name    → nome amigável para o container
+#    -p        → mapeia porta 8080 do host → porta 80 do container
+docker run -d --name meu-site -p 8080:80 meu-site
+
+# 3. Acessar no navegador
+open http://localhost:8080    # macOS
+xdg-open http://localhost:8080  # Linux
+
+# 4. Acompanhar logs
+docker logs -f meu-site
+
+# 5. Parar e remover
+docker stop meu-site
+docker rm meu-site
