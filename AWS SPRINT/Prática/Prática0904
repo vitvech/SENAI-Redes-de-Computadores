@@ -1,0 +1,85 @@
+
+                Clicar em AWS
+                manter na região norte da virginia
+
+                            Executar uma instancia
+                            
+                                    Nome: Linux-Webserver
+                                    t3micro
+                                    par de chaves: Criar novo par   
+                                                    RSA  ,  .pem
+                                                    Criar
+
+                                    Configuração de rede
+
+                                                Habilitar http
+                                    
+
+                                    Config de armazenamento
+
+                                    10    gp3
+
+                                    Sistema de arquivos
+
+                                        EFS -> Linux
+                                        FSx -> Windows
+                                        S3 -> objeto
+
+                                    Detalhes avançados
+                                
+                                        Perfil de instância do IAM
+                                                EMR_ -> Captura de dados
+                                                labInstancce -> Fechar link
+                                    
+
+                                    Configuração de largura de banda da instancia 
+
+                                        Famoso Traffic Shaping
+
+                                    Nome: Windows-Webserver
+                                    t3micro
+                                    par de chaves:  Selecionar a mesma chave do linux, webserver
+                                                                                       (pode ser criado outra)
+                                                                                    
+
+                                    Configuração de rede
+
+                                                Habilitar http
+                                                Selecionar grupo de segurança -> Adicionar o ultimo 
+                                                                                    Ex: 1 3 e 2
+                                                                                        Selecionar o 3
+
+                                    
+
+                                    Config de armazenamento
+
+                                    10    gp3
+
+                                    Sistema de arquivos
+
+                                        EFS -> Linux
+                                        FSx -> Windows
+                                        S3 -> objeto
+
+                                    Detalhes avançados
+                                
+                                        Perfil de instância do IAM
+                                                EMR_ -> Captura de dados
+                                                labInstancce -> Fechar link
+                                    
+
+                                    Configuração de largura de banda da instancia 
+
+                                        Famoso Traffic Shaping
+
+
+
+
+                Conectar
+                Manter parametros
+                Conectar
+                Vai abrir remotamente na instancia 
+
+
+
+         

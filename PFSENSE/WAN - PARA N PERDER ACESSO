@@ -1,0 +1,15 @@
+
+            Firewall > Rules
+            WAN
+            Add
+            
+                    PASS
+                    IPV4
+                    PROTOCOLO: ANY
+                    SOURCE: ANY
+                    DESTINATION: ANY
+                    Descrição: PERMITINDO TUDO NO FIREWALL DA WAN
+
+
+
+                                        OBS:            NÃO CONSIDERADO BOA PRÁTICA

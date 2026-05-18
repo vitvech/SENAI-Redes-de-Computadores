@@ -1,0 +1,52 @@
+
+        SAMBA-> Servidor que permite a comunicação compartilhando arquivos entre linux e windows
+
+        smbd: componente que permite que servidores linux compartilhem seus recursos de disco
+        e impressao com clientes windows
+        
+        nmbd: Traduz nomes NetBIOS para endereços IP e facilita a descoberta de servidores Samba em redes Windows.
+
+
+Arquitetura Cliente-servidor
+
+    Cliente Windows se conectado ao servidor Samba para acessar recursos compartilhados
+
+Comunicação e Autenticação
+
+
+
+
+apt install samba -y -> Instalar serviço samba
+
+nano /etc/samba/ -> arquivo de config
+        (smb.conf)
+
+Desce tudo -> Abra cochetes [Compa]
+                            path = /compartilhamento
+                            available = yes
+                            valid users = redes
+                            read only = no 
+                            browsable = yes
+                            writable = yes
+
+
+
+    cd / -> entra no /
+    mkdir compartilhamento -> criar diretorio
+    adduser redes -> criar usuario
+    chown redes:root compartilhamento -> Mudar redes(usuario) como dono da pasta (compartilhamento)
+
+    smbpasswd -a redes -> Colocar senha para entrar na pasta
+                        New SMB password: <senha>
+                        Added user redes.
+
+    systemctl restart smbd 
+                                 Restarta os dois serviços
+    systemctl restart nmbd
+            ip -c a 
+            Copia o IP
+            Abre o Win+R - //IP
+
+O que está em cochete é o que vai aparecer la para gente []
+no / -> apontar o diretorio criado 
+

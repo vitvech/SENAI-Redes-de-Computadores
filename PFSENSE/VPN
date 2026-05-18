@@ -1,0 +1,103 @@
+
+                    Fase 1: Parte pública
+                        
+                        Aponta com quem vai fechar a relação 
+                        Apontou a vpn
+                                                                  OBS:  (Tem que ser feito nos dois dispositivos)
+       
+       
+                           Fase 2: Parte Privada
+                    
+
+
+
+
+
+
+                            FIREWALL 1:
+                                        VPN > IPSEC
+
+                                        Description: <NOME DO VIZINHO>
+                                        Internet Protocol: IPV4
+                                        INTERFACE: WAN
+                                        REMOTE GATEWAY: <IP PUBLICO DO VIZINHO>
+                                        Pre-Shared Key: <SENHA>
+                                            OBS:   Se a senha não for colocada igual, não autentica a conexão
+
+
+                            + Show Phase 2 Entries
+
+
+
+                                        Add P2
+                                        Description: Ex: CONEXAO_FW_INDUS2_REDEINTERNA
+                                        Local Network: subnet 
+                                        Remote Network: <ID DA REDE PRIVADO DO VIZINHO>
+                                                        EX: 192.168.10.0
+
+                                            SAVE
+
+
+                            FIREWALL 2:
+                                        VPN > IPSEC
+
+                                        Description: <NOME DO VIZINHO>
+                                        Internet Protocol: IPV4
+                                        INTERFACE: WAN
+                                        REMOTE GATEWAY: <IP PUBLICO DO VIZINHO>
+                                        Pre-Shared Key: <SENHA>
+                                            OBS:   Se a senha não for colocada igual, não autentica a conexão
+
+                                            SAVE
+
+
+                            + Show Phase 2 Entries
+
+
+
+                                        Add P2
+                                        Description: Ex: CONEXAO_FW_INDUS2_REDEINTERNA
+                                        Local Network: subnet 
+                                        Remote Network: <ID DA REDE PRIVADO DO VIZINHO>
+                                                        EX: 10.0.0.0
+                                        
+
+
+                            PARA PINGAR:
+
+                                            criar regra de firewall NOS DOIS FIREWALL
+                                            
+                                            E
+
+                                            Caso, for S.O (Sistema Operacional) Windows, Desativar Firewall ou Criar regra liberando o IP
+
+
+                            LAN → controla o que sai da sua rede
+                            IPsec → controla o que vem da outra ponta
+
+EXPLICATIVA:
+
+
+
+
+-
+LAN = tráfego que nasce na rede local
+IPsec = tráfego que vem da VPN
+
+O firewall não pensa em "quem começou lá".
+Ele pensa:
+
+"Quem está entrando por essa interface?"
+
+💡 Por isso você fez:
+
+Na LAN:
+
+Source = 10.10.10.10
+Dest = 192.168.10.10
+
+Na IPsec:
+
+Source = 192.168.10.10
+Dest = 10.10.10.10
+-       

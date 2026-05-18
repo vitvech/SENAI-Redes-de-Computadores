@@ -1,0 +1,77 @@
+
+            apt install nginx -y
+            
+           remover apache2:     apt-get remove --purge apache2 
+                                apt-get autoremove
+
+            pois n podem ocupar o mesmo espaço (apache2 é um servidor web e o nginx tbm)
+
+
+
+Criar conteudo do site e apagar o padrao que veio com o apache em html
+
+
+
+cd /var/www
+rm -r html
+mkdir site
+cd site
+nano index.html > Definir o conteudo que vai aparecer no seu site 
+       
+        ENTRA EM SITE AVAILABLE E CRIAR O VIRUTAL HOST:
+
+                            remover o default
+
+rm default
+nano #NOME DO ARQUIVO#
+
+
+server {
+    listen 8081;
+    server_name lino.com www.lino.com;
+ 
+    root /var/www/site2;
+    index index.html;
+ 
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+
+cd ../sites-enabled/
+
+rm default
+
+
+
+    PARA ATIVAR O SITE QUE ESTAVA EM PRODUCAO PRECISAMOS COLOCAR O ARQUIVO NO SITES ENABLE COM O COMANDO 
+
+
+    ln -s /etc/nginx/sites-available/site3 /etc/nginx/sites-enabled/
+
+
+
+                    INSTALAR AGENT:
+                                    apt Update
+                                    apt install zabbix-agent
+                                    nano /etc/zabbix/zabbix_agentd.conf
+
+                                    Procurar por:
+
+                                                    Server: <IP do Zabbix>
+                                                    
+                                                    Descer e
+
+                                                    Server: <IP do Zabbix>
+
+                                    Restartar serviço
+
+                    No Zabbix:
+
+                                Monitoramento > Host > Add Host
+
+                                Name: NGINX
+                                TEMPLATE: NGINX BY Zabbix Agent
+                                          Linux By Zabbyx Agent 
+                                Grupo HOST: Server Zabbix
+

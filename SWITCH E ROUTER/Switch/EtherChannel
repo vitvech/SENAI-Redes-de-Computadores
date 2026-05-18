@@ -1,0 +1,144 @@
+
+
+PAGP = Port Aggregation Protocol (CISCO)
+LACP = Link Aggregation Control Protocol (PROTOCOLO ABERTO)
+
+
+!Escolher qual protocolo usar no EtherChannel
+enable
+config t
+int range <n°-da-interface>  !Exemplo: int range g0/1-2
+
+channel-protocol ?
+         pagp      Use PAgP protocol
+         lacp      Use LACP protocol
+
+!lacp prepara interface para o LACP PROTOCOl
+!pagp prepara interface para o PAgP PROTOCOl
+
+channel-protocol lacp !ou pagp
+
+
+
+!Escolher qual o grupo as portas fisicas vão trabalhar (POL) LACP
+
+channel-group <1-6>
+channel-group 1 mode <active-passive>
+channel-group 1 mode active !LACP
+
+
+!Escolher qual o grupo as portas fisicas vão trabalhar (POL) PAGP
+
+channel-group <1-6>
+channel-group 1 mode <desirable-auto>
+channel-group 1 mode auto !PAgP
+
+
+!Verificar os detalhes do ETH (etherchannel)
+ENABLE
+show etherchannel
+show etherchannel
+show etherchannel load-balance
+show etherchannel port-channel
+show eth summary
+
+!Deixas as interfaces em modo default (remover etherchannel)
+enable
+config t
+default int range <n°-da-interface>
+           default int range f0/1-2
+
+
+
+
+!Corrigir erro
+1-
+
+S1# show etherchannel summary
+Flags:  D - down        P - bundled in port-channel
+        I - stand-alone s - suspended
+        H - Hot-standby (LACP only)
+        R - Layer3      S - Layer2
+        U - in use      N - not in use, no aggregation
+        f - failed to allocate aggregator
+        M - not in use, minimum links not met
+        m - not in use, port not aggregated due to minimum links not met
+        u - unsuitable for bundling
+        w - waiting to be aggregated
+        d - default port
+        A - formed by Auto LAG
+Number of channel-groups in use: 1
+Number of aggregators:           1
+Group  Port-channel  Protocol    Ports
+------+-------------+-----------+-----------------------------------------------
+1      Po1(SD)         -      Fa0/1(D)    Fa0/2(D)
+
+2-
+
+S1# show run | begin interface port-channel
+interface Port-channel1
+ switchport trunk allowed vlan 1,2,20
+ switchport mode trunk
+!
+interface FastEthernet0/1
+ switchport trunk allowed vlan 1,2,20
+ switchport mode trunk
+ channel-group 1 mode on
+!
+interface FastEthernet0/2
+ switchport trunk allowed vlan 1,2,20
+ switchport mode trunk
+ channel-group 1 mode on
+!======================================
+S2# show run | begin interface port-channel
+interface Port-channel1
+ switchport trunk allowed vlan 1,2,20
+ switchport mode trunk
+!
+interface FastEthernet0/1
+ switchport trunk allowed vlan 1,2,20
+ switchport mode trunk
+ channel-group 1 mode desirable
+!
+interface FastEthernet0/2
+ switchport trunk allowed vlan 1,2,20
+ switchport mode trunk
+ channel-group 1 mode desirable
+
+
+ 3-
+
+ S1(config)# no interface port-channel 1
+S1(config)# interface range fa0/1 - 2
+S1(config-if-range)# channel-group 1 mode desirable
+Creating a port-channel interface Port-channel 1
+S1(config-if-range)# no shutdown
+S1(config-if-range)# exit
+S1(config)# interface range fa0/1 - 2
+S1(config-if-range)# channel-group 1 mode desirable
+S1(config-if-range)# no shutdown
+S1(config-if-range)# interface port-channel 1
+S1(config-if)# switchport mode trunk
+S1(config-if)# finalizar
+S1# 
+
+4-
+
+S1# show etherchannel summary
+Flags:  D - down        P - bundled in port-channel
+        I - stand-alone s - suspended
+        H - Hot-standby (LACP only)
+        R - Layer3      S - Layer2
+        U - in use      N - not in use, no aggregation
+        f - failed to allocate aggregator
+        M - not in use, minimum links not met
+        m - not in use, port not aggregated due to minimum links not met
+        u - unsuitable for bundling
+        w - waiting to be aggregated
+        d - default port
+        A - formed by Auto LAG
+Number of channel-groups in use: 1
+Number of aggregators:           1
+Group  Port-channel  Protocol    Ports
+------+-------------+-----------+-----------------------------------------------
+1      Po1(SU)         PAgP      Fa0/1(P)    Fa0/2(P)

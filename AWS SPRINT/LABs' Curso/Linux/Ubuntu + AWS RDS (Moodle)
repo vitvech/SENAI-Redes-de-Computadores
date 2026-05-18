@@ -1,0 +1,208 @@
+
+# 🐧 Instalação Moodle (EC2 Ubuntu + AWS RDS)
+
+## 1. Criar infraestrutura na AWS
+
+Na Amazon Web Services:
+
+* Criar **EC2 Ubuntu Server 22.04**
+
+  * Nome: `Moodle-Server`
+* Criar chave de acesso:
+
+  * Tipo: `.pem`
+  * Nome: `Moodle`
+* Criar rede:
+
+  * VPC: `Moodle`
+  * Sub-rede: `Public Subnet`
+  * Security Group: `Moodle Security Group`
+
+---
+
+## 2. Acesso à instância
+
+* Conectar via SSH (ex: MobaXterm)
+* Enviar arquivo `Moodle.pem`
+* Ajustar permissões da chave se necessário
+
+---
+
+## 3. Atualizar sistema
+
+```bash id="u1a1"
+sudo apt update && sudo apt upgrade -y
+```
+
+---
+
+## 4. Instalar serviços necessários
+
+### Apache + PHP + extensões
+
+```bash id="u1a2"
+sudo apt install apache2 php libapache2-mod-php php-mysql php-curl php-gd php-intl php-mbstring php-soap php-xml php-xmlrpc php-zip -y
+```
+
+---
+
+## 5. Iniciar serviços
+
+```bash id="u1a3"
+sudo systemctl enable apache2
+sudo systemctl start apache2
+```
+
+---
+
+## 6. Baixar Moodle
+
+```bash id="u1a4"
+cd /var/www/html/
+sudo wget -c https://download.moodle.org/download.php/direct/stable402/moodle-latest-402.tgz
+```
+
+---
+
+## 7. Extrair arquivos
+
+```bash id="u1a5"
+sudo tar xzvf moodle-latest-402.tgz
+```
+
+---
+
+## 8. Criar pasta de dados
+
+```bash id="u1a6"
+sudo mkdir /var/www/moodledata
+```
+
+---
+
+## 9. Ajustar permissões
+
+```bash id="u1a7"
+sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 755 /var/www/html/
+```
+
+---
+
+## 10. Reiniciar Apache
+
+```bash id="u1a8"
+sudo systemctl restart apache2
+```
+
+---
+
+## 11. Criar banco de dados (RDS)
+
+No Amazon RDS:
+
+* Engine: MySQL
+* DB name: `moodle`
+* User: `moodle_user`
+* Password: `Senai123`
+* Endpoint: copiar do RDS
+* Porta: `3306`
+
+---
+
+## 12. Segurança (IMPORTANTE)
+
+No Security Group do RDS:
+
+* Liberar:
+
+  * Porta `3306`
+  * Origem: Security Group da EC2
+
+---
+
+## 13. Acessar Moodle
+
+No navegador:
+
+```text id="u1a9"
+http://IP-DA-EC2
+```
+
+---
+
+## 14. Configuração do Moodle
+
+Na instalação:
+
+* Database type: MySQL
+* Host: endpoint do RDS
+* Database: moodle
+* User: moodle_user
+* Password: Senai123
+* Prefix: mdl_
+
+---
+
+## ⚠️ Conceitos importantes
+
+* EC2 → roda o Moodle (servidor web)
+* RDS → armazena o banco de dados
+* Comunicação entre eles → porta 3306 liberada
+
+---
+
+## 📝 Observação
+
+
+                PHP é um serviço dentro do apache2
+                Se der erro na instalação, reiniciar o apache2, apos as alterações
+
+
+
+
+
+
+
+
+
+                PARA QUE SERVE O MOODLE 
+
+
+chatgpt: 
+
+O Moodle é um sistema de gerenciamento de aprendizagem (LMS). Ele serve para criar, organizar e disponibilizar ambientes de ensino online.
+
+📚 Para que serve o Moodle
+
+O Moodle é usado para:
+
+Criar cursos online
+Disponibilizar aulas (vídeos, PDFs, links)
+Aplicar atividades e exercícios
+Enviar e corrigir tarefas
+Fazer provas e avaliações online
+Acompanhar o desempenho dos alunos
+🎯 Melhor uso do Moodle
+
+Ele é mais usado em:
+
+🏫 Educação
+Escolas
+Universidades
+Cursos técnicos
+🏢 Treinamento corporativo
+Empresas que treinam funcionários
+Cursos internos obrigatórios (segurança, sistemas, processos)
+🌐 Ensino remoto
+Aulas 100% online
+Ensino híbrido (presencial + online)
+💡 Vantagens principais
+Centraliza todo o conteúdo do curso
+Organiza alunos e turmas
+Permite controle de notas e atividades
+Funciona totalmente pela internet
+É open-source (gratuito e personalizável)
+🧠 Resumo simples pra anotação
+
+Moodle é uma plataforma LMS usada para criar e gerenciar cursos online, permitindo aulas, atividades, provas e acompanhamento de alunos em um ambiente virtual.

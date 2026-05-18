@@ -1,0 +1,162 @@
+VMWARE:
+
+                                    SUBIR UM DEBIAN 12
+                                    NOME: ZABBIX-MONITORAMENTO
+                                    DEIXAR EM BRIDGE
+                                    MUDAR O MAC-ADDRESS
+                                
+            PARTE DE BANCOD DE DADOS -> Criar snapshot  
+
+
+                                    Ctrl + Fn + Alt + F3
+
+                                        apt install ssh -y
+
+
+
+                                        Site: zabbix DOWLOAD 
+
+                                        7.4
+                                        debian
+                                        12
+                                        Server, Frontend, Agent
+                                        MySQL
+                                        Apache
+
+
+                        Seguir instalação de acordo com o site
+                                PDF NO ZAP PARA AUXILIAR. (SLIDES DO LINO)
+
+
+
+    RESUMO:
+                OBS: TUDO DEVERÁ SER ALTERADO DE ACORDO COM O CENÁRIO (USUARIO,SISTEMA-OPERACIONAL, ETC)
+                        ir em dowload zabbix para confirmar os comandos (não vai ser os mesmos, abaixo  apenas exemplos)
+
+
+                INSTALAÇÃO DO ZABBIX NO DEBIAN 12
+
+1) Baixar o repositório do Zabbix
+
+    wget https://repo.zabbix.com/zabbix/7.4/release/debian/pool/main/z/zabbix-release/zabbix-release_latest_7.4+debian12_all.deb
+
+Instalar o repositório
+
+    dpkg -i zabbix-release_latest_7.4+debian12_all.deb
+
+Atualizar os pacotes
+
+    apt update
+
+
+2) Instalar os pacotes do Zabbix
+
+    apt install zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf zabbix-sql-scripts zabbix-agent -y
+
+
+3) Criar usuário no sistema
+
+    adduser senai
+
+
+4) Instalar banco de dados (MariaDB)
+
+    apt install mariadb-server
+
+
+5) Entrar no banco de dados
+
+    mysql -uroot -p
+
+
+6) Criar banco e usuário do Zabbix
+
+    create database zabbix character set utf8mb4 collate utf8mb4_bin;
+
+    create user senai@localhost identified by 'Senai@134';
+
+    grant all privileges on zabbix.* to senai@localhost;
+
+    flush privileges;
+
+    set global log_bin_trust_function_creators = 1;
+
+    quit;
+
+
+7) Importar a estrutura do banco do Zabbix
+
+    zcat /usr/share/zabbix/sql-scripts/mysql/server.sql.gz | mysql --default-character-set=utf8mb4 -usenai -p zabbix
+
+
+8) Configurar o Zabbix Server
+
+    nano    
+
+Alterar as linhas:
+
+    DBUser=senai
+    DBPassword=Senai@134
+
+
+9) Reiniciar e habilitar os serviços
+
+    systemctl restart zabbix-server zabbix-agent apache2
+
+
+
+10) Acessar o Zabbix pelo navegador
+
+    http://IP_DO_SERVIDOR/zabbix
+
+Exemplo:
+    http://172.16.54.118/zabbix
+
+
+11) Caso apareça erro de locale
+
+    locale-gen "en_US.UTF-8"
+
+    dpkg-reconfigure locales
+
+
+12) Login padrão do Zabbix
+
+    Usuário: Admin
+    Senha: zabbix
+                                
+
+                                MAPA:
+
+                                    Administração
+                                    Geral > Mapas Geograficos
+
+                                https://www.initmax.com/wiki/google-maps-in-the-zabbix-geomap-widget/
+
+
+
+
+                    MONITORAMENTO:
+
+                                    HOSTS 
+                                    Clicar em zabbix server
+                                    Triggers
+                                    
+                                    
+
+                    TRIGGERS: GATILHOS
+                    ITENS: COLETA OS DADOS (DE ACORDO COM AS TEMPLATES) PARA AS DASHBOARDS
+                    PARA CRIAR UM ITEM PRECISA DE UMA CHAVE
+
+
+
+                    TESTAR BITS RECEBIDOS E CPU 
+
+
+                    wget -O /dev/null http://speedtest.tele2.net/10GB.zip
+
+
+
+
+LINK PARA CHAVES:
+            https://www.zabbix.com/documentation/current/en/manual/config/items/itemtypes/zabbix_agent

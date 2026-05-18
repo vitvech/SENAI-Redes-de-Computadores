@@ -1,0 +1,28 @@
+
+            FIREWALL - LINO
+
+                        O que é um ataque de negação de serviço (DDoS)? 
+                                   (d) Sobrecarga de um sistema, tornando-o inacessível.
+
+                        O que é o protocolo ICMP?
+                                   (c) Protocolo de controle de mensagem 
+
+                                                (O ICMP (Internet Control Message Protocol, ou Protocolo de Controle de Mensagens da Internet) 
+                                                é um protocolo da camada de rede usado por dispositivos de rede (como roteadores e hosts) 
+                                                para diagnosticar problemas de comunicação e relatar erros.)
+
+                        Qual camada o pfsense atua Principalmente?
+                                    (c) camada de rede
+
+                        Qual porta o rdp trabalha?
+                                    (b) 3389
+
+                        Qual serviços o pfsense oferece no padrão?
+                                    (a) DHCP e NAT
+
+
+                        Qual a principal função da vpn
+                                    (d) Unir redes em pontos distintos pela internet de maneira segura
+
+                        3 açoes que o fw pfsense executa no trafego de rede?
+                                    (a) reject, block e pass

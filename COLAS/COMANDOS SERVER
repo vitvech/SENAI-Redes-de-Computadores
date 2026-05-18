@@ -1,0 +1,22 @@
+DEZ/01
+
+
+
+    win + r -> ncpa.cpl
+
+    LIBERAR FIREWALL DE PING
+
+
+
+    win + r -> sysdm.cpl  (Mudar nome do dispositivo, verificar dominio)
+
+    win + r -> lusrmgr.msc  -> usuarios locais e grupos locais
+
+    Gerenciamento de Computador -> Usuários e Grupos Locais
+
+    win + r -> mstsc.exe  -> Conexão de Área de Trabalho Remota
+
+    secpol.msc -> Politicas de Seguranca de grupo
+
+
+    diskmgmt.msc -> Gerenciamento de Disco

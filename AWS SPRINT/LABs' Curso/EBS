@@ -1,0 +1,287 @@
+# 🧪 Laboratório 4 — Amazon EBS (Armazenamento)
+
+## 🎯 Objetivo
+
+Você vai:
+
+* Criar um volume EBS
+* Conectar à instância EC2
+* Criar sistema de arquivos
+* Fazer snapshot (backup)
+* Restaurar o volume
+
+---
+
+# 🔹 PARTE 1 — Criar volume EBS
+
+### 1. Acessar EC2
+
+* Start Lab → console
+* Ir em **EC2**
+
+---
+
+### 2. Ver instância
+
+* Vá em **Instances**
+* Identifique a instância: `Lab`
+
+👉 Anote:
+
+* Zona de disponibilidade (ex: us-west-1a)
+
+---
+
+### 3. Criar volume
+
+* Vá em **Volumes → Create Volume**
+
+Configure:
+
+* Tipo: `gp2`
+* Tamanho: `1 GiB`
+* Zona: **mesma da instância**
+
+👉 Tag:
+
+* Key: `Name`
+* Value: `My Volume`
+
+👉 Criar
+
+⏳ Aguarde: **Available**
+
+---
+
+# 🔹 PARTE 2 — Anexar volume
+
+### 1. Selecionar volume
+
+* Clique em `My Volume`
+
+---
+
+### 2. Anexar
+
+* Ações → **Attach Volume**
+
+Configure:
+
+* Instância: `Lab`
+* Device: `/dev/sdf`
+
+👉 Confirmar
+
+---
+
+# 🔹 PARTE 3 — Conectar na instância
+
+### 1. Conectar
+
+* EC2 → Instances
+* Selecione `Lab`
+* Clique em **Connect**
+
+👉 Aba:
+
+* EC2 Instance Connect → Connect
+
+---
+
+# 🔹 PARTE 4 — Configurar disco (Linux)
+
+### 1. Ver discos
+
+```bash
+df -h
+```
+
+👉 Só aparece disco principal (8GB)
+
+---
+
+### 2. Criar sistema de arquivos
+
+```bash
+sudo mkfs -t ext3 /dev/sdf
+```
+
+---
+
+### 3. Criar pasta
+
+```bash
+sudo mkdir /mnt/data-store
+```
+
+---
+
+### 4. Montar disco
+
+```bash
+sudo mount /dev/sdf /mnt/data-store
+```
+
+---
+
+### 5. Montagem automática
+
+```bash
+echo "/dev/sdf   /mnt/data-store ext3 defaults,noatime 1 2" | sudo tee -a /etc/fstab
+```
+
+---
+
+### 6. Verificar
+
+```bash
+df -h
+```
+
+👉 Agora aparece novo volume
+
+---
+
+### 7. Criar arquivo
+
+```bash
+sudo sh -c "echo some text has been written > /mnt/data-store/file.txt"
+```
+
+---
+
+### 8. Confirmar
+
+```bash
+cat /mnt/data-store/file.txt
+```
+
+---
+
+# 🔹 PARTE 5 — Criar snapshot (backup)
+
+### 1. Voltar ao console
+
+* EC2 → **Volumes**
+* Selecione `My Volume`
+
+---
+
+### 2. Criar snapshot
+
+* Ações → **Create Snapshot**
+
+Tag:
+
+* Name: `My Snapshot`
+
+👉 Criar
+
+⏳ Aguarde: **Completed**
+
+---
+
+### 3. Apagar arquivo (simulação)
+
+No terminal:
+
+```bash
+sudo rm /mnt/data-store/file.txt
+```
+
+Verificar:
+
+```bash
+ls /mnt/data-store/
+```
+
+👉 Arquivo sumiu
+
+---
+
+# 🔹 PARTE 6 — Restaurar snapshot
+
+### 1. Criar novo volume
+
+* EC2 → **Snapshots**
+* Selecione `My Snapshot`
+
+👉 Ações → **Create Volume**
+
+Configurar:
+
+* Mesma zona
+* Nome: `Restored Volume`
+
+👉 Criar
+
+---
+
+### 2. Anexar novo volume
+
+* Vá em **Volumes**
+* Selecione `Restored Volume`
+
+👉 Ações → Attach:
+
+* Instância: `Lab`
+* Device: `/dev/sdg`
+
+---
+
+# 🔹 PARTE 7 — Montar volume restaurado
+
+### 1. Criar pasta
+
+```bash
+sudo mkdir /mnt/data-store2
+```
+
+---
+
+### 2. Montar
+
+```bash
+sudo mount /dev/sdg /mnt/data-store2
+```
+
+---
+
+### 3. Verificar recuperação
+
+```bash
+ls /mnt/data-store2/
+```
+
+👉 Arquivo voltou ✅
+
+---
+
+# 🔹 COMO FUNCIONA (resumo rápido)
+
+* EBS = disco na nuvem
+* Snapshot = backup do disco
+* Você pode restaurar a qualquer momento
+
+👉 É tipo:
+
+* HD + backup + recuperação
+
+---
+
+# ✅ FINALIZAÇÃO
+
+* Clique em **Submit**
+* Veja nota
+* Clique em **End Lab**
+
+---
+
+# 💡 Dicas importantes
+
+* Volume e instância precisam estar na **mesma AZ**
+* Sempre montar o disco no Linux
+* Snapshot salva dados mesmo se apagar depois
+* Novo volume herda dados do snapshot
+
+---

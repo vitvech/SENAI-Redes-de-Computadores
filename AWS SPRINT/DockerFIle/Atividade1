@@ -1,0 +1,19 @@
+Instalar extensão docker
+
+            FROM nginx
+            LABEL maintainer="Seu e-mail"
+                       # ( key="value" )
+            LABEL description="Servidor WEB NGINX - SENAI REDES"
+                       # Nome, Descrição
+            LABEL version="1.0"
+                       # Quando tiver atualização, só mudar aqui
+            workdir /usr/share/nginx/html
+                       # Diretório de trabalho
+            RUN rm -rf ./*
+                       # Apagar tudo que tem na pasta para garantir que não tenha "sujeira"
+            COPY ./site/ . 
+                       # Tudo que estiver dentro da pasta site, vai copiar para a pasta html
+            EXPOSE 80
+                       # Vai se conectar com o mundo exterior pela porta 80
+            CMD [ "nginx" , "-g" , "daemon off;" ]
+                       # comando que inicia o Nginx e mantém o container Docker rodando.

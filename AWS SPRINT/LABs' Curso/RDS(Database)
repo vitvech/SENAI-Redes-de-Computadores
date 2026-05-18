@@ -1,0 +1,191 @@
+CRIAÇÃO DE BANCO DE DADOS
+
+
+# 🧪 Laboratório 5 — Passo a passo (Banco de Dados + Aplicação)
+
+## 🔹 Antes de começar
+
+1. Clique em **Iniciar laboratório**
+2. Aguarde o indicador ficar **verde**
+3. Abra o **Console da AWS**
+4. Deixe as abas lado a lado
+
+---
+
+# 🔐 Tarefa 1: Criar Security Group do banco
+
+👉 Objetivo: permitir que o servidor web acesse o banco
+
+1. Vá em **VPC**
+2. Clique em **Grupos de segurança**
+3. Clique em **Criar grupo de segurança**
+
+Preencha:
+
+* Nome: `DB Security Group`
+* Descrição: `Permit access from Web Security Group`
+* VPC: `Lab VPC`
+
+### Regra de entrada:
+
+* Tipo: **MySQL/Aurora (3306)**
+* Origem: **Web Security Group**
+
+👉 Clique em **Criar**
+
+✅ Agora o banco poderá ser acessado pelo servidor web
+
+---
+
+# 🌐 Tarefa 2: Criar Subnet Group
+
+👉 Objetivo: definir onde o banco pode rodar
+
+1. Vá em **RDS**
+2. Clique em **Grupos de sub-redes**
+3. Clique em **Criar**
+
+Preencha:
+
+* Nome: `DB-Subnet-Group`
+* Descrição: `DB Subnet Group`
+* VPC: `Lab VPC`
+
+### Sub-redes:
+
+* Zonas: `us-east-1a` e `us-east-1b`
+* Subnets:
+
+  * `10.0.1.0/24`
+  * `10.0.3.0/24`
+
+👉 Clique em **Criar**
+
+---
+
+# 🗄️ Tarefa 3: Criar banco no Amazon RDS
+
+👉 Objetivo: subir o banco de dados MySQL
+
+1. Vá em **RDS → Bancos de dados**
+2. Clique em **Criar banco de dados**
+
+### Configurações principais:
+
+* Engine: **MySQL**
+* Template: **Dev/Teste**
+* Alta disponibilidade: **Multi-AZ**
+
+---
+
+### Credenciais:
+
+* Identificador: `lab-db`
+* Usuário: `main`
+* Senha: `lab-password`
+
+---
+
+### Instância:
+
+* Classe: `db.t3.micro`
+
+---
+
+### Armazenamento:
+
+* Tipo: SSD
+* Tamanho: 20 GB
+
+---
+
+### Conectividade:
+
+* VPC: `Lab VPC`
+* Security Group: **DB Security Group**
+* Remova o padrão
+
+---
+
+### Configuração adicional:
+
+* Nome do banco: `lab`
+* ❌ Desativar backups automáticos
+* ❌ Desativar criptografia
+* ❌ Desativar monitoramento avançado
+
+---
+
+👉 Clique em **Criar banco de dados**
+
+⏳ Aguarde ~4 minutos até ficar **Disponível**
+
+---
+
+### 📌 Importante:
+
+1. Clique no banco `lab-db`
+2. Copie o **Endpoint**
+
+   * Exemplo: `lab-db.xxxx.rds.amazonaws.com`
+3. Salve (você vai usar já já)
+
+---
+
+# 💻 Tarefa 4: Conectar aplicação ao banco
+
+## 4.1 Abrir aplicação
+
+1. Pegue o IP do **WebServer** (em “Detalhes da AWS”)
+2. Abra no navegador
+
+---
+
+## 4.2 Configurar conexão
+
+1. Clique na aba **RDS** no site
+
+Preencha:
+
+* Endpoint: (o que você copiou)
+* Database: `lab`
+* Username: `main`
+* Password: `lab-password`
+
+👉 Clique em **Submit**
+
+---
+
+## 4.3 Testar
+
+✔ Vai aparecer um **Address Book**
+
+Agora você pode:
+
+* ➕ Adicionar contatos
+* ✏️ Editar
+* ❌ Excluir
+
+✅ Tudo está sendo salvo no banco RDS
+
+---
+
+# 📤 Finalização
+
+1. Clique em **Enviar**
+2. Veja sua nota
+3. Clique em **Encerrar laboratório**
+
+---
+
+# 🎯 Resumo rápido
+
+Você fez:
+
+* ✅ Criou Security Group para banco
+* ✅ Criou Subnet Group
+* ✅ Criou banco no RDS (Multi-AZ)
+* ✅ Conectou aplicação ao banco
+* ✅ Testou persistência de dados
+
+---

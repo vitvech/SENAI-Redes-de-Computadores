@@ -1,0 +1,23 @@
+Bayface = Forma gráfica de representação de um rack de rede, onde se destaca o posicionamento do equipamentos
+U = Unidades
+
+Microsoft Visio = Programa da Microsoft para fazer fluxogramas e diagramas(PAGO)
+Draw.io = Mesmo proposito(porem GRATIS)
+
+Abaixo ou acima do patch-panel ou do switch tem que ter uma tampa cega e depois vem um organizador terminando com uma tampa cega
+
+Legenda = TC - Tampa cega
+	  Sw = Switch
+	  PP = Patch-Panel
+
+DRAW.Io
+
+
+1- More Shapes
+2- Redes, Rack
+
+------Lugar dos componentes
+
+1- Rack/General
+. Rack - PP (CoverPlate) . Organizados de cabos (Horizontal Cable Duct)
+

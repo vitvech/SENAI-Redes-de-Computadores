@@ -1,0 +1,40 @@
+
+        Cursos > Lab > Módulos > Iniciar os laboratórios de aprendizagem da AWS Academy 
+
+                Descer tudo em clicar em Agreen in 
+
+                    AWS (Vermelho)                              Tempo: 00:00                          Start lab          End Lab       AWS Details     Readme       Reset
+                        Não está em execução
+                    AWS (Amarelo)
+                        Provisionando
+                    AWS (Verde)
+                        Funcionando
+
+                    Start lab
+                    Após Carregar, Clicar em AWS(Verde) para abrir o console
+
+
+                LINK NOTION, SCRIPT PARA UTILIZAÇÂO NA CRIAÇÂO DA INSTÂNCIA
+                    https://bald-girl-473.notion.site/Criando-uma-inst-ncia-Amazon-EC2-Linux-26dd32b0a463812d9f04c55a3c447f60
+
+            Regiões podem ter sido desabilitadas por causa de leis da propria da regiao, porém se precisar usa. Ligar na AWS e justificar que eles ligam
+
+            Caso for alterar o idioma, alterar na propria config do console. Tradutor traduz ao pé da letra.
+
+Primeira API que vamos utilizar
+
+                    Pagina de busca e digitar EC2. Clicando em cima
+                    Executar Instância
+
+                                    Nome:   WebServer 
+                                            Amazon Linux
+                                            AMI do Amazon Linux 2023 kernel 6.1
+                                            arq 64bits x86
+                                            t3 micro (UTILIZAR SEMPRE A MAIS RECENTE)
+                                            vockey (chave de criptografia)
+                                            Atribuir Ip público automticamente (HABILITAR) -  (Toda vez que você acessar a maquina, vai recebe um IP DIFERENTE)
+
+                                            Opções avançadas -> Dados do usuario - Colar o bin do notion 
+
+
+                                    Copiar DNS pública

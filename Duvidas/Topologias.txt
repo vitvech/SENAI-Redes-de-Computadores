@@ -1,0 +1,15 @@
+Fisica= Mostrar Onde o Rack, Prateleira o equipamento(switch,router)
+Logica = Qual a porta, rede e a velocidade que trafega
+
+
+AWS- Eleven nine = 99.999999999% ano ano. Utiliza a estrutura mesh/Totalmente conectada
+
+
+Topologias- 
+
+	Barramento
+	Estrela
+	Mesh
+	Arvore
+	Anel
+

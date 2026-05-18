@@ -1,0 +1,35 @@
+
+
+        NOC - Monitoramento de Rede
+        SOC - Monitoramento da Segurança
+
+
+    O que é uma ferramenta de monitoramento?
+
+        ->  Software ou sistema que observa e analisa em tempo real 
+        o desempenho,a segurança e a disponibilidade de redes,servidores,aplicações     
+        e dispositivos fisicos(cameras/sensores).
+
+        SNMP - Protocolo usado para monitorar cameras,switches,roteadores,impressoras e servidores
+            OBS: se der para baixar o Agent, melhor por ser mais rapido.
+            Tem que ter uma relação (Ida e Volta)
+        Camada 7
+
+    Resumindo:    
+        Grafana -> Visualização (Pega dados do Zabbix e mostra de forma mais amigável)
+        Zabbix -> Servidor de monitoramento (Central)
+        Zabbix Agent -> Coleta dados do dispositivo e envia para o Zabbix Server
+        SNMP -> Protocolo para monitorar dispositivos de rede (Switches, Roteadores, Impressoras, Servidores)
+                    Consegue instalar pacote? -> Se consegue, também consegue instalar o agente, o que é melhor para monitoramento.'
+                    Se não consegue, tem que usar o SNMP.'
+
+        
+
+
+                    
+
+
+        
+
+    
+

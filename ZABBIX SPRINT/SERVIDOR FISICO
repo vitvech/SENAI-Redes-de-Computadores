@@ -1,0 +1,45 @@
+
+                    BOOT:
+                                 COLOQUE O PENDRIVE COM A ISO(VENTOY)
+                                 REINICIE O COMPUTADOR E VÁ EM 
+                                            Boot Configuration
+                                                    Subir o pendrive para primeiro
+                                                    descer, procurar por:
+                                                                Enable Secure Boot (SEGURANÇA DO BOOT)
+                                                                    DESATIVAR - CLICAR EM YES
+
+
+                Colocar IP do exsi como estático, porem na rede
+                entrar via navegador
+
+                                        Fazer a ativação do ssh e do snmp server
+                                
+                                Vá em host > Manager > Services 
+
+
+                                                Procure por TSM-SSH - Clique em ativar
+                                                e
+                                                Por snmpd 
+
+                                                Entrar no exsi via ssh para configurar o snmpd
+
+                                                            esxcli system snmp set --communities public
+                                                            esxcli system snmp set --enable true
+                                                            esxcli system snmp start
+                                                            esxcli system snmp get
+                                                                            TEM QUE ESTAR ASSIM:
+                                                                                        Enabled: true
+                                                                                        Communities: public
+                                                                                        Port: 161
+                                                No outro host use:
+
+                                                snmpwalk -v2c -c public 172.16.33.52
+                                                
+                                            Criação do host:
+
+                                                            Nome: EXSI
+                                                            Template: VMWARE HYPERVISOR
+                                                            Group: QUALQUER UM.    RECOMENDA CRIAR UM GRUPO PARA ORGANIZAR
+                                                            TYPE: SNMP Interface: 172.16.33.52
+
+                                                                    

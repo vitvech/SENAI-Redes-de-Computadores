@@ -1,0 +1,28 @@
+ACESSAR ROOT PELO PUTTY 
+
+    nano -> /nano/ssh/sshd_config
+
+    Achar:
+
+    #Authentication:
+        
+        #PermitRootLogin prohibit-password
+                         (apagar          )
+     
+e
+
+    Deverá ficar assim:
+        
+        PermitRootLogin yes
+
+    systemctl restart ssh -> reiniciar o serviço(ssh)
+
+
+
+    
+
+
+
+
+    apt install git -y -> ferramenta de repositorio
+    

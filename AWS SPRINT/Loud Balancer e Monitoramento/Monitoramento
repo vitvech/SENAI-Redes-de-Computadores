@@ -1,0 +1,149 @@
+Monitoramento:
+
+                    Metricas do amazon cloudwatch - alarme para iniciar uma ação se uma métrica sair de um intervalo aceitavel
+                    Logs de acesso - captura informacões detalhadas sobre solicitacões enviadas ao load balancer
+                    logs do aws cloudtrail - quem, oque , quando e onde das interacões de API nos serviços da aws 
+
+        Explicando o cloudwatch e cloudtrail
+
+
+    Cloudwatch - a nivel de parametros
+
+                    O que é um parametro? ->  
+
+                        Quando eu trabalho com parametros ou metricas, estou trabalhando com cloudwatch 
+
+                Monitoramento de recursos e aplicativos
+                Metricas padrao e Personalizadas
+                Envia notificacoes e executa acoes do amazon ec2 auto scaling ou do amazon ec2
+                            cpu em 70%, ele aciona o auto scaling e ele cria uma nova instancia ec2
+
+                
+                Criar alarme com base no - 
+                    limite estatico
+                    detecção de anomalia (cpu variando mt, é uma anomalia)
+                    expressao matematica de metricas
+                
+                Especificar
+
+                    -
+                    -
+                    -
+                    -
+                
+              Atividade CloudWatch
+
+                Identificar quando o alarme vai ocorrer ou n
+
+                    Ex: se a utilização da cpu for >60% por 5minutos - Correto
+                        Se o numero de conexoes simultaneas for >10 por 1 minuto -> correto
+                        Se o tamanho maximo de bucket em bytes for de 3 por 1 dia -> incorreto, tem que colocar opção de limite
+                                                                                     >,>=, <= ou =
+                    
+              
+              
+              
+  Cloudtrail - Nivel de usuario
+
+
+
+                    Dedo duro dos acessos da sua conta
+
+                    Trabalha para a governancia também
+
+
+                    Explicação do google:  Ele registra automaticamente as chamadas de API, ações de usuários e serviços, como quem realizou a ação, 
+                                           o IP de origem e o horário. Por padrão, mantém o histórico dos últimos 90 dias
+                        
+
+
+
+
+
+                    
+        Auto scaling
+
+            Porque a escabilidade é importante? -> 
+
+                Se eu trabalho com uma capacidade provisionada, eu vou pagar pelo que foi provisionada
+
+                    Auto scallig veio para não precisar escalonar tanto minha infra, caso tenha um pico, volta para o necessario
+
+                                    Ex: 1 dia instancia
+                                        Teve um pico, aumenta para 2
+                                        Teve outro pico, opa 3
+                                        Teve um pico muito grande, 5
+                                        foi diminuindo o uso, 3
+                                        diminuiu mais, 1
+
+                
+                Ajuda a manter a disponibilidade do aplicativo
+                Permite adicionar ou remover automaticamente instancias do ec2 de acordo com condicoes que voce define
+                Detecta instancias do ec2 danificadas e aplicativos nao integros e substitui as instancias sem sua intervencao
+                Fornece varias opcoes de escabilidade - manual, programada, dinamica ou sob demanda e preditiva
+
+
+
+                Capacidade provisionada
+
+                    Trafego tipico
+
+                    modo flatch
+                    Manter uma infra, onde eu trabalho com assinatura de infra com pagamento logo no começo
+                    que é sempre 24% e teve um pico
+
+                    O desafio é adivinhar eficientemente a quantidade desconhecida de quanta capacidade de computacao voce precisa
+
+                        ai que entra o auto scaling - Deixar ativo apenas quando tiver o pico
+                        Não sei oque ocasionou o pico -> verificar o cloudwatch
+
+
+                        Grupos de scalling 
+
+                            Tamanho minimo
+                                    Anomalia, tem q ter uma para deixar funcionado
+                            Capacidade desejada
+                                    ()
+                            Executar ou encerrar instancias conforme necessario 
+                                    (teve um pico, ele ativa as outras 2)
+                            Tamanho maximo
+                                    (4)
+
+
+                            manteve 5 instancias, apaga a mais velha e mantem apenas 4
+
+                        
+
+                        Expansao x reducao
+
+
+                        Config basica - 2 instancias
+                        Aumento - aumentou mais 1 maquina (3)
+                        Reducao - Destruiu aquela maquina 
+
+
+                                Cria uma configuração de executação 
+                                Criar um modelo de lançamento
+                                            Grupo de auto scalling,sempre vai verificar esse modelo
+                                
+
+                        
+                        Quando?
+
+
+                            Manter o numero atual
+                                Verificacoes de integridade
+                            Escabilidade manual
+                                Capacidade minima,maxima e desejada
+                            Escabilidade programada
+                                Acoes programadas - Ex: Programar para algum pico, trabalhar com as instacias ec2 no maximo
+                            Escabilidade dinamica
+                                Politicas de escabilidade
+                            Escabilidade preditiva
+                                AWS auto scalling - Ex: Sei que todo dia apartir das 10hrs, minhas arquitetura vai ter uma certa demanda
+                                                            Vai pegar as medias anteriores e aumentar as intancias de acordo
+                            
+
+
+                
+

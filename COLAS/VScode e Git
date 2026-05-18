@@ -36,3 +36,10 @@ Confirmar (Commit)
 Sincronizar com GitHub (Push/Pull)
         Git Bash: Use git push (enviar para o GitHub).
         VS Code Visual: Clique no botão Sync Changes na barra de status inferior.
+
+
+
+
+            [user]
+	        name = Vitor
+	        email = vitorvechiezoliveir@gmail.com

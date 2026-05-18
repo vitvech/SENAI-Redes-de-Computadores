@@ -1,0 +1,7 @@
+certctl rehash
+pkg-static install -fy pkg pfSense-repo pfSense-upgrade
+pfSense-upgrade -d
+
+Clicar em Package Manager
+
+E Atualizar

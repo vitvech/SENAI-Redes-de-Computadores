@@ -1,0 +1,122 @@
+PROTOCOLO SPANNING-TREE
+ DESCRIÇÃO "Protocolo para evitar loops em redes de computadores"
+
+!Para ver mac-adress use o comando
+enable
+show mac address-table
+
+!Para ver a configuração do spanning-tree use o comando
+enable
+show spanning-tree
+
+!Para ver a prioridade do switch use o comando
+enable
+show spanning-tree root
+
+
+blk - blocked - bloqueado = 20 segundos
+lis - listening - escutando = 15 segundos
+lrn - learning - aprendendo = 15 segundos
+fwd - forwarding - encaminhando
+
+convergencia tempo de 50 segundos - PVST (Per VLAN Spanning Tree)
+
+!Tabela de custo de Bridge
+
+Velocidade         Custo
+10 Mbps             100
+100 Mbps             19
+1 Gbps                4
+10 Gbps               2
+
+
+!Para alterar a prioridade do switch use o comando       -     PVST
+enable
+config t
+spanning-tree vlan 1 priority ?
+spanning-tree vlan 1 priority <0-61440>
+do show span vlan 1
+exit
+
+!ou
+spanning-tree vlan 1 root ?
+!prymary
+!secondary
+spanning-tree vlan 1 root primary
+
+!Como trocar o custo da porta
+enable
+config t
+int f0/1
+spanning-tree vlan 1 cost <1-200000000>
+!ex: spanning-tree cost 1
+
+!Ver as alterações
+do show span vlan 1
+exit
+
+!Opcões do spanning-tree na interface
+enable
+config t
+int g0/1
+spanning-tree ?
+!Quando habilitado, desabilita a porta se um BPDU for recebido
+bpduguard <enable | disable>
+
+!Modifica a prioridade da interface
+cost <1-200000000>
+
+
+!Não deixa a interface ser rootport
+guard root
+
+!Pear-to-Pear para link dedicado ou shared link para hub
+link-type <point-to-point | shared>
+
+!Port fast diminui a convergência da porta
+disable      Disable portfast for this interface
+trunk        Enable portfast on the interface even in trunk mode 
+
+
+!Como mudar o protocolo PVST+ para RAPID-PVST vai diminuir a convergência para 30 segundos
+enable
+config t
+spanning-tree mode ?
+!pvst        Per-VLAN Spanning tree mode
+!rapid-pvst  Per-VLAN rapid spanning tree mode
+         !ex: spanning-tree mode rapid-pvst
+
+
+
+Resumo: 
+
+
+Objetivo do STP
+
+O principal objetivo do STP (IEEE 802.1D) é prevenir loops de Camada 2 em redes Ethernet comutadas que possuem caminhos redundantes. 
+
+Loops de Camada 2: Caminhos redundantes podem causar loops lógicos e físicos, resultando em instabilidade da tabela de endereços MAC, saturação de links, alta utilização da CPU nos switches e tempestades de broadcast, o que torna a rede inutilizável.
+
+Topologia sem Loop: O STP cria uma topologia sem loop ao selecionar um único caminho entre quaisquer dois dispositivos e bloqueando (colocando em estado de descarte) os caminhos redundantes, enquanto mantém a redundância disponível em caso de falha de um link ativo.
+
+Algoritmo: O STP é baseado em um algoritmo inventado por Radia Perlman, que cria a topologia sem loop. 
+Operações STP
+
+O STP usa o seu Algoritmo de Árvore de Abrangência (STA) em um processo de quatro etapas: 
+
+Eleição da Root Bridge: O switch com o menor Bridge ID (BID) se torna a ponte raiz. O BID é composto por um valor de prioridade, o endereço MAC do switch e um ID de sistema estendido.
+
+Eleição das Portas Raiz: Em cada switch não raiz, a porta raiz é a porta com o menor custo de caminho (root path cost) para a Root Bridge.
+
+Eleição das Portas Designadas: Em cada segmento de rede (entre switches), uma porta designada é eleita. É a porta no segmento com o menor custo para a Root Bridge.
+
+Portas Alternativas/Bloqueadas: Portas que não são raiz nem designadas são colocadas em estado de bloqueio (blocking ou discarding) para evitar loops. 
+
+Os switches trocam mensagens chamadas Bridge Protocol Data Units (BPDUs) para compartilhar informações e realizar essas eleições. 
+Evolução do STP
+
+O termo STP é frequentemente usado para se referir a várias implementações: 
+
+RSTP (Rapid STP): Padrão IEEE 802.1w, fornece convergência mais rápida que o STP tradicional. Seus estados de porta são learning, forwarding e discarding.
+PVST+ (Per-VLAN STP Plus) e Rapid PVST+: Implementações proprietárias da Cisco que criam uma instância separada de STP ou RSTP para cada VLAN, permitindo diferentes Root Bridges por VLAN. Suportam recursos como PortFast e BPDU Guard.
+PortFast: Recurso da Cisco que move imediatamente uma porta de acesso do estado de bloqueio para o de encaminhamento, ignorando a espera de convergência do STP. 

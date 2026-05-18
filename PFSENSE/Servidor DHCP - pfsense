@@ -1,0 +1,55 @@
+
+
+
+
+
+            Services > DHCP server
+            Habilitar -> Enable DHCP server on LANADMIN interface
+            Range -> Ex: 192.168.10.20              192.168.10.240
+
+
+                    Boa prática -> Deixar alguns IPs fixos como:            Impressoras
+                                                                            Servidores
+                                                                            APs
+                        IP fixado tem que estar fora desse range
+
+
+
+
+
+
+            DNS -> Ex: IP do domínio
+            Gateway -> IP que leva para fora da rede
+
+                    Networking booting -> Ex: Formatação por rede
+                                                        (Feito em sala)
+                         
+
+            
+
+            Ir no client, testar
+
+
+            ncpa.cpl, colocar como pegar automaticamente
+
+            CMD ->    ipconfig /release
+                      ipconfig /renew
+                      ipconfig /all
+
+
+
+
+        STATIC MAC
+
+                no windows
+                    ipconfig /all
+
+
+
+
+                no pfsense
+
+
+                    dhcp server
+                    descer até
+                    Satic Mapping

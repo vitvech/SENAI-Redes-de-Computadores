@@ -1,0 +1,96 @@
+
+
+                            Na vmware:
+                                            1 placa em bridge
+                                            1 placa em custom: vmnet19
+
+
+
+                            
+                            Verificar interface WAN
+                            Criar regra any(para n cair)
+
+
+
+                            nano /etc/network/interfaces
+                            systemctl restart networking
+                            VERIFICAR SE PEGOU IP FIXO 
+
+
+                            ir no pfsense
+                            Adicionar interface
+
+                            Packet Manager
+                            Fazer o dowload do zabbix agent
+                            -zabbix-agent64- 
+
+                            Services
+                            Zabbix Agente 6. 4
+                            Enable   ->   FLEGAR .  Enable Zabbix Agent service.
+                            Server: 192.168.10.10 (IP FIXO CONFIGURADO)
+                            Server Active:   192.168.10.10 (IP FIXO CONFIGURADO)
+                            Hostname: ZABBIX
+
+
+                    ir em packet manager
+
+                    instalar net-snmp
+                    services > snmp
+                    flegar enable
+                    colocar em LAN
+                    ir em SNMP 
+                    FLegar enable
+
+
+
+                    no zabbix 
+
+                    criar host
+                    
+                    nome : pfsense
+                    Templates: PFsense by snmp
+                    host group: Virtual Machine
+                    
+
+                    SNMP - 192.168.10.1
+                    Version: SNMPv2     
+                    {$SNMP_COMMUNITY}
+
+
+                    ir em macro
+
+                    adicionar
+                    {$SNMP_COMMUNITY}   -       public
+
+
+
+
+                    ou 
+
+                    nome : pfsense
+                    Templates: FreeBSD by Zabbix
+                    host group: Virtual Machine
+                    Agente - 192.168.10.10
+                                pfsense ,
+
+
+
+
+
+ZABBIX
+        apt install snmp
+        
+                snmpwalk -v3 -u senai -l AuthPriv -a SHA -A Senai@134 -x AES -X Senai@134 (Colocar ip do firewall) e colocar usuario e  senha que definimos no pfsense
+
+PFSense
+
+                 Instalar o pacote net-snmp
+                 Entrar em servicos > SNMP (NET-SNMP) e seguir as fotos abaixos
+
+                    
+
+
+                    
+
+
+                        snmpwalk -v2c -c public 172.16.33.191

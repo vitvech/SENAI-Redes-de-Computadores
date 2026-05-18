@@ -1,0 +1,21 @@
+No AD (Active Directory)
+
+    Criar a OU
+    Para apaga-la
+    Clicar em Exibir
+    Recursos Avançados
+    Clicar com o botão direito na OU
+    Propriedades
+    Aba objeto
+    Desmarcar a opção "Proteger objeto contra exclusão acidental"
+    OK
+    Clicar com o botão direito na OU
+    Excluir
+    Confirmar a exclusão
+    Pronto a OU foi apagada
+
+
+
+
+
+    Isso so se caso, Estiver flegado a opção de proteger contra exclusão acidental

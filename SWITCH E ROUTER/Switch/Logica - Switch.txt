@@ -1,0 +1,177 @@
+---------------------5 Elementos de rede
+
+
+
+Mensagem
+
+Emissor
+
+Meios de transmissão
+
+Receptor
+
+Destino
+
+
+
+---
+
+ Protocole de Rede
+
+
+
+Requisitos:
+
+
+
+Codificação -
+
+Encapsulamento -
+
+Tamanho da mensagem -
+
+Velocidade de envio -
+
+Opções de Envio -
+
+
+
+
+
+---
+
+
+
+Comunicação Unicast = Comunicação Unica(Exclusivamente para UMA MAQUINA 1 para 1).
+
+Comunicação Multicast = Uma para um Grupo Especifico ( para alguns da rede, não para todos).
+
+Opção de Envio - Broadcast = envia para todos para identificar um Dispositivo (1 para todos).
+
+
+
+
+
+IEEE (Instituto de Engenheiros elétricos e eletrônicos)- Regulamentar padrões de cabos e conectores
+
+IETF ()- Fizeram os IPS e suas versões
+
+IANA (Internet Assigned Numbers Authority) - Distribuições de IPS
+
+ICANN () - Responsável por administrar os Nomes(Domínios)
+
+ITU (União internacional de Telecom ) - Eles vao regularizar as frequencias
+
+TIA (Associação de industrial de telecomunicação ) =
+
+ISO = Regulamenta
+
+
+
+------------------Modelos de Referencia
+
+
+
+MODELO OSI			MODELO TCP/IP
+
+
+
+Aplicação----|
+
+apresentação |------------------>   Aplicação
+
+sessão-------|
+
+transporte---------------------->   Transporte
+
+rede---------------------------->   Internet
+
+enlace-----|
+
+	   |-------------------->   Acesso a rede
+
+física-----|
+
+
+
+GRAFICO PARA FAZER O TRABOUSHOUT
+
+
+
+---
+
+
+
+PDU = ( Unidade de dados do protocolo)
+
+
+
+
+
+Aplicação = PDU = Dados ( Unidade de dados do protocolo)
+
+Transporte = PDU = Segmento
+
+Rede = PDU = Pacote
+
+Acesso a rede = PDU = Quadro (Depende do meio)
+
+Física = PDU = Bits
+
+
+
+
+---
+
+Suíte de Protocolos
+
+
+
+---APLICAÇÃO----
+
+
+
+HHTP -
+
+DNS - Converte um Nome em um IP
+
+DHCP - Distribui IP automático(Faz um Wicast(Requerimento de IP), e o outro um (Oferta de IP) Ofercast).
+
+FTP -
+
+
+
+TRANSPORTE
+
+
+
+TCP = Confirma a informação
+
+UDP =
+
+
+
+---REDE---
+
+
+
+IPV4 =
+
+IPV6 =
+
+ICMPv4 = Ping
+
+
+
+---Acesso a Rede---
+
+
+
+Ethernet =
+
+Wlan = Wireless Local Network
+
+
+
+app de cyber - WIRESHAK
+

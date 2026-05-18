@@ -1,0 +1,55 @@
+obs: cd /var/www/html/ -> 
+        onde esta index.html(pagina principal do site)
+ 
+ 
+    nano index.html -> Criar pagina e editar
+    systemctl restart apache2 -> restartar serviço(apache2)
+
+
+            Script para o chatgpt:
+
+
+                Estou usando Apache2 <que site você quer>
+
+                ja estou em /var/www/html
+                cria tudo aqui
+
+CRIAR MAIS DE UM SITE 
+
+        mkdir redes -> Criar um diretorio para o 2 site
+        cd redes -> entrar no diretorio
+        nano index.html -> Criar pagina do site
+                PORTA 8080 ou 80
+        cd /etc/apache2 -> Entrar no diretorio de configuração do serviço
+                           Para ativar o site
+
+        cd sites-available ->
+        nano 000-default-conf ->
+            Document root <caminho -> Caminho do site
+
+        Copiar 000-default-conf -> cp 000-default-conf <nome-do-arquivo-destino>
+        nano redes.conf -> Arquivo de config do 2 site
+        alterar porta para 8080
+        alterar document root -> /var/www/redes
+        a2ensite redes.conf
+        systemctl restart apache2 -> Restartar serviço
+
+
+PASSO A PASSO GERAL:
+
+1-        CRIAR UM DIRETORIO E COLOCAR O CONTEUDO DO SITE /VAR/WWW/REDES 
+2-            CRIAR UM VIRTUAL HOST (ARQUVIO DE CONFIG DO SITE)
+
+                     SITE DE TESTE 
+                         /ETC/APACHE2/SITE-AVAILABLE
+                         /ETC/APACHE2/SITE-AVAILABLE/REDES.CONF
+
+3-ATIVAR O SITE -> JOGAR PARA O SITE-ENABLE - SITES EM PRODUÇÃO
+         comando ->           a2ensite redes.conf
+
+RESTART O SERVICE
+        systemctl restart apache2 
+4-LIBERAR A PORTA DESEJADA DO NOVO SITE
+
+            /ETC/APACHE2/PORTS.CONF
+            Adicionar a porta 8080 -> Listen 8080

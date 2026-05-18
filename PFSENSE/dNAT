@@ -1,0 +1,48 @@
+
+
+                NAT -> Network Address Translation ->       Mascara o IP privado para o público, para assim acessar a internet
+                                                                                WAN ->
+                            Roteador e Firewall -> Esses dois podem fazer isso
+
+
+                dNAT -> Mascara o público para o privado
+                            LAN -> WAN
+
+OBS:
+                NAT utilizado para múltiplas redes internas acessarem a externa através de um IP público
+
+                é importante para suprir a falta de endereços IP
+
+                IPV6 n tem NAT
+
+------
+
+
+
+
+--------------------------------------------------
+Um honeypot (pote de mel, em inglês) é uma ferramenta de segurança cibernética que funciona como uma armadilha,
+simulando sistemas, dados ou redes vulneráveis para atrair, detectar e analisar atividades de cibercriminosos
+
+
+Uma DMZ (Zona Desmilitarizada) é uma sub-rede física ou lógica de segurança 
+que atua como um perímetro, isolando serviços voltados ao público (web, e-mail, FTP) da rede interna privada
+--------------------------------------------------
+
+
+
+                        pfSense 
+                                        Firewall > NAT > Port Forward
+                                        Add 
+                                        Procotol:TCP
+                                        Destination: WAN Address 
+                                        Destination port range: 5555
+                                        Single host: <IP do servidor>
+                                        Redirect target port: 80 
+
+                        Description: AO ACESSAR NA PORTA 5555 DA WAN(PÚBLICO) ELE REDIRECIONA PARA O IP 
+                                     DO SERVIDOR QUE ESTA NA LAN(PRIVADO)
+
+
+
+                                     

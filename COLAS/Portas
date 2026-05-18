@@ -16,4 +16,16 @@ Pesquisar quais os serviços relacionados as seguintes portas e se eles utilizam
 	-> SNMP ( Protocolo Simples de Gerenciamento de Rede) - Utiliza UDP,  Comunica Informações de registro e gerenciamento com aplicações de monitoramento remoto
 •389
 	-> LDAP (Lightweight Directory Access Protocol) - Utiliza tanto o TCP quanto o UDP, 
-	Explicação: TCP usado para operações padrão e mais confiáveis, enquanto o UDP pode ser usado para pesquisas CLDAP (Connectionless LDAP) específicas, como em domínios Active Directory  
+	Explicação: TCP usado para operações padrão e mais confiáveis, enquanto o UDP pode ser usado para pesquisas CLDAP (Connectionless LDAP) específicas, como em domínios Active Directory 
+
+DNS  -> 53
+HTTP -> 80
+HTTPS -> 443
+
+
+
+portas baixas ->  0 a 1023 (reservadas para serviços)
+portas médias  ->  1024 a 49151 (aplicações especificas)
+portas altas  -> 49152 a 65535 (padrão IANA, pode varias no SO)
+                            (porta efemera 
+                            porta temportaria)

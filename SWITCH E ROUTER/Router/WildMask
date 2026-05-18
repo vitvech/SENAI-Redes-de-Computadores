@@ -1,0 +1,10 @@
+
+-------------------------------
+    wildmask = 255.255.255.255
+               000.000.000.255
+
+(conta de -)             
+
+-------------------------------
+
+A máscara curinga (wildmask) é usada em roteamento e filtragem de pacotes para especificar quais bits de um endereço IP devem ser considerados na correspondência. Na máscara curinga, um bit definido como '0' indica que o bit correspondente no endereço IP deve ser exatamente igual, enquanto um bit definido como '1' indica que o bit correspondente pode ser qualquer valor.

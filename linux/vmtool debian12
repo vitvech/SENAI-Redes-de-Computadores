@@ -1,0 +1,14 @@
+
+                comandos para instalar vmtools no debian12 
+
+
+
+                            sudo apt update
+                            sudo apt install open-vm-tools
+                            sudo apt install open-vm-tools-desktop
+                            sudo reboot
+
+                OBS:
+                                FERRAMENTAS DE 
+                                        (DEV)
+                                                sudo apt install open-vm-tools-dev

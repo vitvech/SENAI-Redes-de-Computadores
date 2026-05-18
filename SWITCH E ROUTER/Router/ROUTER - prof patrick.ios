@@ -1,0 +1,40 @@
+ROUTER - prof patrick
+
+
+
+!obs: Precisa atribuir o IP da WAN na interface antes de usar o ip route
+Ex: route 1- ip address 200.0.0.1 255.255.255.0
+    route 2- ip address 200.0.0.2 255.255.255.0
+    
+!Mostrar o caminho para o router
+    enable
+    configure terminal
+    ip route    10.0.0.0   255.255.0.0       200.0.0.2
+    IP ROUTE <REDE DESTINO> <MASCARA DA REDE DESTINO> <IP DO ROTEADOR DESTINO>
+    
+ !EX:     ip route 192.168.10.0 255.255.255.0 200.0.0.1
+
+    !Configurar SubInterfaces no Router  (INTER VLAN)
+>enable
+#configure terminal
+(config)#interface <nome-da-subinterface>
+                    !EX: (config)#interface g0/0.10
+                                                !10 sendo o número de Vlan
+(config-subif)#encapsulation dot1q <n°-da-vlan>
+(config-subif)#ip address <ip> <mascara>
+
+
+
+
+--------------! ROTEAMENTOS ESTATICO
+
+
+en
+config t 
+route zip
+version 2
+network [ID de rede 1]
+network [ID de rede 2]
+network [ID da WAN(SE NAO N PINGA)]
+
+

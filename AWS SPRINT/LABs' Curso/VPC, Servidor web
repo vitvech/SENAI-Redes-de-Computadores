@@ -1,0 +1,229 @@
+
+---
+
+# 🧪 Laboratório 2 — Criar VPC e executar servidor web (AWS)
+
+## 🎯 Objetivo
+
+Você vai:
+
+* Criar uma VPC
+* Criar sub-redes (pública e privada)
+* Configurar rotas
+* Criar um grupo de segurança
+* Subir um servidor web (EC2)
+
+---
+
+# 🔹 PARTE 1 — Criar a VPC
+
+### 1. Acessar o console
+
+* Clique em **Start Lab**
+* Abra o **Console AWS**
+* Vá em **VPC**
+
+---
+
+### 2. Criar VPC
+
+* Clique em **Criar VPC**
+* Escolha: **VPC e muito mais**
+
+Configure assim:
+
+* Nome do projeto: `lab`
+* CIDR: `10.0.0.0/16`
+* AZs: `1`
+* Sub-redes públicas: `1`
+* Sub-redes privadas: `1`
+
+👉 Ajuste manual:
+
+* Pública: `10.0.0.0/24`
+* Privada: `10.0.1.0/24`
+
+Outros:
+
+* NAT Gateway: **1 AZ**
+* DNS: ativado
+
+👉 Clique em **Criar VPC**
+
+⏳ Aguarde terminar (principalmente o NAT)
+
+---
+
+# 🔹 PARTE 2 — Criar mais sub-redes
+
+### 1. Ir em Subnets
+
+* Clique em **Sub-redes → Criar sub-rede**
+
+---
+
+### 2. Criar sub-rede pública 2
+
+* Nome: `lab-subnet-public2`
+* AZ: us-east-1b
+* CIDR: `10.0.2.0/24`
+
+---
+
+### 3. Criar sub-rede privada 2
+
+* Nome: `lab-subnet-private2`
+* AZ: us-east-1b
+* CIDR: `10.0.3.0/24`
+
+---
+
+### 4. Ajustar rota da privada
+
+* Vá em **Tabelas de rotas**
+* Selecione: `lab-rtb-private1`
+
+👉 Aba **Associações**
+
+* Clique em editar
+* Marque:
+
+  * private1
+  * private2
+
+💾 Salvar
+
+---
+
+### 5. Ajustar rota da pública
+
+* Selecione: `lab-rtb-public`
+
+👉 Aba **Associações**
+
+* Editar
+* Marque:
+
+  * public1
+  * public2
+
+💾 Salvar
+
+---
+
+# 🔹 PARTE 3 — Criar grupo de segurança
+
+### 1. Vá em Security Groups
+
+* Clique em **Criar grupo**
+
+Configure:
+
+* Nome: `Web Security Group`
+* Descrição: `Enable HTTP access`
+* VPC: `lab-vpc`
+
+---
+
+### 2. Regra de entrada
+
+Adicionar:
+
+* Tipo: **HTTP**
+* Origem: **Anywhere (0.0.0.0/0)**
+
+💾 Criar
+
+---
+
+# 🔹 PARTE 4 — Criar servidor EC2
+
+### 1. Ir para EC2
+
+* Clique em **Executar instância**
+
+---
+
+### 2. Configuração básica
+
+* Nome: `Web Server 1`
+* AMI: Amazon Linux 2023
+* Tipo: `t2.micro`
+* Key pair: `vockey`
+
+---
+
+### 3. Rede
+
+* VPC: `lab-vpc`
+* Sub-rede: `lab-subnet-public2`
+* IP público: **ativado**
+
+---
+
+### 4. Segurança
+
+* Escolher grupo existente:
+
+  * `Web Security Group`
+
+---
+
+### 5. Script (MUITO IMPORTANTE)
+
+Cole isso em **User Data**:
+
+```bash
+#!/bin/bash
+dnf install -y httpd wget php mariadb105-server
+wget https://aws-tc-largeobjects.s3.us-west-2.amazonaws.com/CUR-TF-100-ACCLFO-2/2-lab2-vpc/s3/lab-app.zip
+unzip lab-app.zip -d /var/www/html/
+chkconfig httpd on
+service httpd start
+```
+
+---
+
+### 6. Criar instância
+
+* Clique em **Executar instância**
+
+---
+
+# 🔹 PARTE 5 — Testar o servidor
+
+### 1. Aguarde status:
+
+* **2/2 checks passed**
+
+---
+
+### 2. Acessar site
+
+* Copie o **Public IPv4 DNS**
+* Cole no navegador
+
+👉 Deve aparecer:
+
+* Página com logo da AWS
+* Informações da instância
+
+---
+
+# ✅ FINALIZAÇÃO
+
+* Clique em **Submit**
+* Veja sua pontuação
+* Clique em **End Lab**
+
+---
+
+# 💡 Dica importante
+
+Se algo der errado:
+
+* Verifique nomes EXATOS
+* Verifique CIDR correto
+* Confirme se escolheu sub-rede pública
+
+---

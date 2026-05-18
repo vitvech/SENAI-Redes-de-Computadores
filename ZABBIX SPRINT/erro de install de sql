@@ -1,0 +1,20 @@
+1. Limpe o cache do APT
+    Às vezes o sistema guarda informações corrompidas do download anterior.
+
+Bash
+sudo rm -rf /var/lib/apt/lists/*
+sudo apt clean
+sudo apt update
+
+2. Verifique se há algum "bloqueio" (Lock)
+    Se outra atualização estiver rodando escondida, o comando falha.
+
+Bash
+sudo fuser -vki /var/lib/dpkg/lock-frontend
+sudo dpkg --configure -a
+
+3. Teste a conexão com o servidor
+    Tente dar um "ping" no servidor do Debian para ver se sua rede está alcançando ele:
+
+Bash
+ping -c 4 deb.debian.org

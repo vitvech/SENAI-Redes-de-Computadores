@@ -1,0 +1,31 @@
+AREA ÚNICA E MULTIÁREA---------------------------------
+
+
+            OSPF de área única -> Todos os roteadores estão em uma área
+            OSPF de multiárea -> OSPF é implementado usando varias áreas, de maneira hierárquica. Todas as áreas devem se conectar á área
+                                 de backbone (area 0). Os roteadores interconectando as áreas são denominados Area Border Routers (ABRs).
+                            
+                            
+        
+OSPF MULTIÁREA---------------------------
+
+
+        Com o OSPF de várias áreas, um domínio de roteamento grande pode ser dividido em áreas menores, para oferecer suporte ao roteamento
+        hierárquico. O roteamento ainda ocorre entre as áreas (roteamento entre áreas), enquanto muitas das operações de roteamento intensivas do processador,
+        como recalcular o banco de dados, são mantidas em uma área.
+
+        Por exemplo, sempre que um roteador receber novas informações sobre mudanças de topologia na área, o roteador deve executar novamente o algoritmo SPF,
+        criar uma nova árvore SPF e atualizar a tabela de roteamento. O algoritmo exige muito da CPU e o tempo necessário para o cálculo dependendo do tamanho da área.
+        
+    ------------------------------------------------------
+    OBS:  Os roteadores em outras áreas recebem atualizações sobre alterações na topologia, mas esses roteadores somente atualizam a tabela de roteamento, não executam
+          novamente o algoritmo SPF
+    ------------------------------------------------------
+
+
+
+                  Vantagens: Tabela de roteamento menores
+                             Sobrecarga de atualização do estado do link reduzida
+                             Frequência reduzida de cálculos de SPF
+
+

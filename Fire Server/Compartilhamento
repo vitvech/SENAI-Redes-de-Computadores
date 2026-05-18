@@ -1,0 +1,18 @@
+ Criar as pastas igual está no AD
+ 
+ 
+ Propriedades na pasta
+    -> Compartilhamento Avançado
+    -> Compartilhar esta pasta
+    -> Permissões
+    -> Adicionar Todos
+    -> Permitir Controle Total
+    -> OK
+
+
+    Para verificar se está compartilhado
+      -> win + r -> \\localhost
+      -> win + r -> \localhost
+
+      Uma barra = compartilhamento de rede
+      Duas barras = compartilhamento local

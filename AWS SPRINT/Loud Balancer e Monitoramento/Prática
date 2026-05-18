@@ -1,0 +1,190 @@
+
+
+                ir pro ec2
+                Modelos de execução
+
+
+                        1 - maneira de trabalhar com auto scalling
+
+                                        Clicar em modelos de execução
+                                        Criar modelo de execução  
+
+                                            Nome do modelo: Modelo-Execucao-Zero
+                                            Flegar a opção 
+                                                            
+                                                            Fornecer orientação para me ajudar a configurar um modelo que eu possa usar com o Auto Scaling do EC2
+
+                                            Inicio Rapido-                                         
+                                                            Selecionar Amazon Linux
+
+                                            Tipo:           t3.micro
+                                            Par de chave: vockey
+                                            Criar grupo de segurança: 
+                                                                        Modelo-Execucao
+                                                                        Modelo-Execucao
+
+                                            VPC: Colocar a vpc utilizada, (alpha-vpc-vpc, vpc criada na aula anterior)
+
+
+                                            Adicionar regra de grupo de seguranca-
+
+                                                        HTTP - Qualquer Lugar
+                                            
+
+                                            Detalhes avançados-
+
+                                                        Colocar o script passado na aula passada
+
+                                                                https://south-boursin-78a.notion.site/Site-AWS-34ad8ea07cf9801e8c8cc5fc9d60365b
+
+
+                                            Criar
+
+                        
+
+                        2 - Maneira
+
+
+
+
+
+                                        Flegar a instancia
+                                        Imagem e modelos> Criar modelo apartir desta instancia
+                                    
+
+                                        Nome: Modelo-Execucao-1
+                                        Descrição: Modelo-Execucao-1
+                                        Flegar 
+                                                Fornecer orientação para me ajudar a configurar um modelo que eu possa usar com o Auto Scaling do EC2
+
+                                        Subrede 
+                                                    Não incluir no modelo de execução           (Não amarrar na zona, não consegue trabalhar com outra subrede)
+
+                                        
+                                        Zona de disponibilidade
+
+                                                    Não incluir no modelo de execução           (Não amarrar na zona, não consegue trabalhar com outra AZ)
+
+                                        Grupo de segurança
+
+                                                    Existente - Selecionar grupo Modelo-Execucao
+                                        
+                                        Caso, Der erro
+
+                                                    Detalhes avançados,   Colocar nas configs em vermelho, -Não incluir no modelo de execução-
+
+
+-----------------------------
+
+
+            Ir em Load Balancers
+
+                    Criar load balancer
+                    
+                                Application Load Balancer
+
+
+                    
+                    Nome: app-lb
+
+
+
+                            Selecionar vpc criada anteriormente (alpha-vpc-vpc)
+
+
+                            Zona de disponibilidade e Subredes, Selecionar as duas
+
+                            Grupo de segurança, tirar default e flega o Modelo de execucao
+
+
+                    HTTP 80 
+
+                    Ecaminhar aos grupos de destino
+
+                        Clicar no link pequeno embaixo,  Encaminhar para o grupo de destino -> crie um grupo de destino 
+
+
+
+                                                    Instancias
+                                                    nome: app-tg
+                                                    
+                                                                não mexer em nada
+
+
+                                                    Criar nosso grupo de destino
+
+
+                                                    Clique para atualizar o grupo de destino, selecione o grupo de destino criado(app-tg)
+
+                                                    
+
+
+                Grupos de auto scalling
+
+ETAPA 1: Escolher o modelo ou a configuração de execução
+
+                nome: app-asg
+                
+                Selecionar: Modelo-Execucao-1
+
+
+                                    Default(1)
+
+                                    Proximo
+
+ETAPA 2: Escolher as opções de execução de instância    
+
+                VPC - Selecionar a vpc criada anteriormente (alpha-vpc-vpc)
+
+                Selecionar as 2 publicas
+
+
+                Proximo
+
+ETAPA 3: Integrar com outros serviços
+
+                    Anexar balanceador de carga existente
+                    Escolha entre seus grupos de destino de balanceador de carga 
+
+                                        Selecionar o app-tg (Criado anteriormente) 
+                
+                    Proximo
+
+ETAPA 4:    Configurar tamanho do grupo e ajuste de escala
+
+                Capacidade desejada - 2
+
+                Capacidade mínima desejada - 1 
+
+                Capacidade máxima desejada
+
+                Flegar Política de dimensionamento com monitoramento do objetivo
+
+                Valor de destino - 20% (n precisa colocar %)
+
+                Nenhuma politica
+
+                Habilitar
+                            
+                        Habilitar coleta de métricas de grupo no CloudWatch
+
+ETAPA 6: Adicionar etiquetas
+
+                Etiqueta -
+
+                    Name        - ASG
+
+                    Proximo
+
+
+
+        Adicionar 
+
+VERIFICAR PARA VER SE TA FUNFANDO
+
+            
+        Verificar instancias, para ver se foram criadas
+
+                            Copiar DNS do Load Balancer e jogar no google
+
+                        

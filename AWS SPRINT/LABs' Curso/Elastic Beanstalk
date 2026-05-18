@@ -1,0 +1,185 @@
+
+# 🧪 Laboratório — AWS Elastic Beanstalk
+
+## 🎯 Objetivo
+
+Você vai:
+
+* Acessar um ambiente pronto do Elastic Beanstalk
+* Implantar um aplicativo
+* Entender os recursos criados automaticamente
+
+---
+
+# 🔹 PARTE 1 — Acessar o ambiente
+
+### 1. Abrir serviço
+
+* Start Lab → abrir console
+* Buscar por **Elastic Beanstalk**
+
+---
+
+### 2. Abrir ambiente
+
+* Vá na lista de ambientes
+* Clique no nome do ambiente
+
+👉 Verifique:
+
+* Status: **OK (verde)**
+
+---
+
+### 3. Testar URL
+
+* Clique na URL (termina com `elasticbeanstalk.com`)
+
+👉 Resultado esperado:
+
+* ❌ Erro **404 Not Found**
+
+✔️ Isso é normal (sem app ainda)
+
+---
+
+# 🔹 PARTE 2 — Implantar aplicação
+
+### 1. Baixar app exemplo
+
+Baixe:
+
+* `tomcat.zip` (link fornecido no lab)
+
+---
+
+### 2. Fazer deploy
+
+* Volte ao Elastic Beanstalk
+* Clique em **Upload and Deploy**
+
+---
+
+### 3. Selecionar arquivo
+
+* Escolha o arquivo `tomcat.zip`
+
+👉 Clique em **Deploy**
+
+⏳ Aguarde 1–2 minutos
+
+---
+
+### 4. Testar aplicação
+
+* Clique novamente na URL
+
+👉 Agora deve aparecer:
+
+* Página do aplicativo web ✅
+
+---
+
+# 🔹 PARTE 3 — Ver configurações
+
+### 1. Ir em Configuration
+
+* Menu esquerdo → **Configuration**
+
+---
+
+### 2. Observar:
+
+Você verá:
+
+* Tipo de instância EC2
+* Número mínimo e máximo de instâncias
+* Grupo de segurança
+
+---
+
+### 3. Banco de dados (opcional)
+
+* Clique em **Edit** (Network/Database)
+
+👉 Você pode:
+
+* Adicionar banco facilmente
+
+❌ Mas não precisa nesse lab
+
+---
+
+### 4. Monitoramento
+
+* Menu esquerdo → **Monitoring**
+
+👉 Veja:
+
+* CPU
+* Rede
+* Métricas gerais
+
+---
+
+# 🔹 PARTE 4 — Ver recursos criados
+
+### 1. Ir para EC2
+
+* Buscar por **EC2**
+
+---
+
+### 2. Ver instâncias
+
+* Clique em **Instances**
+
+👉 Você verá:
+
+* 2 instâncias rodando (com "samp" no nome)
+
+---
+
+### 3. Recursos criados automaticamente
+
+O Elastic Beanstalk criou para você:
+
+* 🖥️ Instâncias EC2
+* ⚖️ Load Balancer
+* 📈 Auto Scaling Group (2 a 6 instâncias)
+* 🔥 Security Group (porta 80 liberada)
+
+👉 Ou seja:
+Você não configurou nada manualmente — ele fez tudo
+
+---
+
+# 🔹 COMO FUNCIONA (resumo rápido)
+
+* Você envia o código
+* Elastic Beanstalk:
+
+  * Cria infraestrutura
+  * Faz deploy automático
+  * Escala aplicação
+
+👉 É tipo um **“deploy automático completo”**
+
+---
+
+# ✅ FINALIZAÇÃO
+
+* Clique em **Submit**
+* Veja sua nota
+* Clique em **End Lab**
+
+---
+
+# 💡 Dicas importantes
+
+* 404 antes do deploy é normal
+* Sempre aguarde status **OK**
+* Deploy pode levar alguns minutos
+* Beanstalk gerencia tudo por trás (EC2, LB, Scaling)
+
+---

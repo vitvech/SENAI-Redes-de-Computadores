@@ -1,0 +1,81 @@
+SSH - acesso remoto
+
+
+
+FQDN = FULL QUALIFY DOMAIN NAME (Nome de dominio totalmente qualificado )
+
+
+FQ.DN = FULL QUALIFY . DOMAIN NAME 
+        ! Ex: RodrigoRM.Senai134
+
+RSA = Usa chave publica e chave privada (utiliza criptografia parecida com cifra de cesar)
+
+
+
+!Configurando o SSH
+        !DEFINIR NOME DE DOMINIO
+        >   enable
+            configure terminal
+            ip domain-name info.local
+                          (   FQDN   )
+
+!Definir chave de criptografia
+        enable
+        config terminal
+        crypto key generate rsa general-keys modulus 1024
+                                                      (360-4096)
+
+!Criar usúario locais
+enable
+configure terminal 
+username <nome-do-usuario> privilege <1-15> secret <senha>
+        !Ex: username vitor privilege 15 secret CONFIG*ADMIN
+        !    username estagiario privilege 1 secret SEM*PRIVILEGIO
+
+!Ativar o ssh nas linhas VTY 
+enable
+configure terminal
+line vty 0 15
+transport input SSH
+login local
+
+
+!Habilitar o login local no console
+enable
+configure terminal
+login local
+
+
+!Script SSH
+
+enable
+configure terminal
+
+!trocar nome de dispositivo
+hostname SW-CORE
+
+!Definir nome de dominio
+ip domain-name info.local
+
+!Gerar chave de cryptografia
+crypto key generate rsa general-keys modulus 1024
+
+!Criar usuarios locais
+username vitor privilege 15 secret Senha*segura
+username vitor privilege 1 secret Senha*estagiario
+
+!ativar o shh
+
+line vty 0 15
+transport ssh login local
+
+!Ativar o login local na Console 
+line console 0
+login local
+
+!Salvar as configuracoes
+end
+wr
+
+!Verificar se aplicous as configurações
+show running-config 

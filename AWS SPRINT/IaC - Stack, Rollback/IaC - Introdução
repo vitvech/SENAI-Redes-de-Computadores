@@ -1,0 +1,230 @@
+O que é IaC?
+
+-Infrastructure as Code (IaC) é o gerenciamento e provisionamento de infraestrutura por código, em vez de processos manuais.
+ Ela cria arquivos de configuração com as especificações da infraestrutura, facilitando a edição e a distribuição de configurações. 
+ Isso também garante que você provisione sempre o mesmo ambiente. Ao codificar e documentar suas especificações de configuração, 
+ a IaC auxilia no gerenciamento de configuração e ajuda a evitar alterações de configuração não documentadas e ad hoc.
+   
+    IaC -> 
+
+    Sem IaC -> Clique -> Espera -> Clique -> Esquece -> Clique -> Erro -> Clique de novo...
+
+    Com IaC -> git commit + terraform apply -> Ambiente idêntico em 5 min. SEMPRE.
+
+
+
+    O Problema  - Por que IaC existe?
+
+
+        Lento e repetitivo -> Configurar VPC, subnets,SGs, RDS, EC2, ALB manualmente leva 2-3h . para cada novo ambiente (dev,staging, prod) você repete tudo zero.
+        Não reproduzível -> "Funciona em dev mas não em prod" SG com regra diferente, RDS com parametro esquecido. Dois ambientes nunca são idênticos.
+        Sem histórico -> Quem mudou à regra do SG semana passada? Por quê? O console AwWS não tem git - mudanças somem sem rastro.
+        Sem rollback -> Mudança errada no SG derruba a API. Para voltar atrás, você precisar lembrar o que estava antes - ou ter anotado manualmente.
+        Não escala o time -> ----
+        Custo invisivel -> -----
+
+
+
+    
+
+    Conceitos fundamentais de IaC
+
+Declarativo vs imperativo
+
+Declarativo                                                         Imperativo
+
+"Quero 2 Instancias t2.small na us-east-1 com SG X"                 ""
+-> A ferramenta descobre COMO criar
+ex: CloudFormation, Terraform
+
+
+
+
+
+        Declarativo é mais facil de manter - você descreve o estado desejado
+
+
+
+IndePotencia
+
+
+Pesquisar no aws Cloudformation - 
+
+CloudFormation -> Pilhas 
+
+
+Script para a IA claude:            
+
+ 1       Assuma a função de um especialista engenheiro em cloud que trabalha com automação iac
+
+ 2       quero um arquivo yami para criar uma infraestrutura basica com: vpc chamada testeiac, 1 subrede publica,1 sub rede privada , sem nat gateway e com 1 servidor ec2 com amazon linux instalado com nginx ultima versao com uma pagina html com o con teudo hello word e exposto a internet. Crie todos os recursos necessarios
+
+
+
+
+-------------------------
+
+ls
+aws cloudformation deploy
+
+-------------------------
+
+
+
+
+Criei a stack -> Recurso criado em ordem de dependencia
+Update Stack -> Computa o diff, ChangeSet mostra o que vai mudar ANTES de aplicar
+Rollback -> Falha na autenticação? CF volta para o estado anterior automaticamente
+Drift direction -> Alguem clicou no console? CF detecta e mostra o que mudou fora do código
+Delete Stack -> Apaga tudo feito pela create stack, em ordem reversa!       não há undo!!
+
+
+
+
+
+Comportamento do rollback:
+
+            Create falha -> deleta tudo que criou
+            UPDATE falha -> volta para a versao anterior
+            DELETE falha -> Stack fica em delete_failed
+            ROLLBACK falha -> ROLLBACK_FAILED (requer intervenção manual)
+            OnFailure -> DO_NOTHING -> não faz rollback (debug mais facil)
+
+
+
+
+IaC + CI/CD
+
+
+Link + Validate -> terraform validate , tflLint , terraform fmt -check
+Scurity Scan -> tfsec / Checkov , terraform fmt ,
+
+
+
+
+
+Boas Práticas
+
+            Nunca utilizar senhas direto no código, utilizar variaveis
+            
+                            Nunca: password = "SenhaForte"no .tf
+                            Certo: var.db_password (sensitive=true) + SSM
+                            Certo: var.db_password + AWS Secrets Manager
+
+
+            Colocar comentarios no código
+
+                    Por que estou criando?
+                    O que esta fazendo ? 
+                    DOCUMENTAR !!! para não se perder
+            
+            Politicas, sempre do menor previlegio
+
+                        Não usar acesso adm no ambiente de produção. NUNCA!!!
+                                Crie roler com só o que precisa
+                        
+
+            Cuidado com destroy
+
+                        Sempre verificar antes de mandar o destroy
+
+
+            
+
+
+ 
+
+
+
+
+                                RESUMO IaC      -       SLIDES
+
+
+
+O que é IaC:
+        Infraestrutura como código.
+        Você cria infraestrutura usando código em vez de clicar manualmente na AWS.
+
+Exemplos:
+
+        EC2
+        RDS
+        VPC
+        Security Groups
+        Load Balancer
+
+Problemas que IaC resolve:
+
+        demora para criar ambientes
+        erros manuais
+        ambientes diferentes
+        sem histórico
+        difícil rollback
+        difícil trabalho em equipe
+        custo com recursos esquecidos
+
+Conceitos importantes:
+
+Declarativo
+        Você diz O QUE quer.
+        Ex:
+        “Quero uma EC2 t2.micro”
+
+        Ferramenta decide COMO criar.
+
+Exemplos:
+
+        Terraform
+        CloudFormation
+        
+
+Imperativo
+        Você diz passo a passo.
+
+Ex:
+
+        cria EC2
+        configura SG
+        instala pacote
+
+Exemplos:
+
+        Bash Script
+        Ansible
+        Idempotência
+        Executar o código várias vezes gera o mesmo resultado.
+        State
+        A ferramenta precisa saber o que já criou.
+
+Terraform usa:
+        terraform.tfstate
+
+Sem state:
+
+                                        recursos duplicados
+                                        perda de controle da infra
+                                        Drift
+                                        Alguém altera algo manualmente na AWS.
+                                        Infra real fica diferente do código.
+                                        Rollback
+                                        Voltar para versão anterior caso algo falhe.
+
+Fluxo padrão:
+                                        validate -> plan -> apply
+
+Boas práticas:
+
+                                        sempre usar plan antes do apply
+                                        nunca colocar senha no código
+                                        nunca subir tfstate no Git
+                                        usar CI/CD
+                                        usar variáveis
+                                        separar ambientes
+
+Ferramentas:
+
+                                        CloudFormation
+                                        Terraform
+                                        CDK
+                                        Ansible
+                                        Pulumi

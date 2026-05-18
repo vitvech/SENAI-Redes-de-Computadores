@@ -1,0 +1,31 @@
+1-MODÚLO
+
+
+
+     ETAPAS CONCLUIDAS PELO ROTEADOR ------------------------------------
+     
+     1 -  Estabelecer Adjacências de Vizinhos
+     2 -  Trocar anúncios de estado de link
+     3 -  Criar o Banco de Dados de Estado do Link
+     4 -  Executar o algoritmo SPF
+     5 -  Escolha a melhor rota
+
+
+
+    1- Os roteadores habilitados para OSPF devem se reconhecer antes de compartilhar informações.
+               Envia pacotes Hello de todas as interfaces OSPF permitidas para reconhecer se tem algum vizinho nesses links.
+               Se um vizinho estiver presente, o roteador OSPF ativado tenta estabelecer uma adjacência de vizinho com aquele vizinho.
+
+    2- Depois que as adjacências são estabelecidas, os roteadores trocam anuncios de estado de link (LSAs). Os LSAs contêm o estado
+               e o custo de cada link diretamente conectado. Os roteadores inundam o LSAs para todos os vizinhos adjacentes. Os adjacentes que
+               recebem o LSA inundam imediatamente todos os outros diretamente conectados, até que todos da aréa tenham todos os LSAs
+
+    3- Depois de receber os LSAs, os roteadores habilitados para OSPF criam a tabela de topologia (LSDB) com base nos LSAs recebidos.
+               Esse banco de dados contêm todas as informações sobre a topologia da aréa.
+            
+    4- Em seguida, eles executam o algoritmo SPF. As engrenagens na figura para esta etapa são usadas para indicar a execução do algoritmo
+               SPF. O algoritmo SPF cria a árvore SPF.
+
+    5- Após a contrução da árvore, os melhores caminhos para cada rede são oferecidos para a tabela de roteamento IP. A rota será inserida
+               Na tabela de roteamento, a menos que haja uma origem de rota para a mesma rede com uma distância administrativa menor, como uma rota
+               estática. As decisões de roteamento são feitas com base nas estradas da tabela de roteamento.

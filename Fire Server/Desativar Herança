@@ -1,0 +1,17 @@
+
+
+
+
+
+            Propriedades da pasta
+                -> Segurança
+                -> Avançado
+                -> Desabilitar herança
+                -> Converter permissões herdadas em permissões explícitas neste objeto
+
+                Conversão para não perder as permissões que já estavam configuradas
+
+
+O por que desativar a herança?
+      Para poder configurar as permissões de forma personalizada,  
+      sem que as permissões dos diretórios pai sejam aplicadas automaticamente ao diretório filho.

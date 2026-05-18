@@ -1,0 +1,38 @@
+ver status do serviço -> systemctl status <serviço>
+
+
+Colocar o IP da maquina no putty : Ex: aluno@172.16.33.35
+                                    (USER COMUM@ IP)
+            (Se entrar como root direto, NÃO VAI!!)
+    Apos, entrar como root 
+        su -
+        Senha: Senai@134
+
+apt update -y ->
+apt install apache2 -y -> instalar serviço web(apache2)
+    Jogar o IP no google
+
+cd /var/www/html/ -> onde esta index.html(pagina principal do site)
+nano index.html -> entrar no arquivo do site
+    Procurar por "Apache2 Debian Default Page" e Alterar
+    Sair e salvar -> Ctrl X - y - enter
+    Atualizar a pagina e verificar alteração(titulo da pagina)
+        Caso, Atualizar a pagina e não houve alteração
+                Reiniciar o serviço -> systemctl restart apache2
+    rm index.html -> Excluir pagina
+    nano index.html -> Criar uma pagina html(index.html) nova
+
+Document root -> Diretorio do site
+
+
+Portas utilizadas -> HTTP - 80 
+                     HTTPS - 443
+
+                     arquivo de configuração
+                        ports.conf 
+
+Virtual hosts -> Permite ter varios sites no mesmo servidor
+
+Arquivo -> /etc/apache2/sites-available/ -> sites que não estão no ar
+
+

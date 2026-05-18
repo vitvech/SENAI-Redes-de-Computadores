@@ -1,0 +1,103 @@
+System > Certificates 
+
+            Authorities:
+
+                        Add
+                        Description: <nome>
+                        Certificates
+                        Add
+                        Description: CERT<nome>
+                        Certificate authority: <nome colocado anteriormente>
+                        Common Name: IP da wan(pfsense)
+                        Lifetime (days): 3 em 3 meses
+                        Certificate Type: Server Certificate
+                        Country Code: BR
+                        Alternative Names:  IP address     -        <IP da wan>
+
+
+            OBS: Um certificado para cada VPN, eles se acomulam e são autenticados na CA que foi criada
+
+
+            User manager:
+
+                        Cria usuario
+                        Save
+                        Editar
+                                User Certificates:
+                                                    add
+                                                    Definir nome ex: CERT_USER
+                                                    Certificate Type: User Certificate
+                                                    Certificate authority: <nome da CA criada anteriormente>
+                                                    Common Name: <ip da wan>
+                                                    Lifetime (days): 3 em 3 meses
+                                                    Country Code:  BR
+                                                    Alternative Names:  IP address     -        <IP da wan>                           
+
+
+                        
+             Criar VPN:
+
+                        VPN > OpenVPN > Servers > Add
+                        Wizard
+                        Server Mode: Local User Access
+                        Choose a Server Certificate: <certificado criado anteriormente>
+                        Protocol: UDP on IPv4 only
+                        Local Port: 1194 
+                        IPv4 Local Network: <IP da rede interna>/24             -> REDE QUE VOCÊ QUER ACESSAR ATRAVÉS DA VPN
+                        IPv4 Tunnel Network: <IP da rede da VPN>/24     -> REDE QUE A VPN VAI ATRIBUIR PARA OS CLIENTES
+                                                        <EX: 200.200.200.0/24>
+                        DNS Server : 1.1.1.1 8.8.8.8
+                        NTP Server : 201.49.148.135
+                        FLEGA: Firewall Rule - Add a rule to permit connections to this OpenVPN server instance from clients anywhere on the Internet.
+                        FINISH
+
+                        System> Package Manager > Available Packages
+                        openvpn-client-export
+                        Install - Confirm 
+
+                        OBS: VPN trabalha na porta 1194
+                             CIDR: /24
+                             Servidor NTP: Servidor de horário, pode ser o próprio pfsense ou um servidor externo
+                                        EX: 201.49.148.135
+
+                                                         IANA - LACNIC - NIC Brazil
+
+             Máquina física: 
+
+                                Fazer o Dowload do OpenVPN Client na máquina que vai acessar o vpn 
+                                Instalar o OpenVPN Client
+
+                                VPN > OpenVPN > Client Export
+                                OPEN VPN CLIENTS e faça o dowload do most client
+                                Botão direito no simbolo da ethernet
+                                Import > Importar o arquivo .ovpn que foi baixado
+                                Conectar
+             
+              
+
+              Regra para pingar:
+
+                        Firewall > Rules > OpenVPN
+                        Add
+                        Action: Pass
+                        Interface: OpenVPN
+                        Address Family: IPv4
+                        Protocol: ICMP
+                        Source: any
+                        Destination: any
+                        Save - Apply Changes
+
+               Regra para acessar com ssh:
+
+                        Firewall > Rules > OpenVPN
+                        Add
+                        Action: Pass
+                        Interface: OpenVPN
+                        Address Family: IPv4
+                        Protocol: TCP
+                        Source: any
+                        Destination: any
+                        Destination Port Range: SSH (22)
+                        Save - Apply Changes
+
+

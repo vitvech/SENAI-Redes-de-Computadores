@@ -1,0 +1,28 @@
+Resetando roteador cisco - novos
+
+1. Conecte o cabo Rollvoer/Console ao equipamento DESLIGADO e abra o
+terminal utilizando o Putty para se conectar a interface Serial;
+
+2. LIGUE o equipamento e fique pressionando repetidamente, sem parar, o
+atalho Crtl+Pause Break;
+
+Pare de pressionar o atalho quando aparecer a seguinte informação na tela:
+rommon1&gt;
+
+Você entrará no modo ROMMON (ROM Monitor);
+
+3. Digite os seguintes comandos
+
+    rommon1&gt;confreg 0x2142
+    rommon2&gt;reset
+
+4. Espera o equipamento reiniciar. Após o equipamento reiniciar, digite:
+
+    Router&gt;enable
+    Router#copy running-config startup-config
+    Router(config)#config-register 0x2102
+    Router#reload
+
+
+Pronto, o dispositivo já estará resetado como vem de fábrica!
+Caso não dê certo, repita novamente todos os passos do tutorial.

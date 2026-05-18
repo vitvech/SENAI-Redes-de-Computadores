@@ -1,0 +1,143 @@
+ TROCAR NOME DO EQUIPAMENTO
+>enable
+#configure terminal
+(config)# hostname <novo-nome>
+(config)# exit
+#exit
+>   
+
+ CONFIGURAR UM BANNER
+ >enable
+ #configure terminal
+ (config)# banner motd "texto"  !Acesso apenas para pessoas autorizadas!
+ (config)#end  !Ctrl+Z!
+ #exit
+ >
+
+! M.O.T.D - Mensagem Of The Day (Mensagem Do Dia)!
+
+CONFIGURAR SENHA NA CONSOLE
+
+>enable
+#configure terminal
+(config)#line console 0
+(config-line)#password <senha> batata0
+(config-line)#login
+(config-line)#Ctrl+Z
+#exit
+
+CONFIGURAR SENHA NA ENABLE 
+
+>enable
+#configure terminal
+(config)#enable password <senha> senhasecreta !***TYPE 7 + ANTIGA - SEGURA
+(config)#enable secret <senha> senhasegura !***TYPE 5 + NOVA + SEGURA
+(config)#login
+(config)#end
+#disable
+ 
+
+VERIFICAR AS CONFIGURACOES QUE ESTAO RODANDO NO EQUIPAMENTO
+
+>enable
+#show running-config !memoria ram
+#show startup-config !memoria nvram  (Igual hhd ss)
+
+ATIVAR O SERVICO DE CRIPTOGRAFIA 
+
+>enable
+#configure terminal
+(config)#service password-encryption
+(config)#end
+#exit
+>
+
+
+DESFAZER CONFIGURACOES NO IOS
+!colocar o "no" antes do comando
+
+>enable
+#configure terminal
+(config)#no hostname
+(config)#no enable password !desfaz a senha da password na enable
+(config)#end
+#exit
+>
+
+RESOLVER ERRO DE TRANSSLATING
+!Use as teclas ctrl+ shift + 6
+
+DESATIVAR UMA INTERFACE
+
+>enable
+#configure terminal
+(config)# interface <nome>
+(config)#interface ?
+(config)#interface fastEthernet 0/2
+(config-if)#shutdown
+(config-if)#end
+>
+
+DESATIVAR VARIAS INTERFACES DE UMA SO VEZ
+>enable
+#configure terminal
+(config)#interface range <intervalo>
+(config)#interface range fastEthernet 0/1-3
+(config-if-range)#shutdown
+
+DESATIVAR INTERVALOS DE INTERFACES DIFERENTES
+>enable
+#configure terminal
+(config)#interface range fastEthernet 0/1-3 , 0/8-24 ! 1 a 3 e 8 a 24 (intervalos de interface)
+(config)#interface range fa0/1 , fa0/5 , fa0/22 ! apenas 3 interface
+
+
+CONFIGURANDO O CLOCK
+>enable
+#show clock !mostra o relogio atual hh:mm:ss dd:mm:aa 
+#clock set ? !mostra como configurar
+#clock set 08:00:00 9 sep  2025 !comando completo
+
+
+CONFIGURANDO O SERVICO DE NTP
+#show ntp status !mostra a configuracao do servico de ntp
+(config)#ntp ?
+(config)#ntp server <numero do IP do servidor>
+(config)#ntp server 200.20.224.100
+(config)#end
+>
+
+
+VER OS RESUMOS DAS INTERFACES
+
+>enable
+#show running-config !ver as configuracoes da memoria da ram
+#show startup-config !ver as configuracoes da memoria da nvram -> SSD
+#show interface <nome da interface> !ver as informacoes de configuracoes da interface
+#show ip interface brif !ver RESUMO das INTERFACES
+#show vlan brief !ver resumo das vlans
+#show version !ver todas as configuracoes de hardware e de software
+
+
+SALVAR AS CONFIGURACOES
+
+>enable
+#copy running-config startup-config !copia da memoria ram para a nvram
+#wr (write memory) ! copia da memoria ram para a nvram
+(config)#do wr !"DO" força o comando de qualquer lugar
+
+
+RESETAR PARA AS CONFIGURACOES DE FABRICA
+
+>enable
+#write erase !Apagar a configuracao atual da nvram(RESETA)
+#erase startup-config !Apagar a configuracao atual da nvram
+#reload !reinicia o dispositivo
+
+APAGANDO VLAN.DET 
+
+>enable
+#delete flash:vlan.dat !Apagar o arquivo vlan.dat
+#reload !reinicia o dispositivo
+>:-)
+

@@ -1,0 +1,61 @@
+
+            Elastic Load Balancing - Balancear a carga 
+                (Para não pesar apenas um componente)
+
+
+            Uma zona de disponibilidade ou várias
+            Banda fixa -> Banda n vai aumentar ou diminuir. Vai permitir a mesma quantidade de banda
+            
+            Tipos:
+
+
+                    Application Load Balancer
+
+                Tudo que envolve HTTP e HTTPs
+                Opera na camada de aplicativo - cmd7
+
+
+                    Network Load Balancer-
+
+                De acordo com o protocolo (TCP,UDP e TLS)
+                cmd de transporte (cmd 4)
+
+                    Roteia o trafego para os destinos com base nos dados do IP 
+
+                            Ex: Dentro de um jogo -  Reduzir a latencia dentro do ambiente, Utilizar ele 
+
+
+                    Classic Load Balancer(Não se utiliza mais) - Config escondida
+
+
+
+                        Toda solicitação passa pelo listener e vai pro destino
+
+                        Quantos mais computadores adicionar, mais caro e mais lentidao
+                        
+
+        Casos:
+
+                    APlicativos altamente disponiveis e tolerante a falahas
+                    aplicativos em conteineres
+                    elasticidade e escabilidade
+
+
+                    VPC ou varias zonas de disponibilidade
+                    Ambientes hibridos
+                    Invocar funcoes do lambda por http(s) 
+
+
+                    E segurança :
+
+
+                                Passa pelo Load balancer e não acessa direto
+
+                                    caso tenha ataque, ele que vai ficar exposto
+
+
+
+    Como funciona:
+
+                                    Aceita trafego de entrada de clientes
+                                    o listener verifica se há solicitacoes de conexão

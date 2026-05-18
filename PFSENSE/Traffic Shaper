@@ -1,0 +1,89 @@
+
+
+
+
+                    Ferramente para controle e priorização de tráfego de rede
+
+                        Garante QoS (Qualidade de serviço)
+
+
+                        Quality of Service  -> Tecnologia que controla o trafego de uma rede, assim garantir desempenho
+
+
+                                        FIle transfer
+                Physical                Web app
+                Layer                   Tele
+                                        Voice over Ip
+                   
+
+
+                        pfSENSE:
+
+
+                                    FIrewall > Traffic Shaper
+
+                                    Limiters
+                                    Ex:
+                                    Flegar - Enable limiter and its children
+                                    Name: DOWLOAD 
+                                    Bandwidth: 10
+                                    Description: LIMITANDO DOWLOAD DA REDE DA BIBLIOTECA
+                                    Queue Management Algorithm: Tail Drop
+
+                                        Tail drop  ->
+                                        RED        ->
+                                        GRED       ->
+                                        PIE        ->
+                                        CoDel      ->
+
+                                    Ex:
+                                    Flegar - Enable limiter and its children
+                                    Name: UPLOAD
+                                    Bandwidth: 15
+                                    Description: LIMITANDO DOWLOAD DA REDE DA BIBLIOTECA
+                                    Queue Management Algorithm: Tail Drop
+
+
+                                    Criar a regra liberando todos os protocolos, para acessar a internet para testar
+
+                                    (mais facil criar uma regra liberando tudo, colocando o limitador na opção de opções avançadas)
+
+
+
+                            FIrewall > Rules
+                            Add
+                            Advanced Options
+                            
+                                            In / Out pipe ->        UPLOAD                      DOWLOAD
+
+
+                                                                    Saida                       Entrada
+                            
+
+                            Testar a regra:
+                                windows -> Google
+                                          Speedtest
+
+
+
+                             Linux ->  nano /etc/resolv.conf
+
+                                                                                 é o arquivo de configuração principal no Linux (e sistemas Unix) usado para definir 
+                                                                                 quais servidores DNS o sistema consulta para traduzir nomes de domínio 
+                                                                                 (ex: google.com) em endereços IP
+                            Adicionar essas 2 linhas ->     nameserver 1.1.1.1
+                                                                nameserver 8.8.8.8
+                            Dar um systemctl restart networking
+                            e dar um reboot
+
+                            Instalar speedtest ->   apt install speedtest-cli
+                                                        
+                            Testar -> speedtest 
+                                
+    
+
+                                    
+                                          
+
+
+                                    

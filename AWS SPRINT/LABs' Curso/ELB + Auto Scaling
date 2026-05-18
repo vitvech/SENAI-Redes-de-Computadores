@@ -1,0 +1,232 @@
+
+# 🧪 Laboratório 6 — Passo a passo (ELB + Auto Scaling)
+
+## 🔹 Antes de começar
+
+1. Clique em **Iniciar laboratório**
+2. Aguarde o indicador ficar **verde**
+3. Abra o **Console da AWS** (em nova aba)
+4. Deixe o console e as instruções lado a lado
+
+---
+
+# 🧩 Tarefa 1: Criar uma AMI
+
+👉 Objetivo: criar uma “imagem” do servidor atual
+
+1. Vá em **EC2**
+2. Clique em **Instâncias**
+3. Verifique se **Web Server 1** está com **2/2 checks OK**
+4. Selecione a instância **Web Server 1**
+5. Vá em:
+
+   * **Ações → Imagem e modelos → Criar imagem**
+6. Preencha:
+
+   * Nome: `WebServerAMI`
+   * Descrição: `Lab AMI for Web Server`
+7. Clique em **Criar imagem**
+
+✅ Isso será usado depois no Auto Scaling
+
+---
+
+# ⚖️ Tarefa 2: Criar Load Balancer
+
+## 2.1 Criar Target Group
+
+1. Menu lateral → **Grupos de destino**
+2. Clique em **Criar**
+3. Configure:
+
+   * Tipo: **Instâncias**
+   * Nome: `LabGroup`
+   * VPC: `Lab VPC`
+4. Clique em **Próximo → Criar**
+
+---
+
+## 2.2 Criar Load Balancer
+
+1. Vá em **Balanceadores de carga**
+2. Clique em **Criar**
+3. Escolha: **Application Load Balancer**
+
+Configure:
+
+* Nome: `LabELB`
+* VPC: `Lab VPC`
+* Sub-redes:
+
+  * Sub-rede pública 1
+  * Sub-rede pública 2
+
+Grupo de segurança:
+
+* Selecione **Web Security Group**
+* Remova o padrão
+
+Listener:
+
+* HTTP:80 → encaminhar para `LabGroup`
+
+4. Clique em **Criar**
+
+---
+
+# 🚀 Tarefa 3: Launch Template + Auto Scaling
+
+## 3.1 Criar modelo (Launch Template)
+
+1. Vá em **Modelos de execução**
+2. Clique em **Criar**
+
+Configure:
+
+* Nome: `LabConfig`
+* AMI: **WebServerAMI**
+* Tipo: `t2.micro`
+* Key pair: `vockey`
+* Security group: **Web Security Group**
+
+Em avançado:
+
+* Ativar **CloudWatch detalhado**
+
+Clique em **Criar modelo**
+
+---
+
+## 3.2 Criar Auto Scaling Group
+
+1. Ações → **Criar grupo do Auto Scaling**
+
+### Etapa 1
+
+* Nome: `Lab Auto Scaling Group`
+* Template: `LabConfig`
+
+### Etapa 2
+
+* VPC: `Lab VPC`
+* Sub-redes:
+
+  * Privada 1
+  * Privada 2
+
+### Etapa 3
+
+* Anexar ao Load Balancer existente
+* Selecionar: `LabGroup`
+* Ativar métricas CloudWatch
+
+### Etapa 4 (ESCALA)
+
+* Desejada: **2**
+* Mínima: **2**
+* Máxima: **6**
+
+Política:
+
+* Nome: `LabScalingPolicy`
+* Métrica: CPU média
+* Target: **60%**
+
+### Etapa 5 e 6
+
+* Padrão
+
+### Tags
+
+* Key: `Name`
+* Value: `Lab Instance`
+
+👉 Clique em **Criar**
+
+---
+
+# ✅ Tarefa 4: Verificar funcionamento
+
+1. Vá em **Instâncias**
+
+   * Devem aparecer 2 instâncias **Lab Instance**
+
+2. Vá em **Grupos de destino → LabGroup**
+
+   * Aba **Destinos**
+   * Status deve ficar **Healthy**
+
+3. Vá em **Load Balancer → LabELB**
+
+   * Copie o **DNS**
+
+4. Cole no navegador
+   👉 Deve abrir o site
+
+---
+
+# 📈 Tarefa 5: Testar Auto Scaling
+
+## 5.1 Ver alarmes
+
+1. Vá em **CloudWatch**
+2. Clique em **Alarmes**
+
+   * Deve haver 2 alarmes
+
+---
+
+## 5.2 Gerar carga
+
+1. Volte para o site
+2. Clique em **Load Test**
+
+---
+
+## 5.3 Ver resultado
+
+1. Volte ao CloudWatch
+
+2. Aguarde:
+
+   * CPU subir
+   * Alarme ficar **Em alarme**
+
+3. Vá em **EC2 → Instâncias**
+
+   * Agora terá **mais de 2 instâncias**
+
+✅ Auto Scaling funcionando
+
+---
+
+# 🗑️ Tarefa 6: Encerrar instância antiga
+
+1. Vá em **EC2 → Instâncias**
+2. Selecione **Web Server 1**
+3. Clique em:
+
+   * **Estado da instância → Encerrar**
+
+---
+
+# 📤 Finalização
+
+1. Clique em **Enviar**
+2. Veja sua nota
+3. Clique em **Encerrar laboratório**
+
+---
+
+# 🎯 Resumo rápido
+
+Você fez:
+
+* ✅ Criou AMI
+* ✅ Criou Load Balancer
+* ✅ Criou Auto Scaling
+* ✅ Configurou escalabilidade automática
+* ✅ Testou com carga real
+* ✅ Monitorou com CloudWatch
+
+---

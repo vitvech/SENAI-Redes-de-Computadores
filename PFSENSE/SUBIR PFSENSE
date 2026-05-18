@@ -1,0 +1,60 @@
+
+        PFSENSE é Um firewall e roteador de código aberto baseado em FreeBSD
+            Usado para proteger redes e gerenciar tráfego
+        Atua na camada 3 e 4 ( rede e transporte )
+
+
+            Após a instalação, Primeiro login do pfsense é:
+
+                                Username: admin
+                                Password: pfsense
+
+
+
+
+            Set Interface IP address
+
+                    2
+                    Y
+                    n
+                    enter 
+                    y 
+                    enter 
+
+
+            RESETAR A SENHA:
+
+                    3
+                    y 
+                    enter 
+
+
+            CASO, NÃO SUBIR O PFSENSE NO NAVEGADOR:
+
+                    2
+                    y
+                    n
+                    enter 
+
+
+                    1
+                    n
+                    em0
+                    enter
+                    y 
+                    enter
+
+                    11 (reiniciar)
+
+
+
+        DAR REBOOT 
+
+            5
+            Y 
+
+
+        PINGAR
+
+            7
+            <IP OU NOME> 

@@ -1,0 +1,12 @@
+
+
+
+1-Baixar a iso Win 10 enterprise
+2-ADD network adapter 2
+3-Mudar brigde para vm 0 (Bridge)
+4-Mudar Adaptar 2 para VM 2 (host-only)
+5-Iniciar a VM
+6-Instalar o windows
+7-Instalar o VMware tools
+8-Reiniciar a VM
+

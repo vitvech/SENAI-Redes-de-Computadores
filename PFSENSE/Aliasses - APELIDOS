@@ -1,0 +1,30 @@
+
+
+            Firewall > Aliasses 
+            Add
+            Nome:
+            Descrição:
+            type:
+            IP do FQDN:                                          Descrição:
+            
+        
+
+            Exemplo:
+
+
+            Firewall > Aliasses 
+            Add
+            Nome:  PC_ADM_01
+            Descrição:  COMPUTADOR DA AREA DE ADMINISTRAÇÃO
+            type:       HOST 
+            IP do FQDN:  192.168.10.10                                        Descrição:    PC-ADM-01
+
+            Firewall > Aliasses 
+            Add
+            Nome:  SRV_SCADA_01
+            Descrição:  SERVIDOR DA INDUSTRIA
+            type:       HOST 
+            IP do FQDN:  192.168.20.10                                       Descrição:    SERVIDOR DA INDUSTRIA
+
+
+            

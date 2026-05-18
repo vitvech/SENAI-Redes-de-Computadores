@@ -1,0 +1,45 @@
+Ban = 1-2 m
+Pan = up to 10m a 15m
+Lan = < 100m
+Man = 20 -50 km
+Wan = ranged (internet, ISP, 3g)
+
+----------------------------
+
+ISP = Provedor de Serviços de Internet (Internet Service Provider)
+
+DSL = Modular e Desmodular( equivalência entre as duas transmissões)
+ADSL = Download superior ao upload. Upload não pode ser muito baixa comparado ao download
+
+Modem = Modular e Desmodular
+
+Fibra = Faixes de luz
+
+Celular = Rede de telefonia celular para se conectar
+Curiosidade: consegue pendurar aproximadamente 10.000 dispositivos e se vc for 10.001 vc é quicado.
+
+Satélite: Ondas de radio
+
+Visada: Consegue me ver? Antena precisa q tenha visada com o satélite. 
+
+Link dedicado = Quando so voce usa a fibra. è dedicado a voce 
+
+Cabeamento horizonal = Back-Bone
+
+FTTH = Fiber to the Home, Fusões de fibras e Ligamentos de ruas e vias
+
+Fosseta = Equipamento para enrolar a fibra
+
+CPO = Caixa de Terminação Optica -- Vai fazer a fusões e consegue alimentar 16 ou 24 casas(Depende de modelo).
+
+Poço de visita = é uma estrutura subterrânea que permite o acesso a redes de serviços como esgoto, águas pluviais, telefonia ou energia elétrica
+ 
+DG = Distribuidor Geral em redes telefônicas ou DG Redes de Proteção, uma empresa especializada em redes de proteção
+
+
+
+
+ 
+
+
+

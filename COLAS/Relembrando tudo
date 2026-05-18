@@ -1,0 +1,142 @@
+
+
+----------------subir  PFsense:
+
+                            add new maquina virtual
+                            adicionar iso
+                            colocar placa de rede como bridge
+                            Iniciar
+                            Enter
+                            Install (enter)
+                            3 opção auto
+                            Enter na primeira opção
+                            Commit (enter)
+                            Reebot 
+
+
+
+                Perguntas:
+
+                            enter
+                            em0
+                            enter
+                            y
+
+
+                
+                Acessar pfsense web:
+
+                                        Colocar o IP da placa no navegador (google =)
+
+                                                Usuario: admin 
+                                                Senha: pfsense
+
+                                        Alterar a senha para : Senai@134
+
+                Colocar regra na wan:
+
+                                        Firewall> Rules
+                                        Add
+                                        Protocol: Any
+                                        Save
+                                        Interfaces> WAN
+                                        Desflegar ultima opção: Block bogon networks
+
+
+
+
+-------------SERVIDOR DEBIAN:
+
+
+                                Open
+                                Selecionar OVA DEBIAN 12
+                                Colocar placa de rede em bridge
+                                CLicar em advanced e gerar um MAC
+
+
+            Acessar ssh:
+
+                                apt install ssh -y
+                                apt update -y
+                                ip -c a
+                                Colocar o IP da wan no ssh
+                                Aceitar licença
+                                colocar aluno e depois alterar para root( su -)
+            
+
+            FTP: 
+                                apt install proftpd -y
+                                nano /etc/proftpd/proftpd.conf
+                                COlocar UseIPv6 on como off (UseIPv6 on)
+                                 Descomentar DefaultRoot ~
+                                            RequireValidShell off
+                                            port 21
+                                systemctl restart proftpd
+                                mkdir  /var/ftpteste
+                                useradd naufal -d /var/ftpteste -s /bin/false
+                                passwd naufal
+                                chown naufal:root /var/ftpteste
+            
+            Apache2: 
+
+                                apt install apache2 -y
+                        
+        
+            Colocar ip fixo no linux: 
+
+                                nano /etc/network/interfaces
+                                Descar até o final e adicionar essa linha >
+
+
+                                 auto <interface de rede> ex: auto ens33
+                                iface <interface de rede> inet static
+                                address [IP do debian]
+                                 netmask [Mascara de subrede]
+                                gateway [Gateway do debian]
+
+                                reiniciar - systemctl restart networking
+
+
+            Configurar pfsense para pingar o gateway:
+
+
+                                Interface>Assignments
+                                        Add
+
+                                        enable
+                                        IP static
+                                        colocar o gateway
+                                        /24
+                                        save
+
+------------- Windows:
+
+            Colocar nova interface de rede no pfsense:
+
+                    Interfaces>Assignments 
+                            add
+                            Lan_clientes
+                            ip static
+                            10.0.0.254         
+                            /24
+                            save
+
+            No windows:
+
+
+                    Instalar WinSCP
+                                Instalar para todos os usuarios
+                                Dar apenas Next
+                                Desflegar abrir pagina web para iniciantes
+                                Instalado
+                    
+                    
+
+
+            
+                                
+
+
+
+
+                                

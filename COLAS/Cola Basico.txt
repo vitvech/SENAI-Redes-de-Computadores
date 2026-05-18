@@ -1,0 +1,75 @@
+Comandos Windows|
+-----------------------------
+
+Windows + R -->   sysdm-cpl = Alterações de Nome/Dominio do computador
+
+Comandos CCNA--------------------------
+
+Modo Exec Usuario(view-only) = >
+Modo Exec Privilegiado = #
+
+enable = Muda o modo do EXEC para Privilegiado 
+disable = Sai do modo EXEC privilegiado e volta para o EXEC usuario
+
+(O modo EXEC privilegiado às vezes é chamado de enable mode.)
+
+configure terminal = Entra no modo de configuração global
+
+(Para retornar ao modo EXEC privilegiado, digite o comando *exit global config mode* .)
+
+end ou Ctrl+Z = Passar de qualquer modo de subconfig para o modo de EXEC privilegiado
+
+interface vlan 1 = Entra no modo de configuração de interface
+interface fastethernet 0/1 = ??
+
+(Dependendo do modo, alguns comandos não vão funcionar(Independente se o comando estiver correto)
+
+line "numero da linha" = subconfig de linha
+exit = Sair do modo line, e volta para config global
+
+
+(config)# - line vty 0 15 = Interfaces de gerenciamento de Terminal Virtual, Usado para acesso remoto para o switch.
+
+
+Modo de configuração da interface - Usado para configurar uma porta de switch ou interface de rede do roteador.
+
+Modo de configuração de linha - Usado para configurar o acesso ao console, SSH, Telnet ou AUX.
+
+? = Digitando ? na CLI, passa para voce todos os comandos que voce pode utilizar naquele modo
+
+[comando]? ou [comando] ? = Caso voce não saiba terminar o comando, lista todos os possíveis comandos com aquele inicio.
+
+Ctrl + C = Cancela o comando
+Ctrl + R = Volta para onde parei
+Ctrl + Shift + 6 = Cancela o comando
+
+Privilegiado(#) show clock = Verifica a data e o Horário na CLI
+clock set [Horário] (EX: 15:00:00) [Data(EX:31 Jan 2025)]
+Comando ficaria assim = clock set 15:00:00 31 Jan 2025
+
+Privilegiado(#) hostname [Nome] = Define o nome de um Host na rededi
+		Sw-Floor-1
+Privilegiado(#) no hostname = Para retornar ao o Switch padrão
+
+Privilegiado(#) line console 0 = insira o modo de configuração do console de linha usando o comando de configuração global line console 0	
+
+Privilegiado(#) password [senha] = Especificar a senha 
+
+Privilegiado(#) login = Ativar o acesso
+
+Privilegiado(#) enable secret [Senha]= para proteger o EXEC Privilegiado
+
+Privilegiado(#) Para proteger line vty 0 15 = Entrar no modo (line vty 0 15), password [Senha], login.
+
+Global(config)  service password-encryption = Aplica criptografia fraca todas as senhas de texto simples
+
+Privilegiado(#)  show running-config = Verificar todas as senhas criptografadas
+
+é vital fornecer um método para declarar que apenas pessoal autorizado deve tentar acessar o dispositivo
+Global(config)   banner motd #a mensagem do dia#  = Para criar uma mensagem de faixa do dia em um dispositivo de rede
+
+
+
+
+
+

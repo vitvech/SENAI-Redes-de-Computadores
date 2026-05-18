@@ -1,0 +1,116 @@
+
+
+
+
+
+
+---
+
+## 🔹 Parte 1: Acessar o IAM
+
+1. No console da AWS, vá em **Serviços**.
+2. Pesquise e clique em **IAM**.
+3. No menu esquerdo:
+
+   * Clique em **Usuários** (para ver os usuários).
+   * Clique em **Grupos de usuários** (para ver os grupos).
+
+---
+
+## 🔹 Parte 2: Adicionar usuários aos grupos
+
+### ➤ Adicionar **user-1** ao grupo **S3-Support**
+
+1. Vá em **Grupos de usuários**.
+2. Clique em **S3-Support**.
+3. Acesse a aba **Usuários**.
+4. Clique em **Adicionar usuários**.
+5. Selecione **user-1**.
+6. Clique em **Adicionar usuários**.
+
+---
+
+### ➤ Adicionar **user-2** ao grupo **EC2-Support**
+
+1. Vá em **Grupos de usuários**.
+2. Clique em **EC2-Support**.
+3. Aba **Usuários**.
+4. Clique em **Adicionar usuários**.
+5. Selecione **user-2**.
+6. Clique em **Adicionar usuários**.
+
+---
+
+### ➤ Adicionar **user-3** ao grupo **EC2-Admin**
+
+1. Vá em **Grupos de usuários**.
+2. Clique em **EC2-Admin**.
+3. Aba **Usuários**.
+4. Clique em **Adicionar usuários**.
+5. Selecione **user-3**.
+6. Clique em **Adicionar usuários**.
+
+---
+
+### ✔️ Conferir
+
+* Volte em **Grupos de usuários**.
+* Cada grupo deve mostrar **1 usuário**.
+
+---
+
+## 🔹 Parte 3: Testar os usuários
+
+### ➤ Obter link de login
+
+1. No IAM, clique em **Painel**.
+2. Copie a **URL de login**.
+3. Abra uma aba anônima e cole o link.
+
+---
+
+### ➤ Teste com **user-1**
+
+* Login:
+
+  * Usuário: `user-1`
+  * Senha: `Lab-Password1`
+* Testes:
+
+  * ✅ Acessa **S3** (visualiza buckets)
+  * ❌ Não acessa **EC2**
+
+---
+
+### ➤ Teste com **user-2**
+
+* Login:
+
+  * Usuário: `user-2`
+  * Senha: `Lab-Password2`
+* Testes:
+
+  * ✅ Acessa **EC2 (somente leitura)**
+  * ❌ Não consegue parar instância
+  * ❌ Não acessa **S3**
+
+---
+
+### ➤ Teste com **user-3**
+
+* Login:
+
+  * Usuário: `user-3`
+  * Senha: `Lab-Password3`
+* Testes:
+
+  * ✅ Acessa **EC2**
+  * ✅ Pode **parar/iniciar instância**
+
+---
+
+## 🔹 Finalizar
+
+1. Feche a aba anônima.
+2. Clique em **Enviar** no laboratório.
+3. Depois, clique em **Encerrar laboratório**.

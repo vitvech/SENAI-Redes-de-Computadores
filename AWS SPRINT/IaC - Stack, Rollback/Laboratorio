@@ -1,0 +1,92 @@
+
+
+                    CloudFormation
+                    Escolher existente
+                    Fazer Upload de um arquivo de modelo
+                    Escolher arquivo -  testeiac.yaml
+
+
+                    Proximo
+
+                    nome: testeiac
+
+
+                    Proximo
+
+                    Permissoes: LabRole
+                    Opções de falha de pilha:   
+
+                                    Reverter todos os recursos da pilha
+                                    Usar política de exclusão
+                    
+                    Proximo
+                    Concluir 
+                
+
+                    Apagar Instancia EC2
+
+                    Ir em CloudFormation Selecionar Pilha
+                    Ações da pilha
+                        Detectar Oscilação
+                        Visualizar Resultados da oscilação
+                    
+
+                    Ações da pilha
+                    Criar conjunto de alterações
+                        Conjunto de alterações com com detecção de desvios
+                        Usar modelo existente
+                    Proximo --
+
+
+                    Atualizar Pilha
+                    Fazer uma atualização direta
+                            Usar função existente
+                            Preservar recursos provisionados com êxito
+                            Usar política de exclusão
+                    
+                    Está pedindo para submeter ao uma atualização nova, no change set
+
+
+
+
+                    Duas formas de resolver,        
+
+                    Mudar o código
+
+                    ou 
+                    
+                    Excluir a pilha
+
+
+
+
+                    Vamos excluir a pilha, após isso. Criar novamente !
+
+
+
+                    Mudar de região(oregon)
+
+                                            criar a pilha da mesma forma para vermos se da alguma interferencia
+                                                                NÃO TEVE, SERVIÇO REGIONAL 
+                                                                !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+
+
+
+                    Comando curl para verificar se o HTTP esta trazendo a pagina
+
+                    Esta trazendo?
+                            Sim
+                    
+                    Pergunta do professor:
+
+                                    Tem o bastion, front e o que a gente não criou ainda?
+
+                                            Loud Balancing, Para ter acesso a internet
+                    
+
+                    

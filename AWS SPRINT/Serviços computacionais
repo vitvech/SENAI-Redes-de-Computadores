@@ -1,0 +1,113 @@
+
+
+                    AWS oferece muitos serviços computacionais
+
+
+                
+                Todos trabalham com containers
+
+                ECS ->  Confg de containers
+                EKS (K8S) -> gerenciamneto de containers
+
+                EC2 -> Fornece máquinas virtuais (Instâncias do EC2)
+                    Controle total sobre o S.O
+                    Serviço regional -> fixo naquela região. Apenas com imigração de máquina
+                    ACL -> parecidas com os firewalls de ultima geração
+                    GS -> firewall básico, trabalhando com portas
+                                State-Full -> Tudo marcado como State-full, armazena estado.EX: se eu liberar a porta 80, ele vai liberar para entrada e saida.
+                                
+    AMI -> Imagem de máquina, posso ter uma ami com o sql server pré instalado. 
+        Quick Start : Estão no inicio fornecidos pela aws
+        Minhas AMIs: Todas AMIs que voce criou
+        AWS Marketplace: Modelos pré-configurados de terceiros
+        AMIs da comunidade: AMIs compartilhadas por outras pessoas. (NÃO RECOMENDADO. USE POR CONTA E RISCO)
+
+
+
+                EC2 auto scaling -> 
+                Lighsail ->
+                Serverless Application repository ->
+                Batch -> 
+                Vmware Cloud -> 
+                Fargate -> Automatização de container
+                Elastic Beanstalk -> Criar Infraestrutura,Instancia,banco de dados, gfsx
+                Plataforma e serviço gerenciada pela aws
+
+
+                                     UPGRADE -> Desligar para trocar o modo
+                                     Elasticidade -> Criar varias maquinas virtuais 
+
+
+                Instância-> mesma coisa que servidor local
+                    Tudo que fazemos sem cloud, podemos fazer na cloud.
+
+
+
+
+
+
+
+
+
+                Tipo de instância ->
+
+                                                determinará -> RAM
+                                                               CPU
+                                                               Armazenamento
+                                                               Desempenho de rede
+                                                Ex: t3.large
+                                                        T -> Familia
+                                                        3 -> número da geração
+                                                        large -> tamanho
+
+
+
+
+                Configuração de rede ->
+
+                                        Zona de disponibilidade > VPC > Sub-rede pública > Instância
+
+                    2 formas
+
+                    IP random -> configurado apartir da criação da instância
+                    IP elastic ->  IP público fixo (serviço regional)
+                                    range liberado para o brasil n é a mesma range de ip para os eua, assim em diante.
+                    
+                            CDN
+                            DNS
+--
+ Especificar armazenamento
+
+
+                Volume raiz -> Onde sistema operacional esta instalado
+                Amarzenamento transitorio 
+                Amarzenamento temporario -> fornecidos em discos anexados ao computador host em que a instancia do EC2 esta em execução (usadas em instancias spot)
+
+
+                EBS -> Elastic Block store - Disco virtual que voce cria de acordo do tamanho e desempenho que voce precisa e desvincula a instancia do ECS(não consegue ter acesso aos dados, se ele não estiver conectado a uma instância)
+
+                SSDs -> Velocidade (preferido pela aws)
+                HDDs -> Armazenamento
+                                    
+                    criptografia pode ser usada
+                
+                Amazon Elastic file system -> Serviço de transferencia de arquivos
+                                    dependendo da sigla, muda o s.0 (linux e windows)
+
+                tags : filtragem,automação,alocação de custos
+
+                grupos de segurança -> Portas, nao trabalha vasculhando conteudo
+
+                par de chave -> Camada de segurança para autenticação para quando fazer o acesso remoto
+                        
+
+
+                    reinicializacao não altera ip ou dns de uma instancia
+
+                    porem
+
+                    se for interrompido e logo reinicializado, é alterado
+
+
+        Aumentar escabilidade -> Aumentar VCPU ou HD
+                

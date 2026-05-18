@@ -1,0 +1,82 @@
+
+
+                Gerar MAC
+
+
+                        ir no navegador
+                        Pesquisar por : zabbix agent
+                            Usar os parametros>
+
+                                                Zabbix Agent
+                                                Windows
+                                                Server 12
+                                                6.4
+                                                OpenSSL
+                                                HSI
+                        Fazer a instalação do Zabbix agent v6.4
+
+                           Clique em Next > Aceita os termos > Next e depois coloque as
+informações do seu servidor(nome,Apontar o IP do Centralizador no "Zabbix server IP/DNS" e no "Server
+or Proxy for active checks") > Next > Finish
+
+                
+                No zabbix:
+
+                            Criar host
+                            Name: Win Server
+                            Template: Windows by Agent
+                            Group host: Zabbix Server
+                            Interfaces: 
+                                    Agent: IP do Windows Server
+
+                            Para selecionar o host group Windows server, nós precisamos criar
+Vai em Data Collection > Host Group > Create host group > Windows server > add
+            (GRUPO N MUDA MT COISA,APENAS PARA DEIXAR ORGANIZADO)
+
+
+            Criar nova dash
+
+            CPU utilization
+            Memory Utilization
+                            
+
+CRIANDO UM ITEM E UMA TRIGGER PARA WINDOWS SERVER
+
+
+    Monitoring > Hosts > Clique no host e Clique em Itens
+    Clique em Creat item 
+
+                Ex de informações:  
+                                        Name: MONITORANDO ISS
+                                        key:  net.tcp.port[,80]
+                                        Description: Monitorando o IIS do servidor Windows Server - SALA DE Servidores
+                                        Clique add
+
+    
+
+    Vá em triggers:
+
+                        Create Trigger
+                        
+                                Name: MONITORING PORT 80 - IIS
+                                Expression: last(/SRVWINAD/net.tcp.port[,80])=0             (item criado anteriormente)
+                                Clique em add
+
+
+                    Vamos em Dashboards > Windows Server > edit dashboards > add
+
+
+                    Type: Graph
+                    Nome: porta 80 - DOWN
+                    Host pattern: SRVWINAD                  item pattern: MONITORANDO IIS
+
+
+
+
+
+
+        EXEMPLO DE EXPRESSÃO:'
+
+            net.tcp.port[,445] – samba
+
+

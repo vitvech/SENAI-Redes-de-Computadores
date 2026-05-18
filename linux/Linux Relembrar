@@ -1,0 +1,99 @@
+MOVIMENTAÇÃO
+
+    cd - Utilizado para mudar de diretorio
+    cd /etc - muda para qualquer diretorio etc a partir de qualquer 
+    (/etc - Arquivos de configuração)
+    ls - Lista o conteudo
+    mkdir - Criar diretorios
+    rm - remover
+    rm <nome-do-arquivo>
+    touch <nome-do-arquivo>
+    nano - cria o arquivo e ja entra nele
+    pwd -> ver diretorio onde usuario esta (tem que estar conectado com ele)
+
+
+USUARIOS 
+
+
+    adduser <nome>
+        Senha: Senai@13
+
+        ver arquivos de usuarios
+
+    cat /etc/passwd
+
+
+GRUPOS
+
+
+    addgroup <nome> <grupo>
+
+
+    usermod -aG <grupo> <usuario> - Adicionar usuario a um grupo
+    
+    cat /etc/group
+        
+
+Permissao de Arquivos
+
+        chmod 777 <pasta>
+
+        r  w  x
+        4  2  1 
+
+
+        chown <usuario> <arquivo>
+        ex:  chown redes3:root  arquivo
+                 <usuario:grupo>
+        
+
+
+
+CRIAR OCULTO
+
+        touch .<nome-do-arquivo> - Criar um arquivo oculto
+        mkdir .<nome-do-diretorio> - Criar um diretorio oculto
+
+
+APAGAR
+
+    rmdir <nome>  - apaga diretorio (vazio)
+    rm -r <nome> - Apaga diretorio e todos que estão dentro
+    rm - apaga arquivo
+
+    
+
+
+
+
+
+KAHOOT
+
+    FTP È SEGURO?  ->  Não
+    Serviço samba é para compartilhamento de arquivo? -> Sim
+    o que apt update faz -> Atualiza diretorios oficiais
+    Serviço DHCP é para atribuir IP automaticamente -> Sim
+    Linux é um sistema de codigo aberto? -> Sim
+    Usuario root é o usuario com -> Permissão total
+    Linux é da microsoft -> Falso
+    CAT etc/network/interfaces esta correto? -> Não (CAT é minusculo)
+    O arquivo index.html do servidor apache2 fica localizado em ? ->  
+    O comando touch arquivo.txt esta fazendo oque ?
+    Como sair e salva do nano apos realizar uma edição? -> Ctrl + X + Y + Enter
+    "chown root:redes senai" esta fazendo o que? ->
+    NÃO conseguimos fixar IP para uma impressora no servidor DHCP -> Falso
+    o que o comando cat/etc/network/interfaces esta fazendo? -> Lendo as configuraçoes de placa de redes
+    Comando para instalar o SSH no debian 12 -> apt install ssh 
+    Serviço FTP e para transferencia de arquivo -> Verdadeiro
+    Comando para instalar o tree no linux -> apt install tree
+    O comando cat /etc/network/interface esta correto? -> Não (sem S no final)
+
+
+
+
+DEBIAN  
+
+    Ctrl + Alt + f3 ao 6    
+
+
+

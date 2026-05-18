@@ -1,0 +1,60 @@
+     
+       FTP : transferencia de arquivo sem criptografia (Transferir arquivos)
+       FTPS : FTP com suporte
+       SFTP : Com criptografia e trabalha com o ssh 
+
+       Cliente-Servidor
+
+       FTP Porta -> 21(fechar conexão) usado para o controle da conexão, 20 para transferencia de arquivo
+       SFTP Porta -> 22
+
+
+    WINSCP ---
+
+
+
+      apt install proftpd -y  -> Instalar serviço no servidor
+      cd /etc/proftpd/ -> Arquivo de configuração
+            (proftpd.conf)
+      cp proftpd.conf profttpd.conf.bkp -> Criar backup dos arquivos de conf 
+
+                 nano proftpd.conf -> Abrir arquivo de conf -> Permitir acesso sem shell, Ficar só no diretorio escolhido e Porta 21 liberada
+                 Dentro dele: 
+
+
+                    # Use this to jail all users in their homes
+                    #DefaultRoot ~
+
+                    # Users require a valid shell listed in /etc/shells to login.
+                    # Use this directive to release that constrain.
+                    # RequireValidShell off
+
+                    # Port 21 is the standard FTP port.
+                    Port 21
+
+                Tire as #(descomentar)
+                Ficará assim :
+
+                    # Use this to jail all users in their homes
+                    DefaultRoot ~
+
+                    # Users require a valid shell listed in /etc/shells to login.
+                    # Use this directive to release that constrain.
+                    RequireValidShell off
+
+                    # Port 21 is the standard FTP port.
+                    Port 21
+
+    
+
+
+        mkdir /var/ftpteste -> Criar diretorio no /var
+        useradd ftpteste -d /var/ftpteste -s /bin/false -> Criar usuario apenas para o diretorio sem shell, atrelando ele 
+        cat /etc/passwd -> Deverá ficar assim: 
+                                                 ftpteste:x:1025:1026::/var/ftpteste:/bin/false
+        chown ftpteste:root /var/ftpteste/ -> Definir usuario como dono do diretorio dele
+        passwd ftpteste -> Definir senha do usuario
+                OBS: Senha foi definida agora, pois o usuario não vai fazer login no sistema. 
+                Senha apenas para acessar o ftp (WINscp)
+
+        systemctl restart proftpd -> Reiniciar serviço

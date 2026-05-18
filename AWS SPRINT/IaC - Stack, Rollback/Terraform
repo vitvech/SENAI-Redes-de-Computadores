@@ -1,0 +1,197 @@
+
+
+terraform init
+terraform validate
+terraform plan
+
+
+
+
+    State file -> mapa entre seu codigo e os recursos reais na AWS 
+
+
+
+
+State remoto (S3+DynamoDB)-
+
+            State no S3
+            Lock via DynamoDB (consulta o banco, para não causar conflito)
+            Compartilhado com o time
+            CI/CD pode aplicar com segurança
+
+
+
+terraform list
+
+
+
+
+
+
+
+                                        RESUMO TERRAFORM
+
+
+
+O que é:
+Ferramenta de IaC da HashiCorp.
+
+Usa:
+    HCL
+
+Multi-cloud:
+
+    AWS
+    Azure
+    GCP
+    Kubernetes
+
+Arquivos principais:
+
+    provider.tf
+    configura provider/cloud
+
+    variables.tf
+    define variáveis
+
+    main.tf
+    recursos principais
+
+    outputs.tf
+    saídas/outputs
+
+Fluxo Terraform:
+
+    terraform init
+    baixa providers e módulos
+
+    terraform validate
+    valida sintaxe do código
+
+    terraform plan
+    mostra o que vai mudar
+
+    terraform apply
+    aplica as mudanças
+    
+    terraform destroy
+    apaga recursos
+
+State File:
+
+    terraform.tfstate
+    guarda estado da infraestrutura
+
+Guarda:
+
+    recursos criados
+    IDs
+    relações
+
+Sem state:
+
+    Terraform perde controle da infra
+
+Backend remoto:
+
+    S3
+    armazena state remotamente
+
+    DynamoDB    
+    faz lock do state
+
+Vantagens:
+
+    compartilhado com equipe
+    evita conflito
+    seguro para CI/CD
+
+Comandos úteis:
+
+    terraform state list
+    lista recursos do state
+
+    terraform state show
+    mostra detalhes do recurso
+
+    terraform import
+    importa recurso já existente
+
+    terraform refresh
+    atualiza state comparando com AWS
+
+    terraform force-unlock
+    remove lock preso do state
+
+Módulos:
+
+    module "techstock"
+
+    reutiliza código Terraform
+
+Maior vantagem:
+    terraform plan
+
+Mostra:
+
+    o que será criado
+    alterado
+    destruído
+
+ANTES do apply.
+
+Boas práticas:
+
+    terraform fmt
+    formata código automaticamente
+
+    terraform validate
+    verifica erros de sintaxe
+
+    terraform plan
+    revisar mudanças antes de aplicar
+
+Nunca:
+
+    subir tfstate no Git
+    senha fixa no código
+    apply direto em produção
+
+CI/CD:
+
+    validate -> plan -> apply
+
+    fluxo comum de automação
+
+Problemas comuns:
+
+    State lock
+    state travado por outro processo
+
+    terraform force-unlock
+    remove lock manualmente
+
+    Resource already exists
+    recurso existe na AWS mas não no state
+
+    terraform import
+    importa recurso para o state
+
+    AWS_SESSION_TOKEN expirado
+    muito comum no Learner Lab
+
+Terraform vs CloudFormation:
+
+Terraform:
+
+    multi-cloud
+    HCL mais limpo
+    módulos melhores
+    plan muito forte
+
+CloudFormation:
+
+    integração AWS
+    rollback automático
+    sem tfstate
+    nativo AWS

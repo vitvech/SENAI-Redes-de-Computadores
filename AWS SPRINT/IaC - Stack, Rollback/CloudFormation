@@ -1,0 +1,151 @@
+            CloudFormation vs terraform
+
+
+    Provider -    AWS Apenas                         Multicloud 
+    Linguagem -   JSON e YAMl                        HCL
+    State -       Gerenciado pela AWS                tfstate local ou S3+DynamoDB
+    Rollback -    Automatico em falha                Manual(terraform apply da versao anterior)
+    Plan/Review - ChangeSets                         Terraform plan    
+    Custo - 
+    Drift Detection - 
+    Multi-conta - 
+    Modulos - 
+    licença - 
+    Leaner Lab -
+
+
+                            O MAIS UTILIZADO NO MUNDO DO TRABALHO, TERRAFORM
+
+
+
+
+                            RESUMO CloudFormation
+
+
+O que é:
+Ferramenta de IaC da AWS.
+
+Usa:
+
+YAML
+JSON
+
+Declarativa e nativa AWS.
+
+Estrutura do template:
+
+AWSTemplateFormatVersion
+Description
+Parameters
+Mappings
+Conditions
+Resources
+Outputs
+
+Parte mais importante:
+Resources
+
+Funções principais:
+
+!Ref
+
+referencia recurso ou parâmetro
+
+!Sub
+
+substitui variáveis em strings
+
+!GetAtt
+
+pega atributo de recurso
+
+!FindInMap
+
+busca valor em mappings
+
+Exemplo:
+Type: AWS::EC2::Instance
+
+cria uma instância EC2
+
+Ciclo de vida:
+
+CREATE STACK
+
+cria os recursos
+
+UPDATE STACK
+
+atualiza os recursos
+
+ROLLBACK
+
+volta automaticamente se falhar
+
+DELETE STACK
+
+remove todos os recursos
+
+Comandos importantes:
+
+aws cloudformation create-stack
+
+cria uma stack CloudFormation
+
+aws cloudformation describe-stack-events
+
+mostra eventos e erros da stack
+
+aws cloudformation wait stack-create-complete
+
+espera a stack terminar de criar
+
+aws cloudformation create-change-set
+
+cria preview das mudanças antes de aplicar
+
+aws cloudformation execute-change-set
+
+aplica as mudanças do change set
+
+detect-stack-drift
+
+detecta mudanças feitas manualmente na AWS
+
+StackSets:
+
+deploy em múltiplas contas e regiões
+
+Vantagens:
+
+nativo AWS
+rollback automático
+drift detection
+sem tfstate
+grátis
+
+Desvantagens:
+
+só AWS
+YAML muito verboso
+
+Learner Lab:
+
+NÃO criar:
+AWS::IAM::Role
+
+geralmente bloqueado no laboratório
+
+Usar:
+IamInstanceProfile: LabInstanceProfile
+
+usa profile já existente
+
+Problemas comuns:
+
+ROLLBACK_COMPLETE
+algum recurso falhou
+
+        UPDATE_ROLLBACK_FAILED
+
+#stack travou durante rollback

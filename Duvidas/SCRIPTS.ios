@@ -1,0 +1,277 @@
+-------- !!!! = INDICAÇÃO QUE PODE APAGAR E MUDAR COMO DESEJADO
+
+
+
+!SCRIPT PARA CONFIUGURACAO DE SWITCH(SENHA CONSOLE,ENABLE,HOSTNAME E SERVICO DE CRIPTOGRAFIA)
+
+en
+config t
+hostname <!!!!nome!!!!>
+banner motd "!!texto!!"
+ enable secret <!!!!senha!!!!>
+ line console 0
+ password <!!!!senha!!!!>
+ login
+ exit
+ service password-encryption
+
+ ----------------------------------------------------------------------------------------------------||
+
+SCRIPT VLAN(TRUNK E ACCESS)
+DEIS DA CRIAÇÃO ATÈ A IMPLANTAÇÃO DA INTERFACE NA VLAN
+
+
+enable
+config t
+vlan 10
+name <!!!!!!!!!!!NOME!!!!!!!!>
+vlan 20
+name <!!!!!!!!!!!NOME!!!!!!!!>
+exit
+vlan 30
+name<!!!!!!!!!!!!NOME!!!!!!!!>
+exit
+int f0/1
+switchport mode access
+switchport access vlan 10
+int f0/2
+switchport mode access
+switchport access vlan 20
+int f0/3
+switchport mode access
+switchport access vlan 30
+----CASO QUEIRA CRIAR TRUNK APAGUE ISSO------------
+int g0/1
+switchport mode trunk
+switchport trunk native vlan 99
+---CASO QUEIRA FILTRAR APAGUE ISSO-----------------
+switchport trunk allowed vlan 10,20,30,99
+
+
+!!script vtp atividade
+
+!SW-SERVER
+enable
+config t
+vtp mode server
+vtp domain senai
+vtp password senai123
+exit
+int g0/1
+switchport mode trunk
+switchport trunk native vlan 99
+int g0/1
+switchport mode trunk
+switchport trunk native vlan 99
+do wr
+
+!SW-CLIENT
+
+enable
+config t
+hostname 1-ANDAR
+vtp mode client
+vtp domain senai
+vtp password senai123
+exit
+int g0/1
+switchport mode trunk
+switchport trunk native vlan 99
+int range f0/1-2
+switchport mode access
+switchport access vlan 10
+int range f0/3-4
+switchport mode access
+switchport access vlan 20
+int range f0/5-6
+switchport mode access
+switchport access vlan 30
+exit
+do wr
+    ----------------------------------------------------------------------------------------------------||
+                                        *ATIVIDADE STP*
+!SW-01
+!Parte 1
+!Etapa 1
+enable
+conf terminal
+int f0/6
+no shut
+exit
+
+vlan 10
+vlan 20
+vlan 30
+vlan 40
+vlan 50
+vlan 60
+vlan 70
+vlan 80
+vlan 99
+
+!Etapa 3
+exit
+int f0/6
+switchport mode access
+switchport access vlan 30
+no shut
+
+!Etapa 4
+do show vlan brief
+
+!Etapa 5
+int range f0/1-4
+switchport mode trunk
+switchport trunk native vlan 99
+no shut
+
+int vlan 99
+ip add 172.31.99.1 255.255.255.0
+
+
+!Parte 2
+!Etapa 1
+exit
+span mode pvst
+
+!Etapa 2
+span vlan 1,10,30,50,70 root primary
+
+do show span 
+
+!Parte 3
+!Etapa 1
+int range f0/5-24
+span portfast
+
+!Etapa 2
+span bpduguard enable
+end
+wr
+
+show running-config
+
+
+!SW-02
+!Parte 1
+!Etapa 1
+enable
+conf terminal
+int f0/18
+no shut
+exit
+
+vlan 10
+vlan 20
+vlan 30
+vlan 40
+vlan 50
+vlan 60
+vlan 70
+vlan 80
+vlan 99
+
+!Etapa 3
+exit
+int f0/18
+switchport mode access
+switchport access vlan 20
+no shut
+
+!Etapa 4
+do show vlan brief
+
+!Etapa 5
+int range f0/1-4
+switchport mode trunk
+switchport trunk native vlan 99
+no shut
+
+int vlan 99
+ip add 172.31.99.2 255.255.255.0
+
+
+!Parte 2
+!Etapa 1
+exit
+span mode pvst
+
+!Etapa 2
+span vlan 1,10,20,30,40,50,60,70,80,99 root secondary
+
+do show span 
+
+!Parte 3
+!Etapa 1
+int range f0/5-24
+span portfast
+
+!Etapa 2
+span bpduguard enable
+end
+wr
+
+show running-config
+
+
+!SW-03
+!Parte 1
+!Etapa 1
+enable
+conf terminal
+int f0/11
+no shut
+exit
+
+vlan 10
+vlan 20
+vlan 30
+vlan 40
+vlan 50
+vlan 60
+vlan 70
+vlan 80
+vlan 99
+
+!Etapa 3
+exit
+int f0/11
+switchport mode access
+switchport access vlan 10
+no shut
+
+!Etapa 4
+do show vlan brief
+
+!Etapa 5
+int range f0/1-4
+switchport mode trunk
+switchport trunk native vlan 99
+no shut
+
+int vlan 99
+ip add 172.31.99.3 255.255.255.0
+
+
+!Parte 2
+!Etapa 1
+exit
+span mode pvst
+
+!Etapa 2
+span vlan 20,40,60,80,99 root primary
+
+do show span 
+
+!Parte 3
+!Etapa 1
+int range f0/5-24
+span portfast
+
+!Etapa 2
+span bpduguard enable
+end
+wr
+
+show running-config
+

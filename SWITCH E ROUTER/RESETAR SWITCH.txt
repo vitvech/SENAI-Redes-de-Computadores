@@ -1,0 +1,5 @@
+enable
+wr erase
+erase startup-config
+delete flash:vlan.dat
+reload

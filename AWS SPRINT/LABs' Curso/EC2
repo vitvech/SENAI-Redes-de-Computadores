@@ -1,0 +1,271 @@
+Aqui está o **passo a passo simplificado e direto** do **Laboratório 3 – Introdução ao EC2**, no mesmo estilo do anterior 👇
+
+---
+
+# 🧪 Laboratório 3 — Amazon EC2 (Guia prático)
+
+## 🎯 Objetivo
+
+Você vai aprender a:
+
+* Criar uma instância EC2
+* Monitorar
+* Liberar acesso web (HTTP)
+* Redimensionar a máquina
+* Testar proteções
+* Parar a instância
+
+---
+
+# 🔹 PARTE 1 — Criar instância EC2
+
+### 1. Acessar EC2
+
+* Start Lab → abrir console
+* Ir em **EC2**
+* Região: **us-east-1 (Norte da Virgínia)**
+
+---
+
+### 2. Executar instância
+
+Clique em **Executar instância**
+
+---
+
+### 3. Configuração básica
+
+* Nome: `Web Server`
+* AMI: Amazon Linux 2023
+* Tipo: `t2.micro`
+* Key pair: `vockey`
+
+---
+
+### 4. Rede
+
+* VPC: `Lab VPC`
+* Sub-rede: **PublicSubnet1**
+* IP público: ativado
+
+---
+
+### 5. Segurança
+
+Criar novo grupo:
+
+* Nome: `Web Server security group`
+* Descrição: `Security group for my web server`
+
+⚠️ IMPORTANTE:
+
+* Remova a regra padrão (SSH)
+
+---
+
+### 6. Armazenamento
+
+* Manter padrão (8 GB)
+
+---
+
+### 7. Proteção + Script
+
+Ative:
+
+* ✅ Proteção contra encerramento
+
+Cole o script em **User Data**:
+
+```bash id="2mxtu1"
+#!/bin/bash
+dnf install -y httpd
+systemctl enable httpd
+systemctl start httpd
+echo '<html><h1>Hello From Your Web Server!</h1></html>' > /var/www/html/index.html
+```
+
+---
+
+### 8. Criar instância
+
+* Clique em **Executar instância**
+* Vá em **Ver todas as instâncias**
+
+⏳ Aguarde:
+
+* Estado: Running
+* Status: **2/2 checks passed**
+
+---
+
+# 🔹 PARTE 2 — Monitorar instância
+
+Selecione a instância → veja:
+
+### ✔️ Status checks
+
+* Deve estar OK
+
+---
+
+### ✔️ Monitoramento
+
+* Gráficos (CPU, rede, etc.)
+
+---
+
+### ✔️ Logs
+
+* Ações → Monitor → **Get system log**
+* Verifique se instalou o Apache
+
+---
+
+### ✔️ Screenshot
+
+* Ações → Monitor → **Get instance screenshot**
+
+---
+
+# 🔹 PARTE 3 — Liberar acesso web
+
+### 1. Testar acesso
+
+* Copie o **IPv4 público**
+* Abra no navegador
+
+❌ Não vai funcionar (bloqueado)
+
+---
+
+### 2. Liberar HTTP
+
+* Vá em **Security Groups**
+* Abra: `Web Server security group`
+
+👉 Editar regras de entrada:
+
+* Tipo: HTTP
+* Origem: Anywhere (0.0.0.0/0)
+
+💾 Salvar
+
+---
+
+### 3. Testar novamente
+
+Atualize a página:
+
+✅ Deve aparecer:
+
+```
+Hello From Your Web Server!
+```
+
+---
+
+# 🔹 PARTE 4 — Redimensionar instância
+
+### 1. Parar instância
+
+* Estado → **Stop**
+
+⏳ Aguarde: **Stopped**
+
+---
+
+### 2. Alterar tipo
+
+* Ações → Configurações → **Alterar tipo**
+
+👉 Escolher:
+
+* `t2.small`
+
+---
+
+### 3. Ativar proteção contra parada
+
+* Ações → Configurações → **Proteção contra interrupção**
+* Ativar
+
+---
+
+### 4. Aumentar disco
+
+* Aba **Storage**
+* Clique no volume
+
+👉 Ações → Modify Volume:
+
+* De: 8 GB
+* Para: **10 GB**
+
+💾 Confirmar
+
+---
+
+### 5. Iniciar novamente
+
+* Estado → **Start**
+
+---
+
+# 🔹 PARTE 5 — Ver limites da AWS
+
+### 1. Ir em Service Quotas
+
+* Buscar: **EC2**
+
+---
+
+### 2. Procurar:
+
+* `Running On-Demand`
+
+👉 Aqui você vê:
+
+* Limite de instâncias na conta
+
+---
+
+# 🔹 PARTE 6 — Testar proteção contra parada
+
+### 1. Tentar parar instância
+
+* Vai dar erro ❌
+
+👉 Motivo:
+
+* Proteção ativada
+
+---
+
+### 2. Desativar proteção
+
+* Ações → Configurações → Proteção contra interrupção
+* Desativar
+
+---
+
+### 3. Parar instância
+
+* Agora funciona ✅
+
+---
+
+# ✅ FINALIZAÇÃO
+
+* Clique em **Submit**
+* Veja a nota
+* Clique em **End Lab**
+
+---
+
+# 💡 Dicas importantes
+
+* HTTP precisa estar liberado (porta 80)
+* Instância precisa estar em sub-rede pública
+* Sempre aguarde 2/2 checks
+* Proteções podem bloquear ações (isso é esperado)

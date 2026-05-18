@@ -1,0 +1,224 @@
+Sim, entendi perfeitamente.
+Você não quer mais a atividade “bonitinha” igual o professor passou — você quer transformar isso em um tipo de documentação pessoal / guia rápido, para usar futuramente quando precisar fazer outra infra com CloudFormation.
+
+O ideal é você anotar assim:
+
+* objetivo do que estava fazendo
+* o que cada parte faz
+* sequência prática
+* erros que aconteceram
+* como resolveu
+* observações importantes
+
+Isso vira praticamente seu “manual pessoal de CloudFormation”.
+
+Uma estrutura boa seria:
+
+# CloudFormation — Anotações Práticas
+
+## 1. Criar Stack Básica
+
+### Objetivo
+
+Criar uma EC2 usando CloudFormation pelo Console AWS.
+
+### Passos
+
+1. AWS Console → CloudFormation
+2. Create Stack
+3. Enter template in Designer
+4. Colar YAML
+5. Create Stack
+
+### Template básico
+
+(coloca o yaml)
+
+### O que aprendi
+
+* `Resources` é obrigatório
+* sem `Resources` → erro:
+  `Template format error: At least one Resources member must be defined`
+* `Outputs` mostra informações após criação
+
+### Observações
+
+* Stack cria recursos automaticamente
+* `CREATE_COMPLETE` = sucesso
+* `ROLLBACK_COMPLETE` = falha + rollback automático
+
+---
+
+# Parameters e Mappings
+
+## Parameters
+
+Entradas dinâmicas do usuário.
+
+Exemplo:
+
+```yaml
+Parameters:
+  Environment:
+    Type: String
+```
+
+## Mapping
+
+Tabela interna de valores.
+
+Exemplo:
+
+```yaml
+Mappings:
+  InstanceSize:
+    dev:
+      EC2: t2.small
+```
+
+## O que aprendi
+
+* `!FindInMap` busca valores do mapping
+* `!Ref` referencia parâmetros
+* `!Sub` substitui variáveis em strings
+
+---
+
+# Change Sets
+
+## Objetivo
+
+Ver alterações antes de aplicar.
+
+## Fluxo
+
+1. Update Stack
+2. Create Change Set
+3. Revisar:
+
+   * Action
+   * Replacement
+4. Execute
+
+## Observações importantes
+
+* `Replacement=True`
+  → recurso será recriado
+* parecido com um “git diff”
+
+---
+
+# Drift Detection
+
+## Objetivo
+
+Detectar alterações feitas manualmente fora do CloudFormation.
+
+## Exemplo
+
+Adicionar tag manualmente na EC2.
+
+## Resultado
+
+* Stack ficou:
+  `DRIFTED`
+
+## Observações
+
+CloudFormation perde controle quando alguém altera recursos manualmente.
+
+---
+
+# ImportValue e Cross-Stack
+
+## Objetivo
+
+Compartilhar recursos entre stacks.
+
+## Export
+
+```yaml
+Export:
+  Name: techstock-lab-sg-id
+```
+
+## Import
+
+```yaml
+!ImportValue techstock-lab-sg-id
+```
+
+## Observações
+
+* cria dependência entre stacks
+* não deixa deletar stack exportadora enquanto outra usa
+
+---
+
+# Rollback e Troubleshooting
+
+## O que aconteceu
+
+Stack entrou em rollback por erro no template.
+
+## Como identificar
+
+CloudFormation → Events
+
+## Erros encontrados
+
+* caracteres inválidos no SG
+* VpcId inválido
+
+## Resultado
+
+* `ROLLBACK_COMPLETE`
+
+## Observações
+
+Stack em rollback:
+
+* não pode atualizar
+* precisa deletar e recriar
+
+---
+
+# Problemas que encontrei no Lab
+
+## Learner Lab preso em cleanup
+
+Mensagem:
+
+```text
+account is still in cleanup
+```
+
+## Solução
+
+* esperar reset concluir
+* às vezes demora bastante
+
+---
+
+# Ordem correta para deletar stacks
+
+1. app stack
+2. infra stack
+3. outras stacks
+
+## Motivo
+
+Dependências com `!ImportValue`
+
+---
+
+Isso fica MUITO mais útil futuramente do que a atividade original.
+
+Você pode até criar:
+
+* “comandos úteis”
+* “erros comuns”
+* “estrutura base”
+* “templates reutilizáveis”
+
+Porque aí vira material real de estudo/profissional, não só tarefa escolar.

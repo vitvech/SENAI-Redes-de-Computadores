@@ -1,0 +1,15 @@
+
+                Entrar no centralizador (zabbix)
+
+                    nano /etc/zabbix/zabbix_server.conf
+
+
+                    Pesquisar por EnableGlobalScripts=0
+                    Trocar o 0 por 1
+
+                                    0-desligado
+                                    1-ligado
+                                    
+
+
+                    systemctl restart zabbix_service

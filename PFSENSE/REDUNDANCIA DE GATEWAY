@@ -1,0 +1,39 @@
+
+
+                VM:
+
+                        Colocar 2 adaptador de rede
+                        para simular duas WAN (vivo,claro,tim)
+                        colocando-as em bridge
+
+                        Adicionar mais um adaptador de rede
+                        Colocar em vmnet 
+                        Colocando a mesma no windows
+
+
+
+
+
+                pfsense:
+
+
+                        Adicionar a interface em Assignments
+                        ativar, colocar dhcp e salvar
+
+                            System > Routing 
+                            Group Gateway
+
+
+                                        Nome: REDUNDANCIA DE REDE
+
+                                        Tier : 1 
+                                               2              (DEIXAR O TIER 1 PARA O MELHOR)
+
+
+
+                                        TRIGGER LEVEL: 
+
+
+                                                    MEMBER DOWN -> Se um link cair, o outro assume
+
+                                        

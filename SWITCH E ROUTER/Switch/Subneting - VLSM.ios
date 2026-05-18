@@ -1,0 +1,259 @@
+---------SUBNETTING--------
+
+ REDE PRINCIPAL - 192.168.0.0/24 [CLASSE C]
+    IPS- 256
+    VALIDOS- 254
+
+256/2=128
+
+255.255.255.128 - /25
+
+11111111.111111111.11111111.1 0000000
+            REDE                HOST
+
+Qual o número que eu elevo a 2, que vai me fornecer 128 IPs?
+
+2^7=128   numero magico= 256-128 -> 128
+
+2 sub-redes
+
+        1-192.168.0.0/25 - 128 IPs - 126 VALIDOS
+        2-192.168.0.128/25 - 128 IPs - 126 VALIDOS
+
+
+4 sub-redes
+
+11111111.11111111.11111111.11 000000            /24
+            redes               HOST            MASK
+
+Salto=64
+
+2^6=64              256-64=192
+
+255.255.255.192
+
+
+1- 192.168.0.0/26 - 64 IPs - 62 VALIDOS
+2- 192.168.0.64/26 - 64 IPs - 62 VALIDOS
+3- 192.168.0.128/26 - 64 IPs - 62 VALIDOS
+4- 192.168.0.192/26 - 64 IPs - 62 VALIDOS
+
+
+VLSM ---------------
+
+REDE PRINCIPAL - 192.168.1.0/24
+
+255.255.255.
+
+Qual mascara de rede me fornece 32 IPs ???
+
+
+11111111.11111111.11111111.111  00000               /27
+                redes              HOST             MASK
+
+                /27 = 255.255.255.224       256-224= 32
+                2^5 = 32 IPs - 30 VALIDOS
+
+
+    1 RH - 192.168.1.0/27 - 32 IPs - 30 VALIDOS                 [20 hosts]
+    2 ADM - 192.168.1.32/27 - 32 Ips - 30 VALIDOS               [30 hosts]
+    3 Fnanceiro - 192.168.1.64/27 - 32 IPs - 30 VALIDOS         [10 hosts]
+    4 TI - 192.168.1.96/27 - 32 IPs - 30 VALIDOS                [2 hosts]
+    5 Diretoria - 192.168.1.128/27 - 32 IPs - 30 VALIDOS        [5 hosts]
+    6 Gerencia - 192.168.1.160/27 32 IPs - 30 VALIDOS           [10 hosts]
+    7 Disponivel - 192.168.1.192/27 32 IPs - 30 VALIDOS
+    8 Disponivel - 192.168.1.224/27 32 IPs - 30 VALIDOS
+
+
+
+    VLSM - REDE PRINCIPAL - 192.168.1.0/24
+
+
+    1- Organizar as redes da MAIOR para a MENOR [ORDEM DESCRESCENTE]
+
+    Administracao - 30 hosts
+    RH - 20 hosts
+    Financas - 10 hosts
+    Gerencia - 10 hosts
+    Diretoria - 5 hosts
+    Ti - 2 hosts
+    
+    2- Definir a mascara de subrede para cada subrede
+    
+    1 - ADM - 30 hosts          /27=    255.255.255.224
+    2 - RH - 20 hosts           /27=    255.255.255.224
+    3 - Financas - 10 hosts     /28=    255.255.255.240
+    4 - Gerencia - 10 hosts     /28=    255.255.255.240
+    5 - Diretoria - 5 hosts     /29=    255.255.255.248
+    6 - Ti - 2 hosts            /30=    255.255.255.252
+    
+    3- Calcular as subredes utilizando as mascaras
+
+    REDE PRINCIPAL - 192.168.1.0/24
+
+
+    1- adm 
+            ID= 192.168.1.0/27 -32 IPs - 30 VALIDOS - 30 hosts
+
+    2- RH 
+            ID= 192.168.1.32/27 -32 IPs - 30 VALIDOS - 30 hosts
+    
+    3- Financas
+
+            ID= 192.168.1.64/28 -16 IPS - 14 VALIDOS - 10 hosts
+
+    4- Gerencia
+
+            ID= 192.168.1.80/28 -16 IPs - 14 VALIDOS - 10 hosts
+
+    5- Diretoria
+
+            ID= 192.168.1.96/29 -8 IPs - 6 VALIDOS - 5 hosts
+    
+    6- TI
+
+            ID= 192.168.1.104/30 -4 IPs - 2 VALIDOS - 2 hosts
+
+    7-Disponivel
+
+            ID= 192.168.1.108 - 192.168.1.255 = 147 Disponivel
+
+
+
+
+REDE PRINCIPAL  - 172.16.0.0/16 [Classe B]
+/16 – 255.255.0.0
+11111111.11111111.00000000.00000000
+Como eu sei quantos IPs cabem dentro dessa máscara?
+2^16 = 65536 IPs
+2 SUBREDES – 65536 /2 = 32768 IPs
+	Qual número que eu elevo o 2 para fornecer 32768 IPs?
+	2^15 = 32768
+	Na minha máscara haverá 15 números Zeros (0)
+	Logo haverá  17 números Uns (1)
+	11111111.11111111.10000000.00000000
+	255.255.128.0 - /17 
+	
+Número Mágico = 256 -128  NM = 128
+2 SUBREDES
+	1° ID = 172.16.0.0/17 – 32768 IPs – 32766 Válidos	     
+	      Broadcast 172.16.127.255
+2° ID = 172.16.128.0/17
+      Broadcast 172.16.255.255
+4 SUBREDES  -  65536/4  = 16384 IPs
+	Qual número eu elevo o 2 para me fornecer 16384 IPs?
+		2^14= 16384
+	Na minha máscara haverá 14 números Zeros (0)
+	Logo haverá 18 números Uns (1)
+	11111111.11111111.11000000.00000000
+	255.255.192.0 - /18
+	Número Mágico = 256 – 192   NM = 64
+
+
+
+
+
+DONTPAD-----------
+
+
+
+
+4 SUBREDES
+1° ID 172.16.0.0/18 – 16384 IPs -16382 Válidos
+	Broadcast 172.16.63.255
+2° ID 172.16.64.0/18
+	Broadcast 172.16.127.255
+3° ID 172.16.128.0/18
+	Broadcast 172.16.191.255
+4° ID 172.16.192.0/18
+	Broadcast 172.16.255.255
+
+Exercícios de VLSM
+2 - O SENAI de informática está crescendo, hoje são 90 funcionários, separados em 4 setores: NUDES, Marketing, Professores e Design; 546 alunos, divididos em 2 períodos, e uma média de 20 impressoras e 15 APs. A VIVO lhes forneceu o range 172.16.0.0/16, você precisa dividir essa rede para manter a organização da rede.  
+
+1° Organizar as redes da MAIOR para a MENOR [ORDEM DECRESCENTE!]
+	1° Alunos – 546 Hosts
+	2 ° Funcionários - 90 Hosts
+	3 ° Impressoras – 20 Hosts
+	4 ° APs – 15 Hosts
+2° Definir a Máscara de Subredes para cada Subrede
+	1° Alunos - /22 – 255.255.252.0
+2^10 =1024
+Então na minha máscara haverá 10 Zeros (0)
+Logo na minha máscara haverá 22 Uns (1)
+11111111.11111111.11111100.00000000
+255.255.252.0 - /22
+NM = 256 – 252 = 4
+2° Funcionários – /25 – 255.255.255.128                  NM = 256 -128      NM=128
+3 ° Impressoras - / 27 – 255.255.255.224	     NM = 256 -224     NM= 32
+ 11111111.11111111.11111111.11100000
+4°APs - /27 – 255.255.255.224	     NM = 256 -224     NM= 32
+
+3° Calcular as Subredes utilizando as Máscaras
+	Rede principal 172.16.0.0/16
+	1° Alunos 
+		ID = 172.16.0.0/22 – 1024 IPs – 1022 Válidos -  546 Hosts
+			1° IP Válido 172.16.0.1
+			Último IP válido 172.16.3.254
+		Broadcast 172.16.3.255/22
+2° Funcionários
+ID = 172.16.4.0/25 – 128 IPS – 126 Válidos -  90 Hosts
+	1° IP Válido 172.16.4.1
+	Último IP válido 172.16.4.126/25
+Broadcast 172.16.4.127/25
+	3° Impressoras	
+		ID = 172.16.4.128/27
+			1° IP Válido 172.16.4.129
+Último IP válido 172.16.4.158
+		Broadcast 172.16.4.159
+	4° APs
+		ID = 172.16.4.160/27
+1° IP Válido 172.16.4.161
+Último IP válido 172.16.4.190
+		Broadcast 172.16.4.191/27
+	DISPONÍVEL
+ID = 172.16.4.192/?
+        172.16.255.255
+
+             
+
+ATIVIDADE VLSM-----------------------------------------------------
+193.128.0.0/24
+
+1- Organizar as redes da MAIOR para a MENOR [ORDEM DESCRESCENTE]
+
+Alphaville - 120 hosts
+Bauru - 50 hosts
+Cotia - 30 hosts
+Campinas - 14 hosts
+
+2- Definir a mascara de sub-redes para cada subread
+
+1- Alphaville /25 - 255.255.255.128
+2- Bauru /26 - 255.255.255.192
+3- Cotia /27 - 255.255.255.224
+4- Campinas /28 - 255.255.240
+
+
+
+
+3- Calcular as sub-redes utilizando as mascaras
+
+
+1- Alphaville 
+
+	ID= 193.128.0.0/25 - 128 IPs - 126 Validos
+
+2- Bauru
+	
+	ID= 193.128.0.128/26 - 64 IPs - 62 Validos
+
+3- Cotia
+
+	ID= 193.128.0.188/27 - 32 IPs - 30 Validos
+
+4- Campinas
+
+	ID= 193.128.0.220/28 - 16 IPs - 14 Validos
+
+5- 

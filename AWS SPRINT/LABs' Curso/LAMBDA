@@ -1,0 +1,120 @@
+🧪 Laboratório — AWS Lambda + EventBridge
+🎯 Objetivo
+
+Você vai:
+
+Criar uma função Lambda
+Criar um gatilho automático (a cada 1 minuto)
+Parar uma instância EC2 automaticamente
+🔹 PARTE 1 — Criar função Lambda
+1. Acessar serviço
+Start Lab → abrir console
+Buscar por Lambda
+2. Criar função
+Clique em Criar função
+
+Configure:
+
+Tipo: Criar do zero
+Nome: myStopinator
+Runtime: Python 3.11
+3. Permissões (IMPORTANTE)
+Clique em Alterar função de execução
+Escolha:
+Usar uma função existente
+Role: myStopinatorRole
+
+👉 Clique em Criar função
+
+🔹 PARTE 2 — Criar gatilho automático
+1. Adicionar trigger
+Clique em Adicionar trigger
+2. Configurar
+Tipo: EventBridge (CloudWatch Events)
+
+Criar nova regra:
+
+Nome: everyMinute
+Tipo: Expressão de programação
+Expressão:
+rate(1 minute)
+
+👉 Clique em Adicionar
+
+🔹 PARTE 3 — Configurar código
+1. Editar código
+Vá em aba Code
+Abra: lambda_function.py
+2. Apagar tudo e colar:
+
+import boto3
+region = '<REPLACE_WITH_REGION>'
+instances = ['<REPLACE_WITH_INSTANCE_ID>']
+ec2 = boto3.client('ec2', region_name=region)
+
+def lambda_handler(event, context):
+    ec2.stop_instances(InstanceIds=instances)
+    print('stopped your instances: ' + str(instances))
+    
+3. Substituir valores
+
+👉 Região:
+
+Exemplo:
+region = 'us-east-1'
+
+👉 ID da instância:
+
+Vá em EC2 → Instances
+Copie o ID da instância instance1
+
+Exemplo:
+
+instances = ['i-1234567890abcdef0']
+
+⚠️ IMPORTANTE:
+
+Manter aspas ' '
+4. Salvar e implantar
+Clique em Deploy
+🔹 PARTE 4 — Monitorar
+1. Aba Monitor
+Vá em Monitor
+
+Você verá:
+
+Execuções da função
+Taxa de sucesso/erro
+🔹 PARTE 5 — Testar funcionamento
+1. Ir para EC2
+Abra EC2 → Instances
+2. Verificar
+
+⏳ Aguarde até 1 minuto
+
+👉 A instância será:
+
+Stopped (parada) automaticamente
+3. Teste extra
+Inicie a instância manualmente
+
+👉 Resultado:
+
+Ela será parada novamente em ~1 minuto
+🔹 COMO FUNCIONA (resumo rápido)
+Lambda roda código sem servidor
+EventBridge dispara automaticamente
+IAM Role permite parar EC2
+Script usa Python + boto3 para parar a instância
+
+✅ FINALIZAÇÃO
+Clique em Submit
+Veja nota
+Clique em End Lab
+
+💡 Dicas importantes
+Se não parar:
+Verifique ID da instância
+Verifique região correta
+Role (IAM) precisa estar correta
+Deploy precisa ser feito após editar código

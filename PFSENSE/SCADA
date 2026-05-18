@@ -1,0 +1,126 @@
+            Subir:
+
+                    VM pfsense
+                    VM debian 12
+                    VM windows 10
+
+
+
+            
+            PFsense------
+                     Windows 10:
+                    Adicionar um novo adaptador de rede
+                    Colocar em vmnet5 (Pode ser qualquer uma)
+                    Entrar no web do pfsense
+                    Ir em Interfaces > Assignments
+                    Clicar em Add (para adicionar a nova interface)
+                    Interfaces > LAN
+                    Flegar enable interface
+                    Alterar descrição de acordo com o cenario
+                    IPv4 Configuration Type (Colocar como IPV4)
+                    Descer para Static IPv4 Configuration
+                    Colocar o Gateway e não esquece de alterar a mascara do lado 
+                    Salvar
+                    Reiniciar o PFsense
+                    Verificar para ver se o IP foi atribuido corretamente
+                    
+                    Pro debian 12:
+                            Adicionar mais um adaptador de rede
+                            Colocar vmnet10 (mesmo que o debian)
+                            Ir em Interfaces > Assignments
+                            Clicar em Add (para adicionar a nova interface)
+                            Interfaces > OPT1
+                            Flegar enable interface
+                            Alterar descrição de acordo com o cenario
+                            IPv4 Configuration Type (Colocar como IPV4 static)
+                            Descer para Static IPv4 Configuration
+                            Colocar o Gateway e não esquece de alterar a mascara do lado 
+                            Salvar
+                            Reiniciar o PFsense
+                            Verificar para ver se o IP foi atribuido corretamente
+
+
+                    Firewall
+                            Firewall > Rules > LAN-ADMIN
+                            Adicionar uma nova regra
+                                 
+                            LAN-ADMIN:
+
+                                        HTTP:    Action: Pass
+                                                 Interface: LAN-ADMIN
+                                                 Protocol TCP
+                                                 Source: Single host or alias (IP do windows)
+                                                 Destination: HTTP (Porta 80)
+                                                 Descrição:  <Descreva a regra>
+                                                 Salvar
+                                        
+                                        HTTPS:   Action: Pass
+                                                 Interface: LAN-ADMIN
+                                                 Protocol TCP
+                                                 Source: Single host or alias (IP do windows)
+                                                 Destination: HTTPS (Porta 443)
+                                                 Descrição:  <Descreva a regra>
+                                                 Salvar
+                                        
+                                        DNS:     Action: Pass
+                                                 Interface: LAN-ADMIN
+                                                 Protocol TCP/UDP
+                                                 Source: Single host or alias (IP do windows)
+                                                 Destination: DNS (Porta 53)
+                                                 Descrição:  <Descreva a regra>
+                                                 Salvar
+                                        
+                                        ADM N PODE PINGAR O FIREWALL
+
+                                        ICMP:    Action: BLOCK
+                                                 Interface: LAN-ADMIN
+                                                 Protocol ICMP
+                                                 ICMP Subtypes: any
+                                                 Source: Single host or alias (IP do windows)
+                                                 Destination: This Firewall(self)
+                                                 Descrição:  <Descreva a regra>
+                                                 Salvar
+                                        
+            Windonws 10----------
+                    Liberar Firewall do windows (Para poder pingar, testar conectividade).
+                    Vai ter apenas um adaptador de rede, não precisa adicionar outro
+                    Colocar na mesma vmnet do pfsense (vmnet5)
+                    Acessar o windows
+                    Win + R > ncpa.cpl
+                    Clicar com o mouse direito na placa de rede > Propriedades
+                    Protocolo TCP/IPv4 > Propriedades
+                    Colocar o IP, mascara e gateway de acordo com o cenario
+
+
+
+
+
+            Debian 12----------
+                    Não precisa adicionar um novo adaptador de rede
+                    Colocar o adaptador que já tem na mesma vmnet do pfsense (vmnet10)
+                    Acessar o debian
+                    Editar o arquivo de configuração de rede
+                    sudo nano /etc/network/interfaces
+                    Adicionar as seguintes linhas (de acordo com o cenario):
+
+                    auto <interface de rede> ex: auto ens33
+                    iface <interface de rede> inet static
+                    address [IP do debian]
+                    netmask [Mascara de subrede]
+                    gateway [Gateway do debian]
+
+
+
+
+
+
+
+
+                net -> toda a rede
+                address -> gateway
+                host -> só aquele host
+                
+
+
+
+        

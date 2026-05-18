@@ -1,0 +1,27 @@
+
+        Colocar o pacote de idiomas como iso ( caso,estiver utilizando vmware ou qualquer sistema de virtualização )
+        
+
+
+
+
+                Abra o menu Iniciar e clique no ícone de engrenagem
+                Clique em Hora e idioma.
+                Clique em Idioma no painel esquerdo.
+                Na tela Idioma à direita, clique em Adicionar um idioma.
+                Na tela Escolha um idioma para instalação, selecione o idioma na lista e clique em Avançar. Nessa etapa, o idioma japonês é selecionado como exemplo.
+                Na tela Instalar recursos de idioma, verifique se todos os itens estão selecionados e clique em Instalar.
+                Se o sistema puder se conectar à Internet, o download e a instalação de um pacote de idiomas serão iniciados.
+                Clique em Opções do idioma adicionado.
+                Na tela Opções de idioma, verifique se o pacote de idiomas instalado é exibido na seção Pacote de idiomas e clique no ícone de seta para a esquerda no canto superior esquerdo.
+                Na tela Idioma, selecione o idioma no menu suspenso Idioma de exibição do Windows e clique em Data e hora no painel esquerdo.
+                Na tela Data e hora, selecione o fuso horário no menu suspenso Fuso horário.
+                Selecione Região no painel esquerdo e selecione sua região no menu suspenso País ou região.
+                Desça até a tela Região, encontre Configurações relacionadas e clique em Data, hora e configurações regionais adicionais.
+                Na janela Relógio e região, clique em Região.
+                Na janela Região, abra a guia Administrativo e, na seção Tela de boas-vindas e Novas contas de usuário, clique em Copiar configurações.
+                Em Tela de boas-vindas e Novas contas de usuário, selecione todos os itens da seção Copiar suas configurações atuais para e clique em OK.
+                Na tela da guia Administrativo, na seção Idioma para programas não Unicode, clique em Alterar localidade do sistema.
+                Na tela Configurações de Região, selecione sua região no menu suspenso Localidade do sistema atual e clique em OK.
+                Na caixa de diálogo que solicita a reinicialização, clique em Reiniciar agora para reiniciar o sistema.
+

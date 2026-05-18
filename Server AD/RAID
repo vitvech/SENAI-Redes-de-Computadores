@@ -1,0 +1,36 @@
+PREPARAR O RAID PARA O VIRTUAL
+
+
+DASHBOARD - VIRTUAL CONSOLE
+
+1- CLICAR EM STARTAR TELA DO CONSOLE
+2- PRESSIONAR F2 AO LIGAR
+3- DEVICE SETTINGS
+4- RAID CONTROLLER
+	1-PHYSICAL DISK MANAGER
+	(VER QUANTOS DISCOS FISICOS TEM)
+	2-VIRTUAL DISK MANAGER
+	(VER DISCOS VIRTUAIS)
+	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+	3-Configuration Management
+	4- Clear Management
+	(Vai zerar as propriedades)
+	5-ESC
+	6-Create Disk Virtual
+		
+		Utilizar o RAID MAIOR (RAID 0, RAID 1 - USAR O 1)
+		Virtual disk name - (NOME DO RAID) RAID1
+		Select Physical Disks
+		Deixar que traz as configs automáticas
+		Selecionar os HDS que vão participar
+		Apply changes
+	
+	Create Virtual Disk
+	Confirma a operação
+	Yes,Ok
+	
+	Virtual Disk Management
+	(Vai aparecer que está pronto, porem ainda esta criando).
+
+	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

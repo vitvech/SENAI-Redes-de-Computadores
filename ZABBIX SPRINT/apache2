@@ -1,0 +1,14 @@
+
+                Subir um debian 12
+                apt update -y
+                apt install zabbix-agent
+                nano /etc/zabbix/zabbix_agentd.conf
+
+                        Procurar por:
+                                        Server: <IP do Servidor>
+                        Descer e procurar por:
+                                        Server: <IP do Servidor>
+
+                
+
+                No

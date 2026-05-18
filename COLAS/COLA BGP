@@ -1,0 +1,26 @@
+
+
+enable
+config t
+router bgp 65000
+Network <ID da sua rede > mask <Máscara da sua rede>
+Network <ID da WAN> mask <Máscara da WAN>
+neighbor <IP do roteador vizinho> remote-as <AS do roteador vizinho>
+
+ex: 
+router 1
+en 
+config t 
+router bgp 65000
+network 192.168.20.0 mask 255.255.255.0
+network 200.200.200.0 mask 255.255.255.252
+neighbor 200.200.200.2 remote-as 65001
+do wr
+end
+
+router 2
+
+en
+config t
+router bgp 65001
+network

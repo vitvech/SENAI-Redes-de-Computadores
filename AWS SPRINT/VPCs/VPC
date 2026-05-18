@@ -1,0 +1,332 @@
+
+        REGIAO: NORTE DA VIRGINIA
+
+            Criar VPC
+
+
+                            Pesquisar VPC na aws
+                            Criar VPC
+                            
+                                                    1 modo - 
+                                                                    Somente VPC
+                                                                    Criar o resto na unha
+
+
+                                                    2 modo - 
+                                                                    Ele cria toda a estrutura para você e voce consegue visualizar isso
+
+                            
+        Criar primeira vpc, com o 2 modo     
+
+                            senai134-east1
+                            Manter /16 para eventualmente criar sub-redes 
+                            Bloco - Nenhum
+                            Locação Padrão
+                            Zona de disp - 2  ( aumentar resiliencia da infra )
+                            quantas Sub redes privadas 
+                                        Personalizar blocos CIDR de sub-redes
+
+                                                        Mudar todos para /24
+                                                        Não alterar o range
+                                        CRIAR
+
+
+
+
+
+        
+
+            Mudar para região oregon
+        Criar com o Segundo modo:
+
+                            CRIAR VPC
+
+                                                    SOMENTE VPC
+
+
+                                    tag de nome: senai134-west2
+                                    Bloco CIDR: Entrada manual de CIDR IPv4
+                                    CIDR IPv4: 10.0.0.0/16 (Recomendado)
+
+                                        Criar
+
+
+                            Criar sub-rede 
+
+                                    
+
+                                    Adicionar a VPC criada
+                                    nome da sub-rede: senai134-west2-publico
+                                    Zona de disponibilidade: 2a
+                                    Bloco CIDR IPv4 da sub-rede: 10.0.1.0/24  - não pode transcrever
+
+                                    tag de nome: senai134-west2
+                                    Bloco CIDR: Entrada manual de CIDR IPv4
+                                    CIDR IPv4: 10.0.0.0/16 (Recomendado)
+
+                                        Criar
+
+
+                            Criar sub-rede 
+
+                                    
+
+                                    Adicionar a VPC criada
+                                    nome da sub-rede: senai134-west2-publico
+                                    Zona de disponibilidade: 2a
+                                    Bloco CIDR IPv4 da sub-rede: 10.0.1.0/24  - não pode transcrever
+
+
+            
+        SEGUIR OS MESMOS PARAMETROS PARA TODAS, APENAS ALTERANDO O RANGE E A ETIQUETA. EX:
+
+                                1 subrede - senai134-west2-publico-------------------------------------------
+                                             Bloco CIDR IPv4 da sub-rede: 10.0.1.0/24
+                                2- subrede - senai134-west2-privada                                     2a
+                                              Bloco CIDR IPv4 da sub-rede: 10.0.2.0/24---------------------
+                                3- subrede - senai134-west2-publico------------------------------------------
+                                               Bloco CIDR IPv4 da sub-rede: 10.0.3.0/24 
+                                4- subrede - senai134-west2-privada                                     2b            
+                                             Bloco CIDR IPv4 da sub-rede: 10.0.4.0/24--------------------------
+                    Foi criado 4 sub-redes, 2 sendo privada e 2 sendo publicas.
+                            Quando se cria a privada e vai criar a publica. A zona de disponibilidade precisa ser a mesma.
+                                            Ex:    Criei 1 privada na 2a, 1 publica tambem precisa ser criada na 2a
+                                                   Criei a 2 privada na 2b, preciso criar a 2 publica na 2b também. 
+                                                            Entendeu?
+
+                     Range de IP não pode sobrescrever outro. Então se usar 10.0.1.0 em uma subrede na outra precisa ser 10.0.2.0
+
+
+
+
+
+        Ir em tabelas de rota~
+
+                        Alterar o nome da rota da vpc criada. Para senai134-west2-rtb
+        
+
+        Criar nova tabela de rota
+
+                        Nome: senai134-west2-privada-rtb
+                        Colocar VPC criada senai134-west2
+                        Criar
+
+                                    Vá em associações de sub-rede
+                                    editar
+                                    Selecionar a privada e privada 2
+                                    Confirmar
+
+        Vá em gateway de internet
+
+
+
+
+                                    Criar
+                                    Nome: senai134-west2-igw
+                                    Criar gateway da internet
+                                    
+                                        Selecionar ele
+                                        Ações > Associar a VPC
+                                        Selecionar a VPC criada (senai134-west2)
+
+
+
+        IR em  Tabela de rotas 
+
+
+                        Clicar no ID da tabela de rotas pública 
+                        Editar rotas
+                        Adicionar rotas
+
+                                        Selecionar Gateway da internet
+                                                            Apontar qual estiver com o nome da sua VPC (senai134-west2)
+                        Confirmar
+
+
+        Associação de sub-redes
+
+                Associar as 2 publicas
+
+
+
+
+
+                PARA VERIFICAR:
+
+                                Vá em suas VPCs
+                                Mapa de recursos
+                                Verifique que, As 2 publicas estão se conectando e as 2 privadas também
+                                        Também se, tem a Conexão de rede criada anteriormente. (igw)
+            
+        
+
+
+
+                                    
+
+                            
+                
+
+
+
+
+
+
+
+
+amazonlinkvpc : 
+https://docs.aws.amazon.com/pt_br/AmazonRDS/latest/UserGuide/CHAP_Tutorials.WebServerDB.CreateVPC.html?authuser=0#CHAP_Tutorials.WebServerDB.CreateVPC.VPCAndSubnets
+
+                        Criar um grupo de segurança de VPC para um servidor Web público
+
+                                Norte virginia
+                                Vá em group security
+                                Apague todos os grupos menos os DEFAULT 
+                                Criar um novo grupo
+                                
+                                                nome:tutorial-securitygroup
+                                                Descrição:tutorial-securitygroup
+                                                vpc: Coloca a criada anteriormente (senai134-east2)
+
+                                Regras:        SSH                      QUALQUER IPV4 LOCAL
+                                               HTTP                     QUALQUER IPV4 LOCAL
+                        
+                        Criar um grupo de segurança da VPC para uma instância de banco de dados privada
+
+
+                                Criar novo grupo de segurança
+
+                                                nome:tutorial-db-securitygroup
+                                                descrição:tutorial-db-securitygroup
+                                                vpc: Coloca a criada anteriormente (senai134-west2)
+
+                                Regras: MySQL/Aurora                    Personalizado >   Clica na lupa e seleciona      
+
+
+
+
+                        Procurar por RDS na pagina de busca
+                                Clica no Aurora RDS
+
+
+                                        
+                                        Vincular a criação a um grupo de sub-redes
+                                               Criar grupo de sub-redes de banco de dados:
+
+                                                                Nome: tutorial-db-subnet-group
+                                                                Descrição: tutorial-db-subnet-group
+                                                                VPC: Selecionar o senai134-east2-vpc
+                                                                Zona de disponibilidade: 1a e 1b, foram as que foi criado as subredes
+                                                                Sub-redes: Selecionar as 2 subredes PRIVADAS criadas anteriormente
+
+                        
+                        CRIAR - PRONTO. GRUPO DE SUBREDE CRIADO
+
+
+
+
+2LINK: https://docs.aws.amazon.com/pt_br/AmazonRDS/latest/UserGuide/TUT_WebAppWithRDS.html
+
+
+
+
+                      dentro do link clicar no link: Iniciar uma instância do EC2 para se conectar à instância de banco de dados
+
+                        ->                            
+                                                No aws, clicar em EC2
+                                                Apague todas as Instâncias
+                                                Executar instância
+
+
+                                                                        nome:tutorial-ec2-instance-web-server
+                                                                        imagem: amazon linux
+                                                                        tipo: t3.micro
+                                                                        par de chave: vockey
+                                                                        editar config de rede : 
+
+                                                                                       VPC: Colocar a VPC criada
+                                                                                       Sub-Rede: Public 1
+                                                                                       Atribuir IP?  SIM
+                                                                                       Selecionar grupo existente > tutorial-securitygroup    
+
+                                                                        HD de 8Gb (padrão)
+
+
+                                                                        Detalhes avançados >
+
+                                                                                        Perfil de instância do IAM 
+                                                                                                        Selecionar LabInstanceProfile
+
+
+                                                                        EXECUTAR INSTÂNCIA
+
+
+
+
+                        NO SITE, descer até o final. 
+
+
+                         CLICAR EM :               Criar uma instância de banco de dados do Amazon RDS.            
+
+                    
+
+                        Acessar RDS
+                        Criar no config completa
+
+                                Selecionar MySQL
+                                Config completa 
+                                Selecionar SandBox 
+                                Versão do mecanismo: Manter a padrao
+                                Identificador do banco de dados: tutorial-db-instance.
+                                        (nomeando a maquina virtual que vai estar instalado no meu banco de dados)
+                                Nome do usuário principal:tutorial_user.
+                                        (Usuario que pode acessar o banco de dados)
+                                Senha principal: Senai134    (pode ser trocada futuramente)
+                                Tipo de instância: db.t3.micro
+                                        (tipo de instancia que o RDS suba)  db -> banco de dados
+                                Armazenamento: Manter o padrão
+                                                Adicional de armazenamento:
+
+                                                                        Escabilidade
+                                                        Se o disco bater 20Gb e continuar subindo, ele vai até um Tera
+                                                                Vai usando conforme o necessario
+
+                                Selecionar: 
+                                                Conectar-se a um recurso de computação do EC2
+                                                        Selecionar Instância criada anteriormente
+                                
+                                Grupo de sub-redes de banco de dados:
+
+                                                        Escolher existente
+                                                        
+
+                                Grupo de segurança de VPC (firewall)
+
+                                                        Existente
+                                                        Escolher: <Criada anteriormente>
+                                
+                                Config adicional
+
+                                                        Nome do banco de dados inicial: sample
+
+                                
+                                        CRIAR BANCO DE DADOS (demora em torno de  10 a 15 minutos a criação desse serviço)
+
+
+
+
+                Recomendado criar na seguinte ordem:
+
+
+                                VPC
+                                BANCO DE DADOS
+                                INSTÂNCIA           
+
+
+
+
+
+
+
+
+                  PROXIMA AULA:                         "VPC2"
