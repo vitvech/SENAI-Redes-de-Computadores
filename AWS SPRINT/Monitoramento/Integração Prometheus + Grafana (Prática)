@@ -1,0 +1,647 @@
+notion: https://bald-girl-473.notion.site/Guia-do-Aluno-CloudWatch-Prometheus-Grafana-367d32b0a46380d89836f1c1280b6a4b
+    OBS: Usar e-mail do senai
+
+
+
+
+# ☁️🔥📊 ANOTAÇÕES — CLOUDWATCH · PROMETHEUS · GRAFANA
+
+> 📌 Ambiente:
+- AWS Academy Learner Lab
+- Região: `us-east-1`
+- IAM Role: `LabInstanceProfile`
+- Key Pair: `vockey`
+
+⚠️ OBSERVAÇÕES IMPORTANTES:
+- NÃO criar nova IAM Role
+- Usar apenas `LabInstanceProfile`
+- Usar EC2 `t3.small`
+- Usar apenas AMIs Quick Start
+- Sempre parar a EC2 no final da aula
+- Se o budget zerar, os recursos são deletados
+
+---
+
+# 🔑 CONECTAR NA EC2
+
+Baixar chave PEM:
+AWS Details → Download PEM
+
+Conectar:
+
+```bash
+chmod 400 labsuser.pem
+
+ssh -i labsuser.pem ec2-user@IP
+```
+
+---
+
+# 👁️ OBSERVABILIDADE
+
+## 3 pilares
+
+| Pilar | O que é |
+|---|---|
+| Métricas | valores numéricos |
+| Logs | registros textuais |
+| Traces | caminho da requisição |
+
+## Ferramentas
+
+| Ferramenta | Função |
+|---|---|
+| CloudWatch | métricas AWS |
+| Prometheus | métricas da aplicação |
+| Grafana | dashboards |
+
+---
+
+# ☁️ CLOUDWATCH
+
+## Métricas automáticas
+
+| Métrica | Função |
+|---|---|
+| CPUUtilization | uso CPU |
+| NetworkIn/Out | rede |
+| StatusCheckFailed | saúde da instância |
+| DiskReadOps | leitura disco |
+| DiskWriteOps | escrita disco |
+
+⚠️ Memória e disco (%) NÃO vêm automaticamente.
+
+Precisa instalar:
+
+```bash
+amazon-cloudwatch-agent
+```
+
+---
+
+# ☁️ PREPARAR EC2
+
+| Configuração | Valor |
+|---|---|
+| Nome | lab-monitoring |
+| AMI | Amazon Linux 2023 |
+| Tipo | t3.small |
+| Key Pair | vockey |
+| IAM Role | LabInstanceProfile |
+
+---
+
+# 🔓 SECURITY GROUP
+
+Liberar:
+
+```text
+22
+3000
+3001
+9090
+9093
+9100
+```
+
+| Porta | Serviço |
+|---|---|
+| 22 | SSH |
+| 3000 | API |
+| 3001 | Grafana |
+| 9090 | Prometheus |
+| 9093 | AlertManager |
+| 9100 | Node Exporter |
+
+---
+
+# ☁️ INSTALAR CLOUDWATCH AGENT
+
+```bash
+sudo dnf install -y amazon-cloudwatch-agent
+```
+
+---
+
+# CRIAR CONFIGURAÇÃO CLOUDWATCH
+
+```bash
+sudo tee /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json << 'EOF'
+{
+  "agent": {
+    "metrics_collection_interval": 60,
+    "run_as_user": "cwagent"
+  },
+  "metrics": {
+    "namespace": "LearnerLab/EC2",
+    "metrics_collected": {
+      "mem": {
+        "measurement": ["mem_used_percent"]
+      },
+      "disk": {
+        "measurement": ["disk_used_percent"],
+        "resources": ["/"]
+      }
+    }
+  },
+  "logs": {
+    "logs_collected": {
+      "files": {
+        "collect_list": [
+          {
+            "file_path": "/var/log/lab-app/app.log",
+            "log_group_name": "/learner-lab/app",
+            "log_stream_name": "{instance_id}"
+          }
+        ]
+      }
+    }
+  }
+}
+EOF
+
+```
+
+---
+
+# INICIAR AGENT
+
+```bash
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+-a fetch-config -m ec2 \
+-c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json -s
+```
+
+---
+
+# CRIAR LOGS
+
+```bash
+sudo mkdir -p /var/log/lab-app
+
+sudo touch /var/log/lab-app/app.log
+
+sudo chmod 644 /var/log/lab-app/app.log
+```
+
+---
+
+# GERAR LOGS
+
+```bash
+echo "$(date) INFO: aplicacao iniciada" | sudo tee -a /var/log/lab-app/app.log
+
+echo "$(date) ERROR: conexao recusada no banco" | sudo tee -a /var/log/lab-app/app.log
+```
+
+---
+
+# VALIDAR CLOUDWATCH AGENT
+
+```bash
+sudo systemctl status amazon-cloudwatch-agent
+```
+
+VALIDAR:
+
+```text
+active (running)
+```
+
+---
+
+# ☁️ SNS + ALARMES
+
+## Criar tópico SNS
+
+```bash
+SNS=$(aws sns create-topic --name lab-alertas --query TopicArn --output text)
+
+aws sns subscribe --topic-arn $SNS --protocol email \
+--notification-endpoint SEU@EMAIL.COM
+```
+
+⚠️ Confirmar o email recebido.
+
+---
+
+# PEGAR ID DA EC2
+
+```bash
+ID=$(aws ec2 describe-instances \
+--filters 'Name=tag:Name,Values=lab-monitoring' \
+--query 'Reservations[0].Instances[0].InstanceId' \
+--output text)
+```
+
+---
+
+# ALARME CPU
+
+```bash
+aws cloudwatch put-metric-alarm --alarm-name 'Lab-CPU' \
+--metric-name CPUUtilization \
+--namespace AWS/EC2 \
+--statistic Average \
+--period 300 \
+--threshold 70 \
+--comparison-operator GreaterThanThreshold \
+--evaluation-periods 2 \
+--dimensions Name=InstanceId,Value=$ID \
+--alarm-actions $SNS \
+--ok-actions $SNS
+```
+
+---
+
+# TESTAR ALARME
+
+```bash
+aws cloudwatch set-alarm-state --alarm-name 'Lab-CPU' \
+--state-value ALARM \
+--state-reason 'Teste manual'
+```
+
+---
+
+# 🔥 PROMETHEUS
+
+# INSTALAR DOCKER
+
+```bash
+sudo dnf install -y docker git
+
+sudo systemctl start docker && sudo systemctl enable docker
+
+sudo usermod -aG docker ec2-user
+```
+
+⚠️ IMPORTANTE:
+Depois disso:
+
+```bash
+exit
+```
+
+Entrar novamente no SSH.
+
+Senão aparece:
+
+```text
+permission denied while trying to connect to Docker daemon
+```
+
+---
+
+# INSTALAR DOCKER COMPOSE
+
+```bash
+sudo curl -L \
+"https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" \
+-o /usr/local/bin/docker-compose
+
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
+---
+
+# VALIDAR DOCKER
+
+```bash
+docker --version
+
+docker-compose --version
+```
+
+---
+
+# ESTRUTURA DE PASTAS
+
+```bash
+mkdir -p ~/monitoring/prometheus/rules
+
+mkdir -p ~/monitoring/alertmanager
+
+mkdir -p ~/monitoring/grafana/provisioning/datasources
+
+mkdir -p ~/monitoring/app
+
+cd ~/monitoring
+```
+
+---
+
+# VALIDAR ESTRUTURA
+
+```bash
+tree ~/monitoring
+```
+
+---
+
+# VALIDAR YAML
+
+Antes de subir:
+
+```bash
+docker-compose config
+```
+
+Se aparecer:
+
+```text
+yaml: line X
+```
+
+→ erro de identação/espaço.
+
+---
+
+# SUBIR STACK
+
+```bash
+docker-compose up -d
+```
+
+---
+
+# VALIDAR CONTAINERS
+
+```bash
+docker-compose ps
+```
+
+VALIDAR:
+
+```text
+Up
+Up
+Up
+Up
+```
+
+Containers:
+- prometheus
+- grafana
+- node-exporter
+- alertmanager
+
+---
+
+# 🔥 PROMETHEUS TARGETS
+
+Abrir:
+
+```text
+http://IP:9090/targets
+```
+
+VALIDAR:
+- prometheus = UP
+- node-exporter = UP
+
+---
+
+# 🔄 RELOAD PROMETHEUS
+
+```bash
+curl -X POST http://localhost:9090/-/reload
+```
+
+---
+
+# VALIDAR REGRAS
+
+Abrir:
+
+```text
+http://IP:9090/rules
+```
+
+---
+
+# 📊 GRAFANA
+
+Abrir:
+
+```text
+http://IP:3001
+```
+
+Login:
+
+```text
+admin
+Admin@Lab123!
+```
+
+---
+
+# IMPORTAR DASHBOARD
+
+```text
+Dashboards → Import → ID 1860
+```
+
+Datasource:
+
+```text
+Prometheus
+```
+
+---
+
+# ⚠️ SE O GRAFANA NÃO ABRIR
+
+Verificar:
+- porta 3001 liberada
+- container grafana ativo
+
+---
+
+# 📏 API NODE
+
+Testar:
+
+```bash
+curl http://localhost:3000/metrics
+```
+
+VALIDAR:
+- aparecer métricas
+- principalmente:
+
+```text
+lab_http_requests_total
+```
+
+---
+
+# 📊 PROMQL — QUERIES IMPORTANTES
+
+## Serviços ativos
+
+```promql
+up
+```
+
+## CPU %
+
+```promql
+100 - (avg by(instance)(rate(node_cpu_seconds_total{mode='idle'}[5m])) * 100)
+```
+
+## Memória %
+
+```promql
+(1 - (node_memory_MemAvailable_bytes/node_memory_MemTotal_bytes)) * 100
+```
+
+## Disco %
+
+```promql
+(1-(node_filesystem_avail_bytes{mountpoint='/'}/node_filesystem_size_bytes{mountpoint='/'})) * 100
+```
+
+## Requisições por segundo
+
+```promql
+sum(rate(lab_http_requests_total[5m]))
+```
+
+## Taxa de erro 5xx
+
+```promql
+sum(rate(lab_http_requests_total{status=~'5..'}[5m])) / sum(rate(lab_http_requests_total[5m])) * 100
+```
+
+## Latência P95
+
+```promql
+histogram_quantile(0.95, rate(lab_http_request_duration_seconds_bucket[5m]))
+```
+
+---
+
+# 📊 GRAFANA — DATASOURCES
+
+## Prometheus
+
+URL:
+
+```text
+http://prometheus:9090
+```
+
+## CloudWatch
+
+Authentication:
+
+```text
+AWS SDK Default
+```
+
+Region:
+
+```text
+us-east-1
+```
+
+---
+
+# 📬 ALERTMANAGER
+
+Abrir:
+
+```text
+http://IP:9093
+```
+
+---
+
+# 🖥️ URLS IMPORTANTES
+
+| Serviço | URL |
+|---|---|
+| Grafana | http://IP:3001 |
+| Prometheus | http://IP:9090 |
+| Targets | http://IP:9090/targets |
+| Alertas | http://IP:9090/alerts |
+| AlertManager | http://IP:9093 |
+| Node Exporter | http://IP:9100/metrics |
+| API | http://IP:3000/health |
+| Metrics API | http://IP:3000/metrics |
+
+---
+
+# 🐳 COMANDOS IMPORTANTES
+
+Subir tudo:
+
+```bash
+docker-compose up -d
+```
+
+Ver status:
+
+```bash
+docker-compose ps
+```
+
+Ver logs:
+
+```bash
+docker-compose logs -f prometheus
+```
+
+Reiniciar serviço:
+
+```bash
+docker-compose restart alertmanager
+```
+
+Parar tudo:
+
+```bash
+docker-compose down
+```
+
+Parar + apagar volumes:
+
+```bash
+docker-compose down -v
+```
+
+Reload Prometheus:
+
+```bash
+curl -X POST http://localhost:9090/-/reload
+```
+
+---
+
+# 💰 FINALIZAR A AULA
+
+Parar EC2:
+
+```bash
+aws ec2 stop-instances --instance-ids i-XXXXXXXXXXXXXXX
+```
+
+Deletar alarmes:
+
+```bash
+aws cloudwatch delete-alarms --alarm-names Lab-CPU Lab-Status
+```
+
+Deletar SNS:
+
+```bash
+aws sns delete-topic --topic-arn arn:aws:sns:us-east-1:XXXX:lab-alertas
+```
+
+⚠️ Sempre parar a EC2 ao final da aula.
+
+
+
+                    #Faltei nessa aula, Verificar com o Chatgpt!!!

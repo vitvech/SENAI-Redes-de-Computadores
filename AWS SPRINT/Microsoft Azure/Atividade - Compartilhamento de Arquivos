@@ -1,0 +1,69 @@
+
+            Acessar azure
+
+
+        
+Entrar na azure
+
+    Pesquisar por Contas de armazenamento
+    Criar conta de armazenamento
+    Entrar na conta de armazenamento
+    Ir em Compartilhamento de arquivos clássicos
+    
+        Criar:
+                    Nome: Arquivos
+                    Clicar em Criar
+    
+
+Ao Criar, Clicar em conectar
+
+                    Eu alterei para o V, Pois estava dando conflito com o Z
+                                    (UNIDADE DE DISCO)
+            
+
+        OBS: Verificar a letra da unidade para não dar conflito quando for fazer a conexão
+
+    Mostrar script
+            Copiar
+        Abrir PowerShell (Sem ser ADM)
+    Colar o Script
+
+    
+        Dar Win + R
+    
+        Escrever: 
+		                <unidade>:
+			            Ex: v:
+			                z:
+
+        ISSO MESMO, apenas a letra da unidade e o dois pontos!! RS
+
+
+            Quando conseguir, Excluir tudo.
+
+
+                
+Excluir Conta de armazenamento:
+
+                    Clicar na conta
+                    Clicar em visão geral, Excluir
+                        Copiar nome, Colar lá embaixo(confirmação)
+
+Excluir Grupos de recursos:
+
+Pesquisar por grupos de recursos, Clicar nele, visão geral, 3 pontinhos. Clicar em excluir
+Copiar nome, Confirmar Exclusão.
+
+
+Excluir Compartilhamento de arquivos:
+	
+Entrar no Compartilhamento de arquivos
+		Visão Geral, Excluir. Confirmar exclusão.
+
+	Ops, Exclusão bloqueada.
+			
+		Ir em conta de armazenamento
+		Descer até Bloqueios
+		Se tiver algum listado, clique nos 3 pontos. Excluir
+				
+	Tente a exclusão novamente!

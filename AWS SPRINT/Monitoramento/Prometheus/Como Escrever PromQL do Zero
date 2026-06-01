@@ -1,0 +1,93 @@
+🧭 MAPA MENTAL PROMQL
+
+1. Qual métrica?
+2. É Gauge ou Counter?
+   • Gauge → valor atual
+   • Counter → normalmente usa rate() ou increase()
+
+3. Quero velocidade ou total?
+   • Velocidade → rate()
+   • Total acumulado → increase()
+
+4. Preciso filtrar labels?
+   • {label="valor"}
+   • =~ regex
+   • != diferente
+   • !~ regex negado
+
+5. Preciso agrupar?
+   • sum()
+   • sum by(label)
+   • avg()
+   • avg by(label)
+
+6. É porcentagem?
+   • (parte / total) * 100
+
+7. É latência/P95/P99?
+   • histogram_quantile()
+
+8. É previsão?
+   • predict_linear()
+
+9. É média ao longo do tempo?
+   • avg_over_time()
+
+10. Quero alerta?
+   • QUERY + CONDIÇÃO + for:
+
+────────────────────────────────────
+
+📌 ESTRUTURA UNIVERSAL
+
+FUNÇÃO(
+  MÉTRICA{
+    LABELS
+  }[JANELA]
+)
+
+────────────────────────────────────
+
+📌 EXEMPLOS
+
+# Taxa por segundo
+rate(http_requests_total[5m])
+
+# Total acumulado
+increase(http_requests_total[24h])
+
+# Somar
+sum(rate(http_requests_total[5m]))
+
+# Média
+avg by(instance)(...)
+
+# Porcentagem
+(parte / total) * 100
+
+# P95
+histogram_quantile(
+  0.95,
+  sum by(le)(
+    rate(metric_bucket[5m])
+  )
+)
+
+# Média no tempo
+avg_over_time(up[24h]) * 100
+
+# Previsão
+predict_linear(node_filesystem_avail_bytes[6h], 86400)
+
+────────────────────────────────────
+
+🧠 REGRA DE OURO
+
+Quando travar:
+1. Qual métrica?
+2. É Gauge ou Counter?
+3. Precisa de [5m]?
+4. Precisa de rate()?
+5. Precisa filtrar labels?
+6. Precisa agrupar?
+7. Precisa converter para % ou ms?

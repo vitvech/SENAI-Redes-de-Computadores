@@ -1,0 +1,130 @@
+# 📡 Como as Métricas Funcionam — Do Servidor ao Grafana
+
+> **A dúvida:** “Preciso criar algum arquivo? Como o Prometheus pega as métricas? Como o Grafana acessa tudo isso?”
+> Este guia responde essas perguntas do zero, com exemplos reais.
+
+---
+
+# 🗺️ Visão Geral — O Caminho da Métrica
+
+Antes de qualquer coisa, veja o fluxo completo:
+
+```text
+┌─────────────────┐     expõe     ┌──────────────┐    scrape    ┌────────────┐    query    ┌─────────┐
+│  Seu Servidor   │  ──────────►  │   /metrics   │  ──────────► │ Prometheus │  ─────────► │ Grafana │
+│  (Node Exporter │               │  (endpoint   │   a cada     │ (armazena) │             │ (exibe) │
+│   ou sua App)   │               │   HTTP)      │   15s        └────────────┘             └─────────┘
+└─────────────────┘               └──────────────┘
+```
+
+**Traduzindo em português:**
+
+1. Seu servidor (ou aplicação) **expõe** um endereço HTTP chamado `/metrics`
+2. Esse endereço retorna um **texto simples** com todas as métricas no momento
+3. O Prometheus **visita** esse endereço a cada 15 segundos e **salva** os valores
+4. O Grafana **consulta** o Prometheus e **desenha** os gráficos
+
+> 💡 Você **não envia** métricas para o Prometheus. O Prometheus **busca** as métricas em você. Isso se chama modelo **pull**.
+
+---
+
+# 📄 O que é o `/metrics`?
+
+É um endpoint HTTP que retorna **texto puro** com as métricas. Você pode abrir no navegador agora mesmo.
+
+Se você já tiver o Node Exporter rodando, acesse:
+
+```bash
+http://SEU-IP:9100/metrics
+```
+
+O que você vai ver:
+
+```text
+# HELP node_cpu_seconds_total Seconds the CPUs spent in each mode.
+# TYPE node_cpu_seconds_total counter
+node_cpu_seconds_total{cpu="0",mode="idle"} 4823.45
+node_cpu_seconds_total{cpu="0",mode="system"} 312.18
+node_cpu_seconds_total{cpu="0",mode="user"} 891.02
+node_cpu_seconds_total{cpu="1",mode="idle"} 4801.91
+node_cpu_seconds_total{cpu="1",mode="system"} 298.44
+
+# HELP node_memory_MemAvailable_bytes Memory information field MemAvailable.
+# TYPE node_memory_MemAvailable_bytes gauge
+node_memory_MemAvailable_bytes 1.234567e+09
+
+# HELP node_filesystem_avail_bytes Filesystem space available to non-root users.
+# TYPE node_filesystem_avail_bytes gauge
+node_filesystem_avail_bytes{device="/dev/xvda1",fstype="xfs",mountpoint="/"} 8.5e+09
+```
+
+**Cada linha tem o formato:**
+
+```text
+nome_da_metrica{label1="valor1",label2="valor2"} VALOR TIMESTAMP
+```
+
+Isso é tudo. Nada de banco de dados especial, nada de protocolo complicado. **É só um arquivo de texto servido via HTTP.**
+
+---
+
+# 🔧 De onde vêm as métricas?
+
+Existem **3 fontes** de métricas. Cada uma funciona diferente:
+
+| Fonte | O que é | Exemplos |
+| --- | --- | --- |
+| **Exporters** | Programas prontos que expõem `/metrics` | Node Exporter, MySQL Exporter |
+| **Sua aplicação** | Você adiciona código para expor as métricas | prom-client no Node.js |
+| **AWS CloudWatch** | Grafana busca direto na API da AWS | CPU do EC2, erros do RDS |
+
+---
+
+# 🖥️ Fonte 1 — Node Exporter (métricas do servidor)
+
+## O que é
+
+O **Node Exporter** é um programa que você instala no servidor. Ele lê os arquivos internos do Linux (`/proc`, `/sys`) e expõe tudo como métricas no `/metrics`.
+
+Você não precisa criar nenhum arquivo de métricas. O Node Exporter faz isso automaticamente.
+
+## Como funciona por dentro
+
+```text
+Linux mantém informações em /proc:
+  /proc/stat          → dados de CPU
+  /proc/meminfo       → dados de memória
+  /proc/diskstats     → dados de disco
+
+Node Exporter lê esses arquivos
+e expõe em formato Prometheus em:
+  http://IP:9100/metrics
+```
+
+## Instalar e rodar (via Docker)
+
+```yaml
+# No seu docker-compose.yml — adicione este serviço:
+node-exporter:
+  image: prom/node-exporter:latest
+  container_name: node-exporter
+  restart: unless-stopped
+  ports:
+    - "9100:9100"
+  pid: host
+  volumes:
+    - /proc:/host/proc:ro
+    - /sys:/host/sys:ro
+    - /:/rootfs:ro
+  command:
+    - '--path.procfs=/host/proc'
+    - '--path.sysfs=/host/sys'
+    - '--path.rootfs=/rootfs'
+```
+
+```bash
+docker-compose up -d node-exporter
+
+# Verificar se está funcionando:
+curl http://localhost:9100/metrics | head -20
+```

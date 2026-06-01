@@ -1,0 +1,42 @@
+## Referência Rápida
+
+### Comandos Docker
+
+| Comando | Ação |
+| --- | --- |
+| `docker build -t nome .` | Build da imagem |
+| `docker run -d -p 8080:80 nome` | Subir container |
+| `docker ps` | Listar containers ativos |
+| `docker logs nome` | Ver logs |
+| `docker stop nome && docker rm nome` | Parar e remover |
+| `docker volume ls` | Listar volumes |
+| `docker compose up -d` | Subir todos os serviços |
+| `docker compose down` | Parar todos os serviços |
+
+### Comandos AWS
+
+| Comando | Ação |
+| --- | --- |
+| `aws ecr create-repository` | Criar repositório |
+| `aws ecr get-login-password` | Autenticar Docker |
+| `aws ecr list-images` | Ver imagens |
+| `aws ecs create-cluster` | Criar cluster |
+| `aws ecs register-task-definition` | Registrar task |
+| `aws ecs create-service` | Criar service |
+| `aws ecs update-service --force-new-deployment` | Fazer redeploy |
+| `aws ecs list-tasks` | Listar tasks |
+
+### Fluxo completo
+
+```
+Dockerfile
+  └─→ docker build
+        └─→ docker tag
+              └─→ docker push → ECR
+                                  └─→ register-task-definition
+                                          └─→ create-cluster
+                                                └─→ create-service
+                                                      └─→ IP Público
+```
+
+### Pontos críticos

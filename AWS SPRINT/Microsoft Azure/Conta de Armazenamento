@@ -1,0 +1,56 @@
+Procurar por conta de armazenamento
+
+
+Grupos de recursos: Criar novo
+            Nome: GS-ARMAZENAMENTO
+
+            Nome da conta de armazenamento: vitorvechiez134
+            Desempenho: Standard
+            Redundância: LRS
+
+                Caso, Der erro. Verificar Região e Nome.
+
+Ir em container
+
+    Criar novo
+                Nome: cont134
+                niveld e acesso anonimo: Container
+
+
+        OBS: Antes, Permitir acesso anonimo ao blob
+
+
+            Subir no container, um imagem .jpeg
+                Clicando no nome da imagem
+                Copiar link e jogar no navegador
+
+        
+        Excluir container
+            Excluir Conta de armazenamento:
+
+                    Clicar na conta
+                    Clicar em visão geral, Excluir
+                        Copiar nome, Colar lá embaixo(confirmação)
+
+            OBS: Grupo de recursos mantém
+
+                Para exclui-lo pesquisar por grupos de recursos, Clicar nele, visão geral, 3 pontinhos. Clicar em excluir
+
+                                Copiar nome, Confirmar Exclusão.
+
+
+        OBS:Snapshot na azure, se chama Instantaneo
+
+
+
+
+                Entrar em:
+
+                            https://msle.learnondemand.net/Class/753161
+
+
+
+                lançamento: Manage Microsoft Entra ID Identities
+
+
+                

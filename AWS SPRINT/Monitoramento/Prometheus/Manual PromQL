@@ -1,0 +1,719 @@
+# Manual PromQL — Anotações Completas
+
+# =========================================================
+# O QUE É PROMQL?
+# =========================================================
+
+# PromQL = Prometheus Query Language
+# Linguagem usada para consultar métricas no Prometheus.
+
+# Permite responder perguntas como:
+# - Qual a CPU usada agora?
+# - Qual serviço possui mais erros?
+# - Qual a latência P95?
+# - Quando o disco vai encher?
+
+# =========================================================
+# PARTE 1 — FUNDAMENTOS
+# =========================================================
+
+# ---------------------------------------------------------
+# 1.1 — O que é uma Série Temporal?
+# ---------------------------------------------------------
+
+# Formato interno:
+# nome_metrica{label="valor"} valor timestamp
+
+# Exemplo:
+http_requests_total{method="GET",status="200",job="api"}
+
+# Cada combinação diferente de labels = nova série temporal.
+
+# ---------------------------------------------------------
+# 1.2 — Tipos de Resultado
+# ---------------------------------------------------------
+
+# Instant Vector:
+node_cpu_seconds_total
+
+# Range Vector:
+node_cpu_seconds_total[5m]
+
+# Scalar:
+scalar(count(up))
+
+# String:
+# quase nunca usado
+
+# REGRA:
+# Range Vectors normalmente são usados dentro de funções:
+rate(http_requests_total[5m])
+
+# ---------------------------------------------------------
+# 1.3 — Seletores de Label
+# ---------------------------------------------------------
+
+# Igual:
+http_requests_total{status="200"}
+
+# Diferente:
+http_requests_total{status!="200"}
+
+# Regex:
+http_requests_total{status=~"2.."}
+
+# Regex múltiplo:
+http_requests_total{status=~"4..|5.."}
+
+# Regex negado:
+http_requests_total{status!~"2.."}
+
+# ---------------------------------------------------------
+# 1.4 — Range Vector
+# ---------------------------------------------------------
+
+# Últimos 5 minutos:
+http_requests_total[5m]
+
+# Última hora:
+http_requests_total[1h]
+
+# Últimas 24 horas:
+http_requests_total[24h]
+
+# Unidades:
+# s = segundos
+# m = minutos
+# h = horas
+# d = dias
+# w = semanas
+
+# =========================================================
+# PARTE 2 — OPERADORES
+# =========================================================
+
+# ---------------------------------------------------------
+# 2.1 — Operadores Aritméticos
+# ---------------------------------------------------------
+
+# Porcentagem de memória:
+(node_memory_MemTotal_bytes - node_memory_MemFree_bytes)
+/ node_memory_MemTotal_bytes * 100
+
+# Bytes -> GB:
+node_filesystem_size_bytes / 1024 / 1024 / 1024
+
+# Operadores:
+# + soma
+# - subtração
+# * multiplicação
+# / divisão
+# % módulo
+# ^ potência
+
+# ---------------------------------------------------------
+# 2.2 — Comparações
+# ---------------------------------------------------------
+
+# CPU acima de 80%
+node_cpu_usage_percent > 80
+
+# Serviços DOWN
+up == 0
+
+# Memória entre 70 e 90
+node_memory_used_percent > 70
+and node_memory_used_percent < 90
+
+# ---------------------------------------------------------
+# 2.3 — Operadores Lógicos
+# ---------------------------------------------------------
+
+# AND
+up == 1 and node_cpu_usage_percent > 70
+
+# OR
+node_cpu_usage_percent > 90
+or node_memory_used_percent > 90
+
+# UNLESS
+http_requests_total unless http_requests_total{status="200"}
+
+# ---------------------------------------------------------
+# 2.4 — Matching de Labels
+# ---------------------------------------------------------
+
+# Matching padrão:
+http_requests_total / http_requests_duration_sum
+
+# Matching específico:
+http_requests_total
+/ on(job,method)
+http_requests_duration_sum
+
+# Ignorar labels:
+http_requests_total
+/ ignoring(status)
+http_requests_duration_sum
+
+# group_left:
+http_requests_total
+* on(job) group_left(version)
+app_info
+
+# =========================================================
+# PARTE 3 — FUNÇÕES ESSENCIAIS
+# =========================================================
+
+# ---------------------------------------------------------
+# 3.1 — rate()
+# ---------------------------------------------------------
+
+# Taxa por segundo:
+rate(http_requests_total[5m])
+
+# IMPORTANTE:
+# Use APENAS com COUNTERS.
+
+# COUNTERS:
+# - só aumentam
+# - exemplos:
+#   http_requests_total
+#   node_cpu_seconds_total
+
+# NÃO use rate() em Gauges.
+
+# ERRADO:
+rate(node_memory_MemUsed_bytes[5m])
+
+# CORRETO:
+node_memory_MemUsed_bytes
+
+# OBS:
+# janela ideal = 4x scrape_interval
+
+# ---------------------------------------------------------
+# 3.2 — irate()
+# ---------------------------------------------------------
+
+# Mais reativo:
+irate(node_cpu_seconds_total[5m])
+
+# rate() = dashboards
+# irate() = alertas instantâneos
+
+# ---------------------------------------------------------
+# 3.3 — increase()
+# ---------------------------------------------------------
+
+# Total acumulado:
+increase(http_requests_total{status=~"5.."}[1h])
+
+# ---------------------------------------------------------
+# 3.4 — sum()
+# ---------------------------------------------------------
+
+# Soma total:
+sum(rate(http_requests_total[5m]))
+
+# Agrupar por método:
+sum by(method)(
+  rate(http_requests_total[5m])
+)
+
+# Remover labels:
+sum without(instance)(
+  rate(http_requests_total[5m])
+)
+
+# ---------------------------------------------------------
+# 3.5 — Agregações
+# ---------------------------------------------------------
+
+# Máximo:
+max(node_cpu_usage_percent)
+
+# Mínimo:
+min(node_memory_MemAvailable_bytes)
+
+# Média:
+avg(node_cpu_usage_percent)
+
+# Contagem:
+count(up)
+
+# Top 5:
+topk(5,
+  rate(http_requests_total{status=~"5.."}[5m])
+)
+
+# Bottom 3:
+bottomk(3,node_memory_MemAvailable_bytes)
+
+# ---------------------------------------------------------
+# 3.6 — histogram_quantile()
+# ---------------------------------------------------------
+
+# P50:
+histogram_quantile(
+  0.50,
+  rate(http_request_duration_seconds_bucket[5m])
+)
+
+# P95:
+histogram_quantile(
+  0.95,
+  rate(http_request_duration_seconds_bucket[5m])
+)
+
+# P99:
+histogram_quantile(
+  0.99,
+  rate(http_request_duration_seconds_bucket[5m])
+)
+
+# P99 agrupado:
+histogram_quantile(
+  0.99,
+  sum by(job,le)(
+    rate(http_request_duration_seconds_bucket[5m])
+  )
+)
+
+# MUITO IMPORTANTE:
+# NUNCA remover o label "le"
+
+# ---------------------------------------------------------
+# 3.7 — Funções de Tempo
+# ---------------------------------------------------------
+
+# Média nas últimas 24h:
+avg_over_time(up{job="api"}[24h])
+
+# Máximo:
+max_over_time(node_cpu_usage_percent[6h])
+
+# Mínimo:
+min_over_time(node_memory_MemAvailable_bytes[6h])
+
+# Contagem:
+count_over_time(up{job="api"}[24h])
+
+# ---------------------------------------------------------
+# 3.8 — Predição
+# ---------------------------------------------------------
+
+# Previsão de disco:
+predict_linear(
+  node_filesystem_avail_bytes{mountpoint="/"}[6h],
+  3600 * 24
+)
+
+# Derivada de Gauge:
+deriv(node_memory_MemUsed_bytes[10m])
+
+# ---------------------------------------------------------
+# 3.9 — Outras Funções
+# ---------------------------------------------------------
+
+# Tempo de uptime:
+time() - process_start_time_seconds
+
+# Absoluto:
+abs(delta(node_cpu_usage_percent[5m]))
+
+# Arredondar:
+floor(node_cpu_usage_percent)
+ceil(node_cpu_usage_percent)
+
+# Clamp:
+clamp_min(node_cpu_usage_percent,0)
+clamp_max(node_cpu_usage_percent,100)
+
+# Verificar existência:
+absent(up{job="api"})
+
+# Converter para scalar:
+scalar(count(up))
+
+# =========================================================
+# PARTE 4 — PADRÕES IMPORTANTES
+# =========================================================
+
+# ---------------------------------------------------------
+# 4.1 — USE Method
+# ---------------------------------------------------------
+
+# UTILIZAÇÃO:
+100 - (
+  avg by(instance)(
+    rate(node_cpu_seconds_total{mode="idle"}[5m])
+  ) * 100
+)
+
+# SATURAÇÃO:
+node_load1
+/
+count without(cpu,mode)(
+  node_cpu_seconds_total{mode="idle"}
+)
+
+# ERROS:
+rate(node_disk_io_time_weighted_seconds_total[5m])
+
+# ---------------------------------------------------------
+# 4.2 — RED Method
+# ---------------------------------------------------------
+
+# RATE:
+sum(rate(http_requests_total[5m]))
+
+# ERRORS:
+sum(rate(http_requests_total{status=~"5.."}[5m]))
+/
+sum(rate(http_requests_total[5m]))
+* 100
+
+# DURATION:
+histogram_quantile(
+  0.99,
+  sum by(le)(
+    rate(http_request_duration_seconds_bucket[5m])
+  )
+)
+
+# ---------------------------------------------------------
+# 4.3 — SLO e Disponibilidade
+# ---------------------------------------------------------
+
+# Disponibilidade:
+avg_over_time(up{job="minha-api"}[24h]) * 100
+
+# Taxa de sucesso:
+sum(rate(http_requests_total{status=~"2.."}[1h]))
+/
+sum(rate(http_requests_total[1h]))
+* 100
+
+# Downtime em minutos:
+(1 - avg_over_time(up{job="api"}[24h]))
+* 24 * 60
+
+# =========================================================
+# PARTE 5 — MÉTRICAS IMPORTANTES
+# =========================================================
+
+# ---------------------------------------------------------
+# CPU
+# ---------------------------------------------------------
+
+# CPU total:
+100 - (
+  avg by(instance)(
+    rate(node_cpu_seconds_total{mode="idle"}[5m])
+  ) * 100
+)
+
+# CPU por modo:
+avg by(instance,mode)(
+  rate(node_cpu_seconds_total[5m])
+) * 100
+
+# IOWAIT:
+avg by(instance)(
+  rate(node_cpu_seconds_total{mode="iowait"}[5m])
+) * 100
+
+# ---------------------------------------------------------
+# MEMÓRIA
+# ---------------------------------------------------------
+
+# Memória usada:
+(1 - (
+  node_memory_MemAvailable_bytes
+  /
+  node_memory_MemTotal_bytes
+)) * 100
+
+# Memória usada GB:
+(
+  node_memory_MemTotal_bytes
+  -
+  node_memory_MemAvailable_bytes
+) / 1024^3
+
+# Swap:
+(1 - (
+  node_memory_SwapFree_bytes
+  /
+  node_memory_SwapTotal_bytes
+)) * 100
+
+# ---------------------------------------------------------
+# DISCO
+# ---------------------------------------------------------
+
+# Disco usado:
+(1 - (
+  node_filesystem_avail_bytes{mountpoint="/"}
+  /
+  node_filesystem_size_bytes{mountpoint="/"}
+)) * 100
+
+# Previsão:
+predict_linear(
+  node_filesystem_avail_bytes{mountpoint="/"}[6h],
+  3600*24*7
+)
+
+# IOPS:
+rate(node_disk_reads_completed_total[5m])
+
+# Throughput:
+rate(node_disk_read_bytes_total[5m])
+/ 1024 / 1024
+
+# ---------------------------------------------------------
+# REDE
+# ---------------------------------------------------------
+
+# Entrada:
+rate(node_network_receive_bytes_total[5m])
+/ 1024 / 1024
+
+# Saída:
+rate(node_network_transmit_bytes_total[5m])
+/ 1024 / 1024
+
+# Erros:
+rate(node_network_receive_errs_total[5m])
+
+# =========================================================
+# PARTE 6 — ERROS COMUNS
+# =========================================================
+
+# ---------------------------------------------------------
+# rate() com janela pequena
+# ---------------------------------------------------------
+
+# ERRADO:
+rate(http_requests_total[15s])
+
+# CORRETO:
+rate(http_requests_total[1m])
+
+# ---------------------------------------------------------
+# Esquecer o label le
+# ---------------------------------------------------------
+
+# ERRADO:
+histogram_quantile(
+  0.95,
+  sum by(job)(
+    rate(http_request_duration_seconds_bucket[5m])
+  )
+)
+
+# CORRETO:
+histogram_quantile(
+  0.95,
+  sum by(job,le)(
+    rate(http_request_duration_seconds_bucket[5m])
+  )
+)
+
+# ---------------------------------------------------------
+# Divisão por zero
+# ---------------------------------------------------------
+
+# ERRADO:
+rate(http_errors_total[5m])
+/
+rate(http_requests_total[5m])
+
+# CORRETO:
+rate(http_errors_total[5m])
+/
+(rate(http_requests_total[5m]) > 0)
+
+# ---------------------------------------------------------
+# rate() em Gauge
+# ---------------------------------------------------------
+
+# ERRADO:
+rate(node_memory_MemUsed_bytes[5m])
+
+# CORRETO:
+deriv(node_memory_MemUsed_bytes[10m])
+
+# ---------------------------------------------------------
+# Matching incompatível
+# ---------------------------------------------------------
+
+# ERRADO:
+http_requests_total
+/
+http_request_duration_sum
+
+# CORRETO:
+http_requests_total
+/ on(job,status)
+http_request_duration_sum
+
+# =========================================================
+# PARTE 7 — ALERTAS PROMETHEUS
+# =========================================================
+
+# Estrutura:
+groups:
+- name: exemplo
+  rules:
+
+  - alert: CPUAlta
+    expr: >
+      100 - (
+        avg by(instance)(
+          rate(node_cpu_seconds_total{mode="idle"}[5m])
+        ) * 100
+      ) > 75
+    for: 5m
+
+    labels:
+      severity: warning
+
+    annotations:
+      summary: "CPU alta"
+
+# ---------------------------------------------------------
+# Alertas úteis
+# ---------------------------------------------------------
+
+# Serviço caiu:
+up == 0
+
+# CPU alta:
+100 - (
+  avg by(instance)(
+    rate(node_cpu_seconds_total{mode="idle"}[5m])
+  ) * 100
+) > 75
+
+# Memória alta:
+(1 - (
+  node_memory_MemAvailable_bytes
+  /
+  node_memory_MemTotal_bytes
+)) * 100 > 85
+
+# Disco cheio:
+(1 - (
+  node_filesystem_avail_bytes{mountpoint="/"}
+  /
+  node_filesystem_size_bytes{mountpoint="/"}
+)) * 100 > 80
+
+# Taxa de erro:
+sum(rate(lab_http_requests_total{status=~"5.."}[5m]))
+/
+sum(rate(lab_http_requests_total[5m]))
+* 100 > 5
+
+# =========================================================
+# PARTE 8 — GRAFANA
+# =========================================================
+
+# Painéis importantes:
+# - Status
+# - CPU
+# - Memória
+# - Requests
+# - Latência P50/P95/P99
+# - Taxa de erro
+
+# Variáveis:
+label_values(up,instance)
+
+# Exemplo:
+node_cpu_seconds_total{instance="$instance"}
+
+# =========================================================
+# MAPA MENTAL RÁPIDO
+# =========================================================
+
+# COUNTER?
+# -> rate()
+# -> increase()
+
+# GAUGE?
+# -> valor direto
+# -> deriv()
+
+# HISTOGRAM?
+# -> histogram_quantile()
+
+# AGREGAR?
+# -> sum()
+# -> avg()
+# -> max()
+# -> min()
+# -> count()
+
+# TOP/BOTTOM?
+# -> topk()
+# -> bottomk()
+
+# FILTRAR?
+# -> {label="valor"}
+# -> {label!="valor"}
+# -> {label=~"regex"}
+
+# AGRUPAR?
+# -> by()
+# -> without()
+
+# =========================================================
+# OBSERVAÇÕES IMPORTANTES
+# =========================================================
+
+# 1.
+# rate() = SOMENTE para COUNTERS.
+
+# 2.
+# histogram_quantile() precisa do label "le".
+
+# 3.
+# Janela do rate():
+# mínimo recomendado = 4x scrape_interval
+
+# 4.
+# Gauges:
+# - CPU atual
+# - memória
+# - temperatura
+
+# Counters:
+# - requests_total
+# - bytes_total
+# - seconds_total
+
+# 5.
+# Sempre teste queries direto no Prometheus antes do Grafana.
+
+# 6.
+# Use topk() para encontrar gargalos rapidamente.
+
+# 7.
+# P95 e P99 são MUITO mais importantes que média.
+
+# 8.
+# predict_linear() é excelente para alertas preditivos.
+
+# 9.
+# Use by(instance) quando quiser separar máquinas.
+
+# 10.
+# Use sum() quando quiser visão total do ambiente.
+
+# =========================================================
+# FIM
+# =========================================================

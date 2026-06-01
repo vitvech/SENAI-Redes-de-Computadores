@@ -1,0 +1,106 @@
+
+    WIN -> HD -> Instântaneo
+
+Na máquina virtual
+    Ir em Virtual Machine
+
+        Criar
+        Selecinar Máquina virtual
+        Grupo de Recusos -> Novo - Servidores
+        Nome: ServerWinvit
+        Região: US central
+        Opcoes de disponibilidade: Sem infraestrutura de redundância
+        imagem: Windows Server 2025 Datacenter: Azure Edition - x64 Gen2
+        Tamanho: Standard_D2s_v3 - 2 vcpus, 8 GiB memória (US$ 152,57)          <MAIS BARATO>
+        Usuario: vitor - senha: Senai@134@134
+        Porta de entrada: RDP (3389)
+
+        Disco:
+
+            Professor alterou alguma coisa, mas não lembro o que era, então deixei do jeito que estava
+
+        
+        Criar
+
+    Ir para recursos
+        Copiar IP público
+    Na máquina local
+        Ir em Conexão de Área de Trabalho Remota
+        Ver mais
+        COMPUTADOR: Colar o IP público
+        Usuario: vitor
+
+        Conectar
+        Digitar o nome de usuário e senha
+        Aceitar o certificado
+
+
+        DISCO:
+                    Selecionar maquina virtual criada
+                    Ir em Configurações
+                    Discos
+
+
+            Criar e anexar um novo disco
+
+                nome: DISCO2
+                tipo: Standard
+                Tamanho: 5 GB
+                Leitura
+            
+
+
+        Na maquina virtual
+
+            Comandos para gerenciar o disco:    diskmgmt.msc
+
+
+        Procurar pelo disco novo
+        Clicar com o botão direito
+        
+            Novo volume simples
+            Trocar o nome e a letra da unidade (SE QUISER!)
+
+
+        
+        Acessar o disco na azure, clicar em Criar Instântaneo
+        Nome: Instântaneo1
+        Tipo: Completo
+
+
+
+        Ir no Instântaneo
+        Criar disco
+        nome: DISC2-APARTIRDOINSTANTANEO
+        SEM redundância
+        Criar
+
+
+
+        Desanexar disco da máquina
+        Anexar disco apartir do Instântaneo
+
+                Anexar disco existente
+                Selecionar o disco
+                Somente leitura
+
+
+
+            !<MEIO QUE UM OVERVIEW DA AULA DE TRANSFERENCIA DE ARQ>!    
+
+        Agora, Procure por conta de armazenamento
+
+
+
+
+        Excluir maquina virtual, 3 pontinhos, excluir. Selecionar tudo, Flechar Forçar e confirmar
+
+
+        Excluir disco, Entrar no disco, excluir. OK
+
+
+        Excluir Instântaneo, Entrar nele, Excluir. OK
+
+        Excluir grupo de recurso, Entrar no grupo, 3 pontinhos, Excluir, Confirmar
+        
+

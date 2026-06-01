@@ -1,0 +1,320 @@
+Verificar se o AWS está instalado,          aws --version
+                                            (Se retornar a versão, está instalado. Caso Contrario não)
+
+
+
+Instalar:
+
+
+Arquivo:         https://awscli.amazonaws.com/AWSCLIV2.msi
+
+
+Dar aws --version
+Se não aparecer, reiniciar o computador
+
+
+Notion : https://bald-girl-473.notion.site/Containers-Microservi-os-365d32b0a46380a19d8ef0a47ef5aead
+
+
+
+
+ECR -> Repositorio de imagem para dentro da aws
+ECS -> Orquestrador dentro da aws
+
+Mais parrudo -> Cubbernets
+Mais simples -> ECS
+
+
+Criar container, Obrigatorio criar ECR
+
+
+
+
+
+
+
+
+
+    Etapa - Push para o amazon ECR
+
+            Instalar o CLI -> Adicionar funcionalidades dos comandos da AWS que roda apenas no shel da aws, em qualquer shell!!
+            Credenciais configuradas(aws configure) -> Sistema que eu vou estar definindo minhas Credenciais de usuario
+
+    aws configure:
+            No lab, clique em AWS details
+            AWS CLI: show
+
+    No terminal
+                1 -> Colar o aws_access_key_id= <Copiar e Colar no terminal>
+                2 -> aws_secret_access_key=   <Copiar o ID, Colar lá>
+                3 -> aws_session_token=        <COPIAR ISSO E COLAR LA>
+                4 -> us-east-1 
+                5 -> json
+        OBS: TODA VEZ QUE INICIAR O LAB, O AWS DETAIL MUDA (TERA QUE DAR AWS CONFIGURE DNV. PEGAR AS CREDENCIAIS)
+
+        TODAS ESSAS INFORMAÇOES APARECE NO AWS DETAILS
+
+    aws s3 ls 
+                Se não retornar nada, é pq não tem nada. Porém está conectado com a aws
+                Se retornar mensagem de erro, verificar o aws configure
+
+
+    #Definir Variaveis
+    $ACCOUNT_ID = aws sts get-caller-identity --query Account --output text
+    $REGION = "us-east-1"                                                              
+    $REPO_NAME = "meu-site"
+
+    #Verificar variáveis
+    echo $ACCOUNT_ID
+    echo $REGION                            -> lendo as variaveis
+    echo $REPO_NAME                     
+
+    #Criar o build da imagem
+
+    cd ~/atividade1-nginx               -> entrar na pasta da atividade 1
+    docker build -t $REPO_NAME .        -> criar imagem
+
+
+
+
+    #Invocando a aws, criando o repositorio e qual é a região
+    aws ecr create-repository --repository-name $REPO_NAME --region $REGION
+
+                    Caso, 'more' não é reconhecido
+                        Repositorio foi criado, porém não foi retornado
+
+
+
+    
+    Ir no cloudshell da aws, copiar passo 6
+
+        colar aws ecr describe-repositories
+        copiar 123003485956.dkr.ecr.us-east-1.amazonaws.com/meu-site
+                    (vai devolver isso para voce no comando)
+
+    Copiar comando no 7, apagar até "stdin" e colar a uri
+
+    #Autenticar dooker dentro da  ECR (valido por 12hrs)
+    Comando original:
+    aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com
+
+    Comando alterado(que a gente vai usar)
+    aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin 123003485956.dkr.ecr.us-east-1.amazonaws.com/meu-site
+                                                                                                                URI
+
+
+    #Entrar na pasta da atividade e buildar
+    cd atividade1-nginx
+    docker build -t $REPO_NAME .
+
+    #Tag com URI do ECR
+    docker tag meu-site:latest 123003485956.dkr.ecr.us-east-1.amazonaws.com/meu-site:latest
+
+    #PUSH
+    docker push 123003485956.dkr.ecr.us-east-1.amazonaws.com/meu-site:latest
+                        
+
+
+
+
+        #Criar Log Group no CloudWatch , Centralizo as logs
+        aws logs create-log-group --log-group-name /ecs/meu-site --region $REGION
+
+        #Criar Cluster, todos se conversarem
+        aws ecs create-cluster --cluster-name meu-cluster --region $REGION
+
+        #Verificar Account_ID
+        echo $ACCOUNT_ID
+                Ex: 123003485956
+
+        Criar o arquivo task-definition.json, na atividade 1
+        E copiar o conteudo do notion, conteudo também esta na atividade 1
+                Trocar a variavel <ACCOUNT_ID> por o ID Account copiado anteriormente
+                        Ex: 123003485956
+
+
+        #Fazer o registro da tarefa e definir os parametros
+        aws ecs register-task-definition `
+        --cli-input-json file://task-definition.json `
+        --region $REGION
+
+
+        #procurando automaticamente a VPC padrão da sua conta AWS e guardando o ID dela em uma variável para usar depois em outros comandos.
+     
+        $VPC_ID = aws ec2 describe-vpcs `
+        --filters Name=isDefault,Values=true `
+        --query "Vpcs[0].VpcId" --output text --region $REGION
+
+        #procurando uma subnet dentro da VPC e salvando o ID dela na variável $SUBNET_ID
+
+        $SUBNET_ID = aws ec2 describe-subnets `
+         --filters Name=vpc-id,Values=$VPC_ID `
+         --query "Subnets[0].SubnetId" --output text --region $REGION
+
+
+        #criando um Security Group na AWS dentro da VPC escolhida e salvando o ID dele na variável $SG_ID.
+
+        $SG_ID = aws ec2 create-security-group `
+         --group-name ecs-sg `
+         --description "ECS Security Group" `
+          --vpc-id $VPC_ID `
+         --query GroupId --output text --region $REGION
+
+        #adiciona uma regra no Security Group permitindo conexões HTTP (porta 80) vindas de qualquer lugar da internet.
+        aws ec2 authorize-security-group-ingress `
+        --group-id $SG_ID `
+        --protocol tcp `
+        --port 80 `
+        --cidr 0.0.0.0/0 `
+        --region $REGION
+
+                        OBS: 
+                                Possivel erro: 
+                                                An error occurred (InvalidGroup.Duplicate) when calling the CreateSecurityGroup operation:
+                                                The security group 'ecs-sg' already exists for VPC 'vpc-xxxxxxxx'
+
+                                Motivo: O Security Group chamado ecs-sg já existia dentro da VPC.
+
+                                        Na AWS:
+
+                                        nomes de Security Groups precisam ser únicos dentro da mesma VPC
+                                        portanto a criação falhou
+
+                                        Como o comando falhou:
+
+                                        nenhum novo Security Group foi criado
+                                        $SG_ID ficou vazio
+                                
+                                Solução:
+                                        Em vez de criar um novo Security Group, foi utilizado o grupo já existente.
+                                        Ou apagar o grupo existente e criar o novo
+
+                                Comando usado para solucionar:
+                                $SG_ID = aws ec2 describe-security-groups `
+                                --filters Name=group-name,Values=ecs-sg `
+                                --query "SecurityGroups[0].GroupId" `
+                                --output text `
+                                --region $REGION
+                                                O que ele faz:
+                                                                        lista os Security Groups
+                                                                        filtra pelo nome ecs-sg
+                                                                        pega apenas o GroupId
+                                                                        salva o valor em $SG_ID
+
+                                O comando de liberação da porta funcionou normalmente:
+                                aws ec2 authorize-security-group-ingress `
+                                --group-id $SG_ID `
+                                --protocol tcp `
+                                --port 80 `
+                                --cidr 0.0.0.0/0 `
+                                --region $REGION
+
+
+
+
+
+
+        #Criar Service 
+        aws ecs create-service `
+        --cluster meu-cluster `
+        --service-name meu-site-service `
+         --task-definition meu-site-task `
+         --desired-count 1 `
+        --launch-type FARGATE `
+         --network-configuration "awsvpcConfiguration={subnets=[$SUBNET_ID],securityGroups=[$SG_ID],assignPublicIp=ENABLED}" `
+         --region $REGION
+
+
+
+        #Obter IP publico
+        $TASK_ARN = aws ecs list-tasks `
+        --cluster meu-cluster `
+        --query "taskArns[0]" --output text --region $REGION
+        
+        #Listar task
+        echo $TASK_ARN
+
+        #Verifique se a Task já foi criada
+        aws ecs describe-services `
+        --cluster meu-cluster `
+        --services meu-site-service `
+        --region $REGION `
+        --query "services[0].{Status:status,Running:runningCount,Pending:pendingCount,Desired:desiredCount}"
+
+
+        #Se o resultado RUNNING estiver 0, aguarde de 1 a 2 minutos para a criação da task. Logo apos, busque a task corretamente
+        aws ecs list-tasks `
+        --cluster meu-cluster `
+        --service-name meu-site-service `
+        --region $REGION
+
+
+        #Se retornar ARN, atribuir manualmente
+        $TASK_ARN = "arn:aws:ecs:us-east-1:123456789012:task/meu-cluster/xxxxxxxxxxx"
+
+        Seguir com os comandos restantes:
+
+                $ENI_ID = aws ecs describe-tasks `
+                 --cluster meu-cluster --tasks $TASK_ARN `
+                 --query "tasks[0].attachments[0].details[?name=='networkInterfaceId'].value" `
+                 --output text --region $REGION
+
+                                OBS:                            
+
+                                        Erro:
+                                                AccountIDs mismatch   
+
+                                        troca de credenciais AWS (aws configure)
+                                        variável antiga salva
+                                        task criada em outra conta
+                                        região incorreta  
+
+                                        Solução:
+                                                Verificar conta atual:
+                                                                aws sts get-caller-identity
+                                                Limpar variável:
+                                                                $TASK_ARN = $null
+                                                Obter task ARN novamente:
+                                                                aws ecs list-tasks `
+                                                                --cluster meu-cluster `
+                                                                --query "taskArns[0]" `
+                                                                --output text `
+                                                                --region $REGION
+
+        #Pegar o IP público da task/container
+
+                aws ec2 describe-network-interfaces `
+                 --network-interface-ids $ENI_ID `
+                 --query "NetworkInterfaces[0].Association.PublicIp" `
+                 --output text --region $REGION
+
+        Acesse no navegador: http://<IP_RETORNADO>
+
+
+        Atualizar após nova imagem
+
+        #Criar uma imagem Docker a partir do Dockerfile da pasta atual.
+
+                 docker build -t $REPO_NAME .
+
+        #Criar uma nova tag para a imagem Docker, apontando para o repositório do Amazon ECR.
+       
+                 docker tag "${REPO_NAME}:latest" `
+                  "$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/${REPO_NAME}:latest"
+
+        #Enviar a imagem Docker local para o Amazon ECR.
+                
+                 docker push `
+                 "$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/${REPO_NAME}:latest"
+
+        #Atualizar/reiniciar o serviço ECS e forçar uma nova implantação das tasks.
+
+                 aws ecs update-service `
+                --cluster meu-cluster `
+                --service meu-site-service `
+                --force-new-deployment `
+                --region $REGION
+
+
+
+        PRONTO

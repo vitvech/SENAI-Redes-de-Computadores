@@ -1,0 +1,812 @@
+# 📚 Observabilidade — Anotações Completas
+## CloudWatch + Prometheus + Grafana + PromQL
+
+    O QUE É OBSERVABILIDADE
+
+            Definição
+
+Observabilidade é a capacidade de entender o estado interno de um sistema observando suas saídas externas.
+
+Na prática:
+        - entender o que está acontecendo
+        - detectar problemas antes do usuário
+        - monitorar performance
+        - agir preventivamente
+
+
+# Analogia do avião
+
+Sem observabilidade:
+- você só percebe o problema quando tudo já caiu
+
+Com observabilidade:
+  - você acompanha:
+  - CPU
+  - memória
+  - rede
+  - latência
+  - erros
+  - recebe alertas antes do sistema quebrar
+
+# 🧱 Os 3 Pilares da Observabilidade
+
+ # 1. Métricas
+
+    Valores numéricos ao longo do tempo.
+
+# Exemplos:
+    - CPU: 72%
+    - Requisições: 350/s
+    - Latência P95: 320ms
+
+### Usado para:
+Entender O QUE está acontecendo AGORA.
+
+### Ferramentas:
+    - CloudWatch
+    - Prometheus
+    - Grafana
+
+## 2. Logs
+
+    Registros textuais de eventos.
+
+### Exemplo
+
+```txt
+ERROR: conexão recusada
+INFO: retry 1/3
+```
+
+### Usado para:
+Entender:
+ - O QUE aconteceu
+ - QUANDO aconteceu
+
+### Ferramentas:
+ - CloudWatch Logs
+ - Loki
+
+## 3. Traces
+
+    Mostra o caminho completo da requisição.
+
+### Exemplo
+
+```txt
+API → Auth → Banco → Cache → Resposta
+```
+
+### Usado para:
+Entender:
+ - POR QUE está lento
+ - onde existe gargalo
+
+### Ferramentas:
+ - OpenTelemetry
+ - Jaeger
+
+# ☁️ 2. CLOUDWATCH (AWS)
+
+# O que é o CloudWatch?
+
+Ferramenta nativa da AWS para:
+ - monitoramento
+ - métricas
+ - logs
+ - alarmes
+ - eventos
+
+A AWS já coleta várias métricas automaticamente.
+
+---
+
+# 🧩 Os 5 Componentes do CloudWatch
+
+## 1. Metrics
+
+Métricas numéricas da infraestrutura AWS.
+
+### Exemplos:
+- CPU
+- rede
+- disco
+- status EC2
+
+### Coleta automática:
+- normalmente a cada 5 minutos
+
+---
+
+## 2. Alarms
+
+Regras que monitoram métricas.
+
+### Exemplo
+
+```txt
+CPU > 80% por 10 minutos
+→ enviar email
+→ aumentar Auto Scaling
+```
+
+---
+
+## 3. Logs
+
+Centraliza logs de aplicações e serviços.
+
+### Importante:
+Para logs da aplicação:
+- instalar CloudWatch Agent
+
+---
+
+## 4. Dashboards
+
+Painéis visuais nativos da AWS.
+
+Permite:
+- gráficos
+- métricas
+- visualização sem Grafana
+
+---
+
+## 5. Events
+
+Reage automaticamente a eventos AWS.
+
+### Exemplo
+
+```txt
+EC2 foi encerrada
+→ Lambda executa ação automática
+```
+
+---
+
+# 🔄 Fluxo do CloudWatch
+
+```txt
+EC2/RDS/Lambda
+↓
+Coleta automática
+↓
+CloudWatch
+↓
+Dashboard / Alarmes / Grafana
+```
+
+---
+
+# 📦 Métricas automáticas do EC2
+
+Sem instalar nada:
+
+| Métrica | Função |
+|---|---|
+| CPUUtilization | Uso de CPU |
+| NetworkIn | Entrada de rede |
+| NetworkOut | Saída de rede |
+| StatusCheckFailed | Saúde da instância |
+| DiskReadOps | Leituras disco |
+| DiskWriteOps | Escritas disco |
+
+---
+
+# ⚙️ Métricas que precisam do CloudWatch Agent
+
+Necessário instalar agente.
+
+### Exemplos:
+- memória RAM
+- uso de disco
+- logs da aplicação
+- CPU detalhada
+
+### Métricas:
+- mem_used_percent
+- disk_used_percent
+- cpu_usage_active
+
+---
+
+# 🚨 CLOUDWATCH ALARMS
+
+## Estados possíveis
+
+| Estado | Significado |
+|---|---|
+| OK | Tudo normal |
+| ALARM | Limite ultrapassado |
+| INSUFFICIENT_DATA | Dados insuficientes |
+
+---
+
+# Anatomia de um Alarme
+
+## Métrica
+
+Qual métrica monitorar.
+
+### Exemplo
+
+```txt
+CPUUtilization
+```
+
+---
+
+## Limite
+
+Valor que dispara alerta.
+
+### Exemplo
+
+```txt
+> 80%
+```
+
+---
+
+## Período
+
+Por quanto tempo.
+
+### Exemplo
+
+```txt
+2 períodos de 5min
+```
+
+---
+
+## Ação
+
+O que fazer.
+
+### Exemplos:
+- SNS
+- email
+- Auto Scaling
+
+---
+
+# 🔥 3. PROMETHEUS
+
+## O que é o Prometheus?
+
+Banco de dados de séries temporais + coletor de métricas.
+
+### Criado:
+- SoundCloud (2012)
+- CNCF (2016)
+
+---
+
+# Principais características
+
+| Característica | Explicação |
+|---|---|
+| Pull model | Prometheus busca métricas |
+| TSDB | Banco de séries temporais |
+| Scrape | Coleta periódica |
+| PromQL | Linguagem de consulta |
+| Open source | Muito usado com Kubernetes |
+
+---
+
+# 🧠 O que ele NÃO faz
+
+| Não faz | Ferramenta correta |
+|---|---|
+| Dashboard | Grafana |
+| Logs | Loki/CloudWatch |
+| Alerta direto | AlertManager |
+| Métricas AWS nativas | CloudWatch |
+
+---
+
+# 🔄 Modelo Pull
+
+Prometheus pergunta:
+
+```txt
+"quais métricas você tem?"
+```
+
+Serviço responde:
+
+```txt
+/metrics
+```
+
+Prometheus salva.
+
+---
+
+# ✅ Vantagens do Pull
+
+- Configuração centralizada
+- Detecta serviço DOWN
+- Serviços não precisam conhecer Prometheus
+- Fácil adicionar novos targets
+
+---
+
+# 📊 Tipos de Métricas no Prometheus
+
+---
+
+# 1. Counter
+
+Só cresce.
+
+### Exemplo
+
+```txt
+http_requests_total
+```
+
+### Usado para:
+- total de requisições
+- total de erros
+- logins
+
+### Sempre usar:
+
+```promql
+rate()
+```
+
+---
+
+# 2. Gauge
+
+Pode subir e descer.
+
+### Exemplos:
+- CPU
+- memória
+- conexões
+
+### NÃO usa rate()
+
+Usa direto.
+
+---
+
+# 3. Histogram
+
+Distribui valores em buckets.
+
+### Usado para:
+- latência
+- duração de requisições
+
+### Cria:
+- _bucket
+- _sum
+- _count
+
+### Função principal:
+
+```promql
+histogram_quantile()
+```
+
+---
+
+# 4. Summary
+
+Parecido com histogram.
+
+### Diferença:
+- calcula percentis no próprio serviço
+
+### Observação importante:
+Não recomendado para novos projetos.
+
+---
+
+# 📊 4. GRAFANA
+
+## O que é o Grafana?
+
+Ferramenta de visualização.
+
+### IMPORTANTE:
+O Grafana NÃO coleta dados.
+
+Ele apenas:
+- consulta
+- organiza
+- mostra dashboards
+
+---
+
+# Data Sources
+
+O Grafana conecta em:
+- Prometheus
+- CloudWatch
+- MySQL
+- PostgreSQL
+- Elasticsearch
+- etc.
+
+---
+
+# Tipos de Painel
+
+| Painel | Uso |
+|---|---|
+| Time Series | gráfico temporal |
+| Stat | número único |
+| Gauge | velocímetro |
+| Table | tabela |
+
+---
+
+# 🧩 As 3 ferramentas juntas
+
+## CloudWatch
+Infra AWS:
+- EC2
+- RDS
+- ALB
+- Lambda
+
+---
+
+## Prometheus
+Aplicação:
+- métricas customizadas
+- Node Exporter
+- prom-client
+
+---
+
+## Grafana
+Visualização unificada.
+
+---
+
+# 📌 REGRA IMPORTANTE
+
+✅ CloudWatch → infraestrutura AWS  
+✅ Prometheus → aplicação  
+✅ Grafana → visualizar tudo
+
+---
+
+# 🧠 5. PROMQL (MUITO IMPORTANTE)
+
+## O que é?
+
+Linguagem de consulta do Prometheus.
+
+---
+
+# Estrutura de nome de métrica
+
+### Padrão
+
+```txt
+o_que_mede + unidade + tipo
+```
+
+### Exemplo
+
+```txt
+node_cpu_seconds_total
+```
+
+---
+
+# Exemplos importantes
+
+| Métrica | Tipo |
+|---|---|
+| up | Gauge |
+| http_requests_total | Counter |
+| node_memory_MemAvailable_bytes | Gauge |
+| http_request_duration_seconds | Histogram |
+
+---
+
+# 🏷️ LABELS
+
+Diferenciam métricas.
+
+### Exemplo
+
+```promql
+http_requests_total{status="200"}
+```
+
+---
+
+# Tipos de filtro
+
+| Operador | Função |
+|---|---|
+| = | igual |
+| != | diferente |
+| =~ | regex |
+| !~ | regex inversa |
+
+---
+
+# ⏱️ Janelas de tempo
+
+### Exemplo
+
+```promql
+rate(http_requests_total[5m])
+```
+
+### Significa:
+- taxa média nos últimos 5 minutos
+
+---
+
+# Sufixos
+
+| Sufixo | Significado |
+|---|---|
+| s | segundos |
+| m | minutos |
+| h | horas |
+| d | dias |
+| w | semanas |
+
+---
+
+# 🔥 Funções MAIS IMPORTANTES
+
+---
+
+# rate()
+
+Transforma counter em taxa/s.
+
+```promql
+rate(http_requests_total[5m])
+```
+
+---
+
+# sum()
+
+Soma séries.
+
+```promql
+sum(rate(http_requests_total[5m]))
+```
+
+---
+
+# avg()
+
+Calcula média.
+
+```promql
+avg(cpu_usage)
+```
+
+---
+
+# histogram_quantile()
+
+Calcula P95/P99.
+
+```promql
+histogram_quantile(0.95, ...)
+```
+
+---
+
+# predict_linear()
+
+Prevê futuro.
+
+```promql
+predict_linear(disk_free[6h], 86400)
+```
+
+---
+
+# avg_over_time()
+
+Média ao longo do tempo.
+
+```promql
+avg_over_time(up[24h])
+```
+
+---
+
+# 📊 Agrupamento
+
+## sum by()
+
+Mantém labels específicos.
+
+```promql
+sum by(status)(...)
+```
+
+---
+
+## sum without()
+
+Remove labels específicos.
+
+```promql
+sum without(instance)(...)
+```
+
+---
+
+# 📈 Conversões comuns
+
+## Bytes → GB
+
+```promql
+valor / 1024 / 1024 / 1024
+```
+
+---
+
+## Segundos → ms
+
+```promql
+valor * 1000
+```
+
+---
+
+## Taxa → %
+
+```promql
+(erros / total) * 100
+```
+
+---
+
+# 🧠 Queries IMPORTANTES
+
+---
+
+# CPU %
+
+```promql
+100 - (
+avg by(instance)(
+rate(node_cpu_seconds_total{mode="idle"}[5m])
+) * 100
+)
+```
+
+---
+
+# Taxa de erro %
+
+```promql
+(
+sum(rate(http_requests_total{status=~"5.."}[5m]))
+/
+sum(rate(http_requests_total[5m]))
+) * 100
+```
+
+---
+
+# Latência P95
+
+```promql
+histogram_quantile(
+0.95,
+sum by(le)(
+rate(http_request_duration_seconds_bucket[5m])
+)
+) * 1000
+```
+
+---
+
+# 🚨 ERROS MAIS COMUNS
+
+---
+
+# ❌ rate() em Gauge
+
+### ERRADO
+
+```promql
+rate(memory_used[5m])
+```
+
+### CERTO
+
+```promql
+memory_used
+```
+
+---
+
+# ❌ Janela pequena demais
+
+### ERRADO
+
+```promql
+rate(req_total[10s])
+```
+
+Se scrape = 15s.
+
+### CERTO
+
+```promql
+rate(req_total[1m])
+```
+
+---
+
+# ❌ Esquecer label "le"
+
+### ERRADO
+
+```promql
+sum by(job)(rate(bucket[5m]))
+```
+
+### CERTO
+
+```promql
+sum by(job, le)(rate(bucket[5m]))
+```
+
+---
+
+# ❌ Divisão por zero
+
+### ERRADO
+
+```promql
+errors / requests
+```
+
+### CERTO
+
+```promql
+errors / (requests > 0)
+```
+
+---
+
+# 🧠 RESUMO FINAL
+
+| Ferramenta | Função |
+|---|---|
+| CloudWatch | Monitoramento AWS |
+| Prometheus | Coleta e armazenamento |
+| Grafana | Dashboards |
+| PromQL | Consultas |
+
+---
+
+# 📌 Próximos estudos recomendados
+
+
+- Loki (logs)
+- AlertManager
+- OpenTelemetry
+- Jaeger
+- Kubernetes observability
+- kube-prometheus-stack
+- exporters
+- Node Exporter
+- Blackbox Exporter
