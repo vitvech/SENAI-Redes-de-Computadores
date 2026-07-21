@@ -8,199 +8,216 @@ Com uma VPC é possível controlar:
 
 - Endereçamento IP;
 - Sub-redes;
-- Tabelas de rota;
-- Acesso à internet;
-- Segurança da rede.
+- Tabelas de rotas;
+- Gateway de internet;
+- Regras de segurança.
 
-A VPC funciona como uma rede própria dentro da nuvem AWS, semelhante a uma rede corporativa tradicional.
+A VPC funciona de forma semelhante a uma rede corporativa tradicional, porém executada dentro da infraestrutura da AWS.
 
 ---
 
-# Região utilizada
+# Laboratório realizado
 
-Durante os laboratórios foi utilizada a região:
+## Região utilizada
+
+Durante a prática foi utilizada a região:
 
 ```
 Norte da Virgínia (us-east-1)
 ```
 
-A região define onde os recursos serão criados.
+A região define onde os recursos da AWS serão criados.
 
 ---
 
-# Criando uma VPC
+# Criação da primeira VPC
 
-Existem duas formas principais:
+A criação pode ser feita de duas formas:
 
-## 1 - Somente VPC
+## Opção 1 - Somente VPC
 
 Cria apenas a rede virtual.
 
-O restante precisa ser configurado manualmente:
+Os demais recursos precisam ser configurados manualmente:
 
 - Sub-redes;
-- Tabelas de rota;
+- Tabelas de rotas;
 - Internet Gateway;
 - Configurações de segurança.
 
 ---
 
-## 2 - VPC com recursos adicionais
+## Opção 2 - VPC com recursos adicionais
 
 A AWS cria uma estrutura inicial automaticamente.
 
-Permite visualizar:
+Foi utilizado esse modelo durante a prática para visualizar:
 
 - VPC;
 - Sub-redes;
 - Rotas;
-- Gateways.
-
-Durante a prática foi utilizado esse modelo.
+- Gateway.
 
 ---
 
-# CIDR da VPC
+# Configuração da VPC
 
-Exemplo:
+Nome utilizado:
+
+```
+senai134-east1
+```
+
+CIDR IPv4:
 
 ```
 10.0.0.0/16
 ```
 
-O CIDR define o intervalo de endereços IP disponíveis dentro da rede.
-
-O uso de /16 permite criar diversas sub-redes posteriormente.
+O bloco /16 foi escolhido para permitir a criação de várias sub-redes futuramente.
 
 ---
 
-# Sub-redes
+# Criação das sub-redes
 
-As sub-redes dividem a VPC em redes menores.
+Durante o laboratório foram utilizadas duas zonas de disponibilidade para aumentar a disponibilidade da infraestrutura.
 
-Podem ser:
+Foram criadas quatro sub-redes:
 
-## Pública
+| Nome | Tipo | CIDR | Zona |
+|---|---|---|---|
+| senai134-west2-publico | Pública | 10.0.1.0/24 | 2a |
+| senai134-west2-privada | Privada | 10.0.2.0/24 | 2a |
+| senai134-west2-publico | Pública | 10.0.3.0/24 | 2b |
+| senai134-west2-privada | Privada | 10.0.4.0/24 | 2b |
 
-Possui acesso através de Internet Gateway.
+---
+
+## Observação importante sobre zonas de disponibilidade
+
+Quando uma sub-rede pública e uma privada trabalham juntas, é importante manter a mesma zona de disponibilidade.
 
 Exemplo:
+
+```
+Privada:
+us-west-2a
+
+Pública:
+us-west-2a
+```
+
+Outra regra importante:
+
+Os blocos CIDR não podem se sobrepor.
+
+Exemplo incorreto:
 
 ```
 10.0.1.0/24
+
+10.0.1.0/24
 ```
 
----
-
-## Privada
-
-Sem acesso direto da internet.
-
-Utilizada para:
-
-- Bancos de dados;
-- Aplicações internas;
-- Serviços protegidos.
-
-Exemplo:
+Exemplo correto:
 
 ```
+10.0.1.0/24
+
 10.0.2.0/24
 ```
 
 ---
 
-# Alta disponibilidade
+# Configuração das tabelas de rota
 
-Durante a criação foram utilizadas duas zonas de disponibilidade.
+As tabelas de rota definem como o tráfego será encaminhado dentro da VPC.
 
-Exemplo:
-
-```
-us-east-1a
-us-east-1b
-```
-
-A utilização de múltiplas zonas aumenta a resiliência da infraestrutura.
-
----
-
-# Organização das sub-redes
-
-Exemplo criado:
+Foi alterado o nome da tabela principal:
 
 ```
-1 - Pública
-10.0.1.0/24
-
-2 - Privada
-10.0.2.0/24
-
-3 - Pública
-10.0.3.0/24
-
-4 - Privada
-10.0.4.0/24
-```
-
-Regra importante:
-
-Uma sub-rede pública e privada que trabalham juntas devem estar na mesma zona de disponibilidade.
-
-Exemplo:
-
-```
-Privada - us-east-1a
-Pública - us-east-1a
+senai134-west2-rtb
 ```
 
 ---
 
-# Tabelas de rota
+# Criando tabela de rota privada
 
-As tabelas de rota definem para onde o tráfego da rede será encaminhado.
+Nome:
 
-Foram criadas:
+```
+senai134-west2-privada-rtb
+```
 
-## Rota pública
+VPC:
 
-Responsável pelo acesso externo através do Internet Gateway.
+```
+senai134-west2
+```
+
+Após criação:
+
+- Acessar associações de sub-rede;
+- Editar;
+- Selecionar as sub-redes privadas.
 
 ---
 
-## Rota privada
-
-Utilizada pelas sub-redes privadas para comunicação interna.
-
----
-
-# Internet Gateway (IGW)
+# Criando Internet Gateway
 
 O Internet Gateway permite comunicação entre a VPC e a internet.
 
-Processo:
+Processo realizado:
 
-1. Criar Internet Gateway;
-2. Associar à VPC;
-3. Adicionar rota para internet:
+1. Acessar Internet Gateway;
+2. Criar novo gateway.
+
+Nome:
 
 ```
+senai134-west2-igw
+```
+
+3. Associar à VPC criada.
+
+---
+
+# Configurando rota pública
+
+Na tabela de rota pública:
+
+Adicionar rota:
+
+```
+Destino:
+
 0.0.0.0/0
 ```
+
+Destino:
+
+```
+Internet Gateway criado anteriormente
+```
+
+Depois:
+
+- Acessar associações de sub-rede;
+- Associar as duas sub-redes públicas.
 
 ---
 
 # Security Groups
 
-Security Groups funcionam como firewall das instâncias.
+Security Groups funcionam como firewall das instâncias EC2.
 
-Controlam:
+Eles controlam:
 
 - Portas;
 - Protocolos;
-- Origem do tráfego.
+- Origem do acesso.
 
-Exemplo:
+Exemplo utilizado:
 
 ```
 SSH - Porta 22
@@ -208,30 +225,96 @@ SSH - Porta 22
 HTTP - Porta 80
 ```
 
-São stateful:
+Os Security Groups possuem comportamento:
 
-Se uma conexão de entrada é permitida, a resposta também será permitida automaticamente.
+```
+Stateful
+```
+
+Ou seja, quando uma conexão é permitida, o retorno também é permitido automaticamente.
 
 ---
 
-# Boas práticas
+# Criação de grupo de segurança para servidor Web
 
-- Planejar o CIDR antes da criação;
-- Evitar sobreposição de redes;
-- Separar recursos públicos e privados;
-- Utilizar múltiplas zonas de disponibilidade;
-- Aplicar menor privilégio nas regras de segurança.
+Nome:
+
+```
+tutorial-securitygroup
+```
+
+Regras:
+
+```
+SSH
+HTTP
+```
+
+Origem:
+
+```
+Qualquer IPv4
+```
+
+---
+
+# Criação de grupo de segurança para banco privado
+
+Nome:
+
+```
+tutorial-db-securitygroup
+```
+
+Utilizado para controlar acesso ao banco de dados privado.
+
+---
+
+# Grupo de sub-redes do banco de dados
+
+Para utilização com Amazon RDS foi criado um grupo de sub-redes.
+
+Configuração:
+
+Nome:
+
+```
+tutorial-db-subnet-group
+```
+
+Foram selecionadas as sub-redes privadas criadas anteriormente.
+
+---
+
+# Verificação da arquitetura
+
+Para validar a criação:
+
+Acessar:
+
+```
+VPC
+→ Mapa de recursos
+```
+
+Verificar:
+
+- Sub-redes públicas;
+- Sub-redes privadas;
+- Internet Gateway;
+- Conexões existentes.
 
 ---
 
 # Conhecimentos desenvolvidos
 
-Durante este estudo foram desenvolvidos conhecimentos sobre:
+Durante este laboratório foram praticados:
 
 - Criação de VPC;
 - Planejamento de CIDR;
-- Sub-redes públicas e privadas;
-- Tabelas de rota;
+- Criação de sub-redes;
+- Separação entre redes públicas e privadas;
+- Configuração de tabelas de rota;
 - Internet Gateway;
 - Security Groups;
-- Arquitetura básica de redes na AWS.
+- Preparação de ambiente para EC2 e RDS.
