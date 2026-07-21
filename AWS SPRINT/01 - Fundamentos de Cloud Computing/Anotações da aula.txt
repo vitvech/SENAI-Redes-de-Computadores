@@ -1,0 +1,87 @@
+prof: TADAU
+
+
+                Conceitos e Caracteristicas:
+
+
+                    1961 -> John McCarthy previu a computação organizada como um serviço publico, similar a rede telefonica
+                    1969 -> Leonard Kleinrock previu a disseminação de "utilitarios de computador" com a sofisticação das redes
+                    Anos 90 -> Motores de busca e emails provaram o processamento não precisava ser local
+                                Na epoca :   UOL ou INNERCITIES (Prototipo validado)
+                    
+                    1999 -> Saas
+                                    Serviços remotos para o mundo corporativo
+                                    Tinha citrix era uma api que para quem era usuario instalava no computador
+                                        Abria e ja tinha as aplicações q vc usaria para trabalhar
+
+                    2006 -> Fundação da Amazon web Services
+                                    Uns dos primeiros serviços (EC2)
+                                                                Elastic Compute Cloud (EC2) -> Servidores virtuais
+                                                                SQS -> Gerenciamento de filas para aplicação da amazon
+                                                                S3 -> Armazenamento de Objetos 
+                    
+                    Mudança de paradigma -> Sai do bare metal de dentro da sua empresa e passa a usar o serviço medido
+                                                        Paga oque usa
+
+                    
+                
+                    
+
+        NIST (National Institute of Standards and Technology) -> Padrão que você vai usar em qualquer projeto de engenharia
+
+                    1-Uso sob demanda
+
+                                Consumidor provisiona recusos sozinho, sem precisar de intervenção humano do provedor. Self-Service
+
+                    2-Acesso Ubíquo()
+
+                                O serviço tem que estar disponivel para qualquer dispositivo (celular,laptop,workstation) e em qualquer
+                                lugar com rede.
+                    
+                    3-Multilocação e Pool de recursos (Multitenancy)
+
+                                Varios clientes (tenants), compartilham o mesmo hardware fisico, mas ficam isolados logicamente.
+                                O provedor gerencia esse "pool" de forma dinâmica
+                                                        (pagar mais barato)
+
+                    4-Elasticidade (Elasticity)
+
+                                Capacidade de expadir ou reduzir recursos de forma transparente e automática conforme a carga (famoso scaling).
+                                        Ex: Ifood apartir das 11h da manha, insfra deles é mais baixinha, vai scalonando conforme as horas
+                                            Chega meio dia, Serviços dobra
+                                            Apartir de 13h começa a diminuir o serviços
+
+
+                    5-Uso medido (Measured Service)
+
+                                O uso é monitorado, controlado e cobrado baseando-se no consumo real 
+                                (pay-as-you-go ou pagamento por uso), garantindo transparência.
+
+
+                    6-Resiliencia(Resiliency)
+
+                                Uso de redundância geográfica e failover automatico para garantir que, ser um datacenter cair, o serviço continue
+                                no ar em outro ponto.
+
+                                            Ex: Principal caiu, outro precisa assumir. Quando voltar o outro assume.
+
+
+
+Arquitetura inicial
+
+                    Cloudfront
+                    S3
+                    API gateway
+                    lambda
+                    DynamoDB
+                    Aurora
+                    SNS
+                    SES 
+
+
+                Main Frame -> Codificado em COBOL
+
+                Curadoria das licenças cai sobre a cloud,nesse caso AWS
+
+                CapEX -> Investimento local (licenças,funcionarios,treinamento,energia,agua,luz,equipamentos de rede)
+                OpEx -> Investimento Cloud ()
