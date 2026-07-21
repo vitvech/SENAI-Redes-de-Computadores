@@ -1,87 +1,226 @@
-prof: TADAU
+# ☁️ Fundamentos de Cloud Computing
 
+Documentação dos meus estudos sobre os conceitos fundamentais de Cloud Computing durante o curso Técnico em Redes de Computadores no SENAI.
 
-                Conceitos e Caracteristicas:
+Neste módulo foram estudados a evolução da computação em nuvem, suas principais características, modelos de utilização e os conceitos iniciais utilizados em ambientes Cloud.
 
+---
 
-                    1961 -> John McCarthy previu a computação organizada como um serviço publico, similar a rede telefonica
-                    1969 -> Leonard Kleinrock previu a disseminação de "utilitarios de computador" com a sofisticação das redes
-                    Anos 90 -> Motores de busca e emails provaram o processamento não precisava ser local
-                                Na epoca :   UOL ou INNERCITIES (Prototipo validado)
-                    
-                    1999 -> Saas
-                                    Serviços remotos para o mundo corporativo
-                                    Tinha citrix era uma api que para quem era usuario instalava no computador
-                                        Abria e ja tinha as aplicações q vc usaria para trabalhar
+# 🎯 Objetivo
 
-                    2006 -> Fundação da Amazon web Services
-                                    Uns dos primeiros serviços (EC2)
-                                                                Elastic Compute Cloud (EC2) -> Servidores virtuais
-                                                                SQS -> Gerenciamento de filas para aplicação da amazon
-                                                                S3 -> Armazenamento de Objetos 
-                    
-                    Mudança de paradigma -> Sai do bare metal de dentro da sua empresa e passa a usar o serviço medido
-                                                        Paga oque usa
+Compreender os fundamentos da computação em nuvem, entendendo como a tecnologia evoluiu, suas principais características definidas pelo NIST e as diferenças entre modelos tradicionais de infraestrutura e ambientes Cloud.
 
-                    
-                
-                    
+---
 
-        NIST (National Institute of Standards and Technology) -> Padrão que você vai usar em qualquer projeto de engenharia
+# 🕒 Evolução da Computação em Nuvem
 
-                    1-Uso sob demanda
+## 1961 — John McCarthy
 
-                                Consumidor provisiona recusos sozinho, sem precisar de intervenção humano do provedor. Self-Service
+John McCarthy apresentou a ideia de que a computação poderia ser disponibilizada como um serviço público, semelhante ao modelo utilizado pelas redes telefônicas.
 
-                    2-Acesso Ubíquo()
+Essa ideia ajudou a formar o conceito de oferecer recursos computacionais como um serviço.
 
-                                O serviço tem que estar disponivel para qualquer dispositivo (celular,laptop,workstation) e em qualquer
-                                lugar com rede.
-                    
-                    3-Multilocação e Pool de recursos (Multitenancy)
+---
 
-                                Varios clientes (tenants), compartilham o mesmo hardware fisico, mas ficam isolados logicamente.
-                                O provedor gerencia esse "pool" de forma dinâmica
-                                                        (pagar mais barato)
+## 1969 — Leonard Kleinrock
 
-                    4-Elasticidade (Elasticity)
+Leonard Kleinrock previu a popularização de "utilitários de computador", onde recursos computacionais poderiam ser acessados através de redes cada vez mais avançadas.
 
-                                Capacidade de expadir ou reduzir recursos de forma transparente e automática conforme a carga (famoso scaling).
-                                        Ex: Ifood apartir das 11h da manha, insfra deles é mais baixinha, vai scalonando conforme as horas
-                                            Chega meio dia, Serviços dobra
-                                            Apartir de 13h começa a diminuir o serviços
+---
 
+## Anos 90 — Expansão da Internet
 
-                    5-Uso medido (Measured Service)
+Com a evolução da internet, serviços como e-mails, motores de busca e aplicações online mostraram que o processamento e armazenamento poderiam acontecer remotamente, sem depender exclusivamente do computador local.
 
-                                O uso é monitorado, controlado e cobrado baseando-se no consumo real 
-                                (pay-as-you-go ou pagamento por uso), garantindo transparência.
+---
 
+## 1999 — Software as a Service (SaaS)
 
-                    6-Resiliencia(Resiliency)
+O conceito de Software como Serviço ganhou força, permitindo que empresas utilizassem aplicações remotamente através da internet.
 
-                                Uso de redundância geográfica e failover automatico para garantir que, ser um datacenter cair, o serviço continue
-                                no ar em outro ponto.
+---
 
-                                            Ex: Principal caiu, outro precisa assumir. Quando voltar o outro assume.
+## 2006 — Amazon Web Services (AWS)
 
+A Amazon iniciou sua plataforma de Cloud Computing oferecendo serviços como:
 
+- Amazon EC2 (Elastic Compute Cloud): servidores virtuais sob demanda.
+- Amazon S3 (Simple Storage Service): armazenamento de objetos.
+- Amazon SQS (Simple Queue Service): gerenciamento de filas para aplicações.
 
-Arquitetura inicial
+---
 
-                    Cloudfront
-                    S3
-                    API gateway
-                    lambda
-                    DynamoDB
-                    Aurora
-                    SNS
-                    SES 
+# ☁️ Características da Cloud Computing (NIST)
 
+O NIST (National Institute of Standards and Technology) define características essenciais da computação em nuvem.
 
-                Main Frame -> Codificado em COBOL
+---
 
-                Curadoria das licenças cai sobre a cloud,nesse caso AWS
+## 1. Uso sob demanda (On-Demand Self-Service)
 
-                CapEX -> Investimento local (licenças,funcionarios,treinamento,energia,agua,luz,equipamentos de rede)
-                OpEx -> Investimento Cloud ()
+O consumidor consegue criar e gerenciar recursos computacionais automaticamente, sem depender da intervenção manual do provedor.
+
+Exemplo:
+
+Criar uma instância EC2 através do console AWS.
+
+---
+
+## 2. Acesso amplo pela rede (Broad Network Access)
+
+Os serviços Cloud devem estar disponíveis através da rede e acessíveis por diferentes dispositivos:
+
+- Computadores;
+- Notebooks;
+- Smartphones;
+- Workstations.
+
+---
+
+## 3. Pool de recursos e Multilocação (Resource Pooling)
+
+Os provedores Cloud compartilham recursos físicos entre diversos clientes, mantendo isolamento lógico entre ambientes.
+
+Esse modelo permite:
+
+- Melhor utilização da infraestrutura;
+- Redução de custos;
+- Escalabilidade.
+
+---
+
+## 4. Elasticidade (Rapid Elasticity)
+
+Capacidade de aumentar ou reduzir recursos conforme a demanda.
+
+Exemplo:
+
+Aplicativos como iFood podem aumentar recursos em horários de maior acesso e reduzir quando a demanda diminui.
+
+---
+
+## 5. Serviço medido (Measured Service)
+
+O consumo dos recursos é monitorado e utilizado para cobrança.
+
+Modelo:
+
+Pay-as-you-go
+
+O cliente paga apenas pelo que utiliza.
+
+---
+
+## 6. Resiliência (Resiliency)
+
+Uso de redundância e mecanismos de recuperação para garantir disponibilidade dos serviços.
+
+Exemplo:
+
+Caso um datacenter apresente falha, outro ambiente pode assumir a operação.
+
+---
+
+# 🏗️ Primeiros serviços AWS estudados
+
+Durante a introdução à AWS foram apresentados serviços como:
+
+- Amazon CloudFront;
+- Amazon S3;
+- Amazon API Gateway;
+- AWS Lambda;
+- Amazon DynamoDB;
+- Amazon Aurora;
+- Amazon SNS;
+- Amazon SES.
+
+---
+
+# 🖥️ Mudança dos modelos computacionais
+
+Antes da popularização da Cloud Computing, muitas empresas utilizavam ambientes tradicionais baseados em servidores próprios e mainframes.
+
+Mainframes eram sistemas de grande porte utilizados para processamento de grandes volumes de dados, com linguagens como COBOL sendo muito utilizadas nesses ambientes.
+
+Com a Cloud Computing, responsabilidades como manutenção da infraestrutura, gerenciamento físico dos servidores e parte da administração das licenças passam a ser responsabilidade do provedor Cloud, como a AWS.
+
+---
+
+# 💰 Modelos de investimento
+
+## CapEx (Capital Expenditure)
+
+Modelo tradicional de infraestrutura própria.
+
+Exemplos:
+
+- Compra de servidores;
+- Equipamentos de rede;
+- Licenças;
+- Energia;
+- Espaço físico;
+- Treinamentos.
+
+---
+
+## OpEx (Operational Expenditure)
+
+Modelo utilizado em Cloud Computing.
+
+Características:
+
+- Pagamento conforme utilização;
+- Menor investimento inicial;
+- Maior flexibilidade.
+
+---
+
+# 🔄 Mudança de paradigma
+
+A computação em nuvem mudou o modelo tradicional de infraestrutura.
+
+Antes:
+
+Empresa
+
+- Servidores próprios
+- Datacenter
+- Energia
+- Manutenção
+- Equipe de infraestrutura
+
+Depois:
+
+Provedor Cloud
+
+AWS / Azure / Google Cloud
+
+Recursos sob demanda
+
+Pagamento por uso
+
+---
+
+# 💡 Conhecimentos desenvolvidos
+
+Durante esse estudo desenvolvi conhecimentos sobre:
+
+- Conceitos fundamentais de Cloud Computing;
+- História e evolução da computação em nuvem;
+- Características definidas pelo NIST;
+- Modelo Pay-as-you-go;
+- Diferença entre CapEx e OpEx;
+- Conceitos iniciais da arquitetura AWS.
+
+---
+
+# 📚 Próximos estudos
+
+Próximos tópicos aprofundados neste repositório:
+
+- Serviços computacionais AWS;
+- Redes na AWS (VPC);
+- Armazenamento;
+- Monitoramento;
+- Infraestrutura como Código (Terraform);
+- Containers.
